@@ -1,54 +1,77 @@
-const tiles = [];
+class Board {
+  constructor(canvasId, map, tilesSrc) {
+    this.map = map;
+    this.tiles = this.initTiles(tilesSrc);
+    this.tilesLoaded = 0;
+    this.ctx = document.getElementById(canvasId).getContext('2d');
+  }
 
-function loadTiles() {
+  initTiles(tilesSrc) {
+    const tilesSrcKeys = Object.keys(tilesSrc), tiles = {};
+    for (let i = 0; i < tilesSrcKeys.length; i++) {
+      const tile = tilesSrcKeys[i];
+      tiles[tile] = new Image();
+      tiles[tile].src = tilesSrc[tile];
+    }
 
-    const tilesSrc = [
-      "/assets/images/PNG/mapTile_187.png",
-      "/assets/images/PNG/mapTile_001.png",
-      "/assets/images/PNG/mapTile_002.png",
-      "/assets/images/PNG/mapTile_003.png",
-      "/assets/images/PNG/mapTile_016.png",
-      "/assets/images/PNG/mapTile_017.png",
-      "/assets/images/PNG/mapTile_018.png",
-      "/assets/images/PNG/mapTile_031.png",
-      "/assets/images/PNG/mapTile_032.png",
-      "/assets/images/PNG/mapTile_033.png",
-    ],
-    tilesLoaded = 0;
+    return tiles;
+  }
 
-    for (let i = 0; i < tilesSrc.length; i++) {
-      tiles[i] = new Image();
-      tiles[i].src = tilesSrc[i];
-      tiles[i].onload = function() {
-        tilesLoaded++;
-        if (tilesLoaded === tilesSrc.length) {
-            render();
+  loadTiles() {
+    const tilesSrcKeys = Object.keys(this.tilesSrc);
+    for (let i = 0; i < tilesSrcKeys.length; i++) {
+      const tile = tilesSrcKeys[i];
+      this.tiles[tile] = new Image();
+      this.tiles[tile].src = this.tilesSrc[tile];
+      this.tiles[tile].onload = () => {
+        this.tilesLoaded++;
+        if (this.tilesLoaded === this.tilesSrc.length) {
+          this.render();
         }
       };
     }
-
   }
 
-function render() {
-    const map = [
-      [0,0,0,0,0],
-      [0,1,2,3,0],
-      [0,4,5,6,0],
-      [0,7,8,9,0]
-      [0,0,0,0,0]
-    ];
+  render() {
+    const w = 64, h = 64;
 
-    const ctx = document.getElementById('main').getContext('2d');
-
-    for (let i = 0; i < map.length; i++) {
-      for (let j = 0; j < map[i].length; j++) {
-        const tile = map[i][j];
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        const tile = this.map[i][j];
         if (tile) {
-          ctx.fillStyle = '#FF0000';
-          ctx.fillRect(j * 20, i * 20, 20, 20);
+          this.ctx.drawImage(this.tiles[tile], j * w, i * h);
         }
       }
     }
+  }
+
+  draw(x, y, tile) {
+    this.ctx.drawImage(this.tiles[tile], x, y);
+  }
+
 }
 
-window.render = render;
+const tilesSrc = {
+  w1: "./assets/images/PNG/mapTile_187.png",
+  d1: "./assets/images/PNG/mapTile_001.png",
+  d2: "./assets/images/PNG/mapTile_002.png",
+  d3: "./assets/images/PNG/mapTile_003.png",
+  d4: "./assets/images/PNG/mapTile_016.png",
+  d5: "./assets/images/PNG/mapTile_017.png",
+  d6: "./assets/images/PNG/mapTile_018.png",
+  d7: "./assets/images/PNG/mapTile_031.png",
+  d8: "./assets/images/PNG/mapTile_032.png",
+  d9: "./assets/images/PNG/mapTile_033.png",
+};
+
+const map = [
+  ['w1','w1','w1','w1','w1'],
+  ['w1','d1','d2','d3','w1'],
+  ['w1','d4','d5','d6','w1'],
+  ['w1','d7','d8','d9','w1'],
+  ['w1','w1','w1','w1','w1']
+];
+
+window.tilesSrc = tilesSrc;
+window.map = map;
+window.Board = Board;
