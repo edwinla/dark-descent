@@ -24,5 +24,4 @@ const map = [
 document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('main');
   const floor = new Floor(canvasEl, map, tilesSrc);
-  floor.render();
 });

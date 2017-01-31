@@ -14,20 +14,32 @@ import Partition from './partition';
 export default class Floor {
   constructor(canvasEl, map, tilesSrc) {
     this.map = map;
-    this.tiles = this.initTiles(tilesSrc);
     this.tilesLoaded = 0;
     this.ctx = canvasEl.getContext('2d');
+    this.tiles = {};
+
+    this.loadTiles(tilesSrc);
   }
 
-  initTiles(tilesSrc) {
+  loadTiles(tilesSrc) {
     const tilesSrcKeys = Object.keys(tilesSrc), tiles = {};
     for (let i = 0; i < tilesSrcKeys.length; i++) {
       const tile = tilesSrcKeys[i];
-      tiles[tile] = new Image();
-      tiles[tile].src = tilesSrc[tile];
+      this.tiles[tile] = new Image();
+      this.tiles[tile].src = tilesSrc[tile];
+      this.tiles[tile].onload = () => {
+        this.init(tilesSrcKeys.length);
+      };
     }
 
     return tiles;
+  }
+
+  init(count) {
+    this.tilesLoaded++;
+    if (this.tilesLoaded === count) {
+      this.render();
+    }
   }
 
   render() {
