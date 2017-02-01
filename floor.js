@@ -48,9 +48,10 @@ export default class Floor {
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
         const tile = this.map[i][j];
-        if (tile) {
-          this.ctx.drawImage(this.tiles[tile], j * w, i * h);
+        if (tile !== 'w1') {
+          this.ctx.drawImage(this.tiles.w1, j * w, i * h);
         }
+        this.ctx.drawImage(this.tiles[tile], j * w, i * h);
       }
     }
   }
