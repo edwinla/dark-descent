@@ -1,4 +1,3 @@
-import Room from './room';
 import Partition from './partition';
 
 /*
@@ -43,15 +42,15 @@ export default class Floor {
   }
 
   render() {
-    const w = 64, h = 64;
+    const w = 32, h = 32;
 
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
         const tile = this.map[i][j];
         if (tile !== 'w1') {
-          this.ctx.drawImage(this.tiles.w1, j * w, i * h);
+          this.ctx.drawImage(this.tiles.w1, j * w, i * h, w, h);
         }
-        this.ctx.drawImage(this.tiles[tile], j * w, i * h);
+        this.ctx.drawImage(this.tiles[tile], j * w, i * h, w, h);
       }
     }
   }

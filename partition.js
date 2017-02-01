@@ -1,18 +1,74 @@
 import Room from './room.js';
 
 export default class Partition {
-  constructor(height = 10, width = 10, gapSize = 2, partitionNo) {
+  constructor(height = 10, width = 10, gapSize = 2) {
     this.height = height;
     this.width = width;
     this.gapSize = gapSize;
-    this.partitionNo = partitionNo;
-    const roomChance = Math.random(4);
+    // const roomChance = Math.random() * 4;
 
-    this.grid = roomChance > 3 ? this.createRoom() : null;
+    this.grid = this.createRoom();
+    // this.grid = roomChance > 3 ? this.createRoom() : null;
+  }
+
+  generate(partRoomX, partRoomY, partRoomXEnd, partRoomYEnd) {
+    const grid = [];
+
+    for (let i = 0; i < this.height; i++) {
+      const row = [];
+      for (let j = 0; j < this.width; j++) {
+        // conditionals for rendering edges of rooms
+        if (
+          (i >= partRoomY && i <= partRoomYEnd) &&
+          (j >= partRoomX && j <= partRoomXEnd)
+        ) {
+          if (i === partRoomY) {
+            switch (j) {
+              case partRoomX:
+                row.push('d1');
+                break;
+              case (partRoomXEnd):
+                row.push('d3');
+                break;
+              default:
+                row.push('d2');
+            }
+          } else if (i === partRoomYEnd) {
+            switch(j) {
+              case partRoomX:
+                row.push('d7');
+                break;
+              case (partRoomXEnd):
+                row.push('d9');
+                break;
+              default:
+                row.push('d8');
+            }
+          } else {
+            switch(j) {
+              case partRoomX:
+                row.push('d4');
+                break;
+              case (partRoomXEnd):
+                row.push('d6');
+                break;
+              default:
+                row.push('d5');
+            }
+          }
+        }
+        else {
+          row.push('w1');
+        }
+      }
+      // push the row into the grid
+      grid.push(row);
+    }
+
+    return grid;
   }
 
   createRoom() {
-
     // The max dimensions of the room, where gap is on all four sides
     const roomMaxWidth = this.width - (2 * this.gapSize); // default: 6
     const roomMaxHeight = this.height - (2 * this.gapSize); // default: 6
@@ -22,15 +78,26 @@ export default class Partition {
     const roomHeight = Math.floor(Math.random() * 4) + (roomMaxHeight - 3); // default 3 - 6
 
     // Random room placement that does not intrude partition gap
-    const xOfPart = Math.floor(Math.random() * roomMaxWidth - roomWidth + 1); // default 0 - 3
-    const yOfPart = Math.floor(Math.random() * roomMaxHeight - roomHeight + 1); // default 0 - 3
+    const partRoomX = Math.floor(Math.random() * (roomMaxWidth - roomWidth)) + this.gapSize; // default 0 - 3
+    const partRoomY = Math.floor(Math.random() * (roomMaxHeight - roomHeight)) + this.gapSize; // default 0 - 3
 
-    // Place rooms
-    const roomX = (this.partitionNo * this.width) + xOfPart + this.gapSize;
-    const roomY = (this.partitionNo * this.height) + yOfPart + this.gapSize;
+    // End of the room subtracts 1 because we count the initial position in size
+    const partRoomXEnd = partRoomX + roomWidth - 1;
+    const partRoomYEnd = partRoomY + roomHeight - 1;
 
+    this.roomMaxWidth = roomMaxWidth;
+    this.roomMaxHeight = roomMaxHeight;
 
+    this.roomWidth = roomWidth;
+    this.roomHeight = roomHeight;
+
+    this.partRoomX = partRoomX;
+    this.partRoomY = partRoomY;
+
+    return this.generate(partRoomX, partRoomY, partRoomXEnd, partRoomYEnd);
   }
 
 
 }
+
+window.Partition = Partition;
