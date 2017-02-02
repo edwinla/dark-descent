@@ -11,17 +11,29 @@ import Partition from './partition';
 
 
 export default class Floor {
-  constructor(canvasEl, map, tilesSrc) {
-    this.map = map;
+  constructor(canvasEl, tilesSrc) {
     this.tilesLoaded = 0;
     this.ctx = canvasEl.getContext('2d');
     this.tiles = {};
 
+    // must be an even square for glue function to work
+    this.partitions = this.generatePartitions(16);
+    this.map = this.gluePartitions();
+
     this.loadTiles(tilesSrc);
   }
 
+  generatePartitions(num) {
+    const partitions = [];
+    for (let i = 0; i < num; i++) {
+      const partition = new Partition();
+      partitions.push(partition.grid);
+    }
+    return partitions;
+  }
+
   loadTiles(tilesSrc) {
-    const tilesSrcKeys = Object.keys(tilesSrc), tiles = {};
+    const tilesSrcKeys = Object.keys(tilesSrc);
     for (let i = 0; i < tilesSrcKeys.length; i++) {
       const tile = tilesSrcKeys[i];
       this.tiles[tile] = new Image();
@@ -30,8 +42,29 @@ export default class Floor {
         this.init(tilesSrcKeys.length);
       };
     }
+  }
 
-    return tiles;
+  gluePartitions() {
+    const rootSize = Math.sqrt(this.partitions.length);
+    let map = [];
+    let nextRows = [];
+    for (let i = 0; i < this.partitions.length; i++) {
+      if (i % 5 === 0) {
+        map = map.concat(nextRows);
+        nextRows = this.partitions[i];
+      } else {
+        nextRows = this.glue(nextRows, this.partitions[i]);
+      }
+    }
+    return map;
+  }
+
+  glue(part1, part2) {
+    const glued = [];
+    for (let i = 0; i < part1.length; i++) {
+      glued.push(part1[i].concat(part2[i]));
+    }
+    return glued;
   }
 
   init(count) {

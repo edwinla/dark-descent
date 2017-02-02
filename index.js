@@ -1,4 +1,5 @@
 import Floor from './floor';
+import Partition from './partition';
 
 const tilesSrc = {
   w1: "./assets/images/PNG/mapTile_187.png",
@@ -23,5 +24,7 @@ const map = [
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('main');
-  const floor = new Floor(canvasEl, map, tilesSrc);
+  const partition = new Partition();
+  const floor = new Floor(canvasEl, tilesSrc);
+  window.floor = floor;
 });

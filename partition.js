@@ -1,14 +1,28 @@
 import Room from './room.js';
 
 export default class Partition {
-  constructor(height = 10, width = 10, gapSize = 2) {
+  constructor(height = 10, width = 10, gapSize = 1) {
     this.height = height;
     this.width = width;
     this.gapSize = gapSize;
-    // const roomChance = Math.random() * 4;
+    const roomChance = Math.random() * 4;
 
-    this.grid = this.createRoom();
-    // this.grid = roomChance > 3 ? this.createRoom() : null;
+    // this.grid = this.createRoom();
+    this.grid = roomChance > 2 ? this.createRoom() : this.solidPartition();
+  }
+
+  solidPartition() {
+    const grid = [];
+
+    for (let i = 0; i < this.height; i++) {
+      const row = [];
+      for (let j = 0; j < this.width; j++) {
+        row.push('w1');
+      }
+      grid.push(row);
+    }
+
+    return grid;
   }
 
   generate(partRoomX, partRoomY, partRoomXEnd, partRoomYEnd) {
@@ -70,34 +84,23 @@ export default class Partition {
 
   createRoom() {
     // The max dimensions of the room, where gap is on all four sides
-    const roomMaxWidth = this.width - (2 * this.gapSize); // default: 6
-    const roomMaxHeight = this.height - (2 * this.gapSize); // default: 6
+    const roomMaxWidth = this.width - (2 * this.gapSize);
+    const roomMaxHeight = this.height - (2 * this.gapSize);
 
     // Room minimum height should be at least 3 x 3
-    const roomWidth = Math.floor(Math.random() * 4) + (roomMaxWidth - 3); // default 3 - 6
-    const roomHeight = Math.floor(Math.random() * 4) + (roomMaxHeight - 3); // default 3 - 6
+    const roomWidth = Math.floor(Math.random() * 4) + (roomMaxWidth - 3);
+    const roomHeight = Math.floor(Math.random() * 4) + (roomMaxHeight - 3);
 
     // Random room placement that does not intrude partition gap
-    const partRoomX = Math.floor(Math.random() * (roomMaxWidth - roomWidth)) + this.gapSize; // default 0 - 3
-    const partRoomY = Math.floor(Math.random() * (roomMaxHeight - roomHeight)) + this.gapSize; // default 0 - 3
+    const partRoomX = Math.floor(Math.random() * (roomMaxWidth - roomWidth)) + this.gapSize;
+    const partRoomY = Math.floor(Math.random() * (roomMaxHeight - roomHeight)) + this.gapSize;
 
     // End of the room subtracts 1 because we count the initial position in size
     const partRoomXEnd = partRoomX + roomWidth - 1;
     const partRoomYEnd = partRoomY + roomHeight - 1;
-
-    this.roomMaxWidth = roomMaxWidth;
-    this.roomMaxHeight = roomMaxHeight;
-
-    this.roomWidth = roomWidth;
-    this.roomHeight = roomHeight;
-
-    this.partRoomX = partRoomX;
-    this.partRoomY = partRoomY;
 
     return this.generate(partRoomX, partRoomY, partRoomXEnd, partRoomYEnd);
   }
 
 
 }
-
-window.Partition = Partition;
