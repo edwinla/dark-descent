@@ -88,8 +88,8 @@ export default class Partition {
     const roomMaxHeight = this.height - (2 * this.gapSize);
 
     // Room minimum height should be at least 3 x 3
-    const roomWidth = Math.floor(Math.random() * 4) + (roomMaxWidth - 3);
-    const roomHeight = Math.floor(Math.random() * 4) + (roomMaxHeight - 3);
+    const roomWidth = Math.floor(Math.random() * (roomMaxWidth - 4)) + 3;
+    const roomHeight = Math.floor(Math.random() * (roomMaxHeight - 4)) + 3;
 
     // Random room placement that does not intrude partition gap
     const partRoomX = Math.floor(Math.random() * (roomMaxWidth - roomWidth)) + this.gapSize;
