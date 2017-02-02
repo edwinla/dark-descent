@@ -49,11 +49,14 @@ export default class Floor {
     let map = [];
     let nextRows = [];
     for (let i = 0; i < this.partitions.length; i++) {
-      if (i % 5 === 0) {
-        map = map.concat(nextRows);
+      if (i % rootSize === 0) {
         nextRows = this.partitions[i];
       } else {
         nextRows = this.glue(nextRows, this.partitions[i]);
+
+        if (i % rootSize === rootSize - 1) {
+          map = map.concat(nextRows);
+        }
       }
     }
     return map;
