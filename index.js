@@ -14,14 +14,6 @@ const tilesSrc = {
   d9: "./assets/images/PNG/mapTile_033.png",
 };
 
-const map = [
-  ['w1','w1','w1','w1','w1'],
-  ['w1','d1','d2','d3','w1'],
-  ['w1','d4','d5','d6','w1'],
-  ['w1','d7','d8','d9','w1'],
-  ['w1','w1','w1','w1','w1']
-];
-
 document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('main');
   const partition = new Partition();
