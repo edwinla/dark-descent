@@ -24,6 +24,17 @@ loop
 
 */
 
+import MapNode from './map_node';
+
+function createNodesFromMap(map) {
+  const nodes = [];
+  map.forEach(coord => {
+    const newNode = new Node(coord);
+    nodes.push(nodes);
+  });
+  return nodes;
+}
+
 const pathfinder = (startNode, targetNode) => {
   const open = [startNode], closed = [], path = [];
 
