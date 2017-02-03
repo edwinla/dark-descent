@@ -23,3 +23,46 @@ loop
       add neighbor to OPEN
 
 */
+
+const pathfinder = (startNode, targetNode) => {
+  const open = [startNode], closed = [], path = [];
+
+  while (open.length > 0) {
+    const current = findLowestFCost(open);
+    open.splice(open.indexOf(current), 1);
+    closed.push(current);
+
+    if (current === targetNode) {
+      return reconstructPath(path, current);
+    }
+
+    const neighbors = current.neighbors;
+
+    for (let i = 0; i < neighbors.length; i++) {
+      const neighbor = neighbors[i];
+      if (neighbor.traversable || closed.indexOf(neighbor) !== -1) {
+          continue;
+      }
+      const oldPath = neighbor.fCost;
+      const newPath = neighbor.getFCost();
+
+      if (newPath < oldPath || closed.indexOf(neighbor) === -1) {
+        neighbor.fCost = newPath;
+        neighbor.parent = current;
+
+        if (open.indexOf(neighbor) === -1) {
+          open.push(neighbor);
+        }
+      }
+    }
+  }
+
+};
+
+function findLowestFCost() {
+
+}
+
+function reconstructPath() {
+
+}
