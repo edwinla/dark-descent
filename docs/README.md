@@ -83,8 +83,6 @@ This project will be implemented with the following technologies:
 - Add level/depth change on event
 - Finalize sprite/tileset
 - Add 'continue' modals in between each floor
-
-**Day 6**
 - Add 'how-to' and 'about' screens to main menu
 
 ### Bonus features
