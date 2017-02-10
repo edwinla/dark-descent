@@ -1,4 +1,4 @@
-# Silver Moon
+# Torrey Pines
 
 ## Background
 Silver Moon is a rogue-like dungeon crawler with the possibility of unlimited levels and high replay value due to procedural generation of each depth/floor.
@@ -22,7 +22,7 @@ In addition, this project will include:
   * Start a new game
   * Read the game rules
   * Display the about page
-  
+
 - [ ] A production README
 
 ## Wireframes
