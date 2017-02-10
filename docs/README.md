@@ -1,13 +1,13 @@
 # Torrey Pines
 
 ## Background
-Silver Moon is a rogue-like dungeon crawler with the possibility of unlimited levels and high replay value due to procedural generation of each depth/floor.
+Torrey Pines is a rogue-like dungeon crawler with the possibility of unlimited levels and high replay value due to procedural generation of each depth/floor.
 
 The game is built on vanilla JavaScript without any external libraries and works on any browser that supports requestAnimationFrame.
 
 ## Functionality & MVP
 
-With Silver Moon, players will be able to:
+With Torrey Pines, players will be able to:
 
 - [ ] Start a new game
 - [ ] Procedural-generated content
