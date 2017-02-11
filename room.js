@@ -2,37 +2,44 @@ export default class Room {
   constructor(minWidth, maxWidth, minHeight, maxHeight, mapWidth, mapHeight) {
     this.width = this.getRandomNumber(minWidth, maxWidth);
     this.height = this.getRandomNumber(minHeight, maxHeight);
-    this.absolutePosition = {
-      x: this.getRandomNumber(2, mapWidth - 2),
-      y: this.getRandomNumber(2, mapHeight - 2)
-    };
+    this.absolutePosition = this.getRandomPosition(mapWidth, mapHeight);
     this.corners = this.getCorners();
+  }
+
+  getRandomPosition(mapWidth, mapHeight) {
+    const xUpperLimit = mapWidth - this.width - 1;
+    const yUpperLimit = mapHeight - this.height - 1;
+    return {
+      x: this.getRandomNumber(1, xUpperLimit),
+      y: this.getRandomNumber(1, yUpperLimit)
+    };
   }
 
   getCoordinates() {
     const coordinates = [];
     const absX = this.absolutePosition.x, absY = this.absolutePosition.y;
-
-    for (let y = absY ; y < this.width; y++) {
-      for (let x = absX ; x < this.height; x++) {
+    const absXLimit = absX + this.width - 1;
+    const absYLimit = absY + this.height - 1;
+    for (let y = absY ; y <=  absYLimit; y++) {
+      for (let x = absX ; x <= absXLimit; x++) {
         const coordinate = {pos: {y: y, x: x}};
         if (y === absY) {
           switch (x) {
             case (absX):
               coordinate.type = 'd1';
               break;
-            case (absX + this.height - 1):
+            case (absXLimit):
               coordinate.type = 'd3';
               break;
             default:
               coordinate.type = 'd2';
           }
-        } else if (y === absY + this.height - 1) {
+        } else if (y === absYLimit) {
           switch (x) {
             case (absX):
               coordinate.type = 'd7';
               break;
-            case (absX + this.Height - 1):
+            case (absXLimit):
               coordinate.type = 'd9';
               break;
             default:
@@ -43,7 +50,7 @@ export default class Room {
             case (absX):
               coordinate.type = 'd4';
               break;
-            case (absX + this.Height - 1):
+            case (absXLimit):
               coordinate.type = 'd6';
               break;
             default:
@@ -61,6 +68,7 @@ export default class Room {
     for (let i = 0; i < coordinates.length; i++) {
       const coord = coordinates[i];
       ctx.drawImage(tiles[coord.type], coord.pos.x * w, coord.pos.y * h, w, h);
+      ctx.strokeRect(coord.pos.x * w, coord.pos.y * h, w, h);
     }
   }
 
