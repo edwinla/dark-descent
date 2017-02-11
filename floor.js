@@ -18,7 +18,7 @@ export default class Floor {
     this.tiles = {};
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
-    this.rooms = this.generateRooms(5, 10, 5, 10, 100, 1);
+    this.rooms = this.generateRooms(5, 10, 5, 10, 100, 7);
 
     // must be an even square for glue function to work
     // this.partitions = this.generatePartitions(16);
@@ -47,6 +47,8 @@ export default class Floor {
 
     loop1:
     while (rooms.length < maxRooms && i < attempts) {
+      i++;
+
       const newRoom = new Room(
         minWidth,
         maxWidth,
@@ -63,7 +65,6 @@ export default class Floor {
       }
 
       rooms.push(newRoom);
-      i++;
     }
 
     return rooms;
