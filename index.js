@@ -1,5 +1,4 @@
 import Floor from './floor';
-import Partition from './partition';
 import Room from './room';
 
 const tilesSrc = {
@@ -30,7 +29,6 @@ const tileSet1 = {
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('main');
-  // const partition = new Partition();
   const floor = new Floor(canvasEl, tileSet1, 30, 30);
   window.floor = floor;
 });

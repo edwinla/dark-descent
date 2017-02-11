@@ -1,15 +1,4 @@
-import Partition from './partition';
 import Room from './room';
-
-/*
-
-1. A new floor instantiates with n partitions of h height and w width
-2. Floor pieces the partitions together
-3. Floor connects rooms together
-4. Floor generates enemies, items
-
-*/
-
 
 export default class Floor {
   constructor(canvasEl, tilesSrc, mapWidth, mapHeight) {
@@ -20,11 +9,7 @@ export default class Floor {
     this.mapHeight = mapHeight;
     this.rooms = this.generateRooms(5, 10, 5, 10, 100, 7);
 
-    // must be an even square for glue function to work
-    // this.partitions = this.generatePartitions(16);
-    // this.map = this.gluePartitions();
     this.map = this.getBackgroundMap(mapWidth, mapHeight);
-
 
     this.loadTiles(tilesSrc);
   }
@@ -70,15 +55,6 @@ export default class Floor {
     return rooms;
   }
 
-  generatePartitions(num) {
-    const partitions = [];
-    for (let i = 0; i < num; i++) {
-      const partition = new Partition();
-      partitions.push(partition.grid);
-    }
-    return partitions;
-  }
-
   loadTiles(tilesSrc) {
     const tilesSrcKeys = Object.keys(tilesSrc);
     for (let i = 0; i < tilesSrcKeys.length; i++) {
@@ -89,32 +65,6 @@ export default class Floor {
         this.init(tilesSrcKeys.length);
       };
     }
-  }
-
-  gluePartitions() {
-    const rootSize = Math.sqrt(this.partitions.length);
-    let map = [];
-    let nextRows = [];
-    for (let i = 0; i < this.partitions.length; i++) {
-      if (i % rootSize === 0) {
-        nextRows = this.partitions[i];
-      } else {
-        nextRows = this.glue(nextRows, this.partitions[i]);
-
-        if (i % rootSize === rootSize - 1) {
-          map = map.concat(nextRows);
-        }
-      }
-    }
-    return map;
-  }
-
-  glue(part1, part2) {
-    const glued = [];
-    for (let i = 0; i < part1.length; i++) {
-      glued.push(part1[i].concat(part2[i]));
-    }
-    return glued;
   }
 
   init(count) {
@@ -139,10 +89,6 @@ export default class Floor {
     for (let i = 0; i < this.rooms.length; i++) {
       this.rooms[i].render(this.ctx, this.tiles, w, h);
     }
-  }
-
-  draw(x, y, tile) {
-    this.ctx.drawImage(this.tiles[tile], x, y);
   }
 
 }
