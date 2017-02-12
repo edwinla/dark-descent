@@ -24,64 +24,79 @@ loop
 
 */
 
-const pathfinder = (startNode, targetNode) => {
-  const open = [startNode], closed = [], path = [];
+export default class Path {
+  constructor(startNode, targetNode, map) {
+    this.startNode = startNode;
+    this.targetNode = targetNode;
+    this.map = map;
 
-  while (open.length > 0) {
-    const current = findLowestFCost(open);
-    open.splice(open.indexOf(current), 1);
-    closed.push(current);
+    this.path = [];
 
-    if (current === targetNode) {
-      return reconstructPath(path, current);
-    }
+    this.aStarPathFinder();
+  }
 
-    const neighbors = current.neighbors;
+  aStarPathFinder() {
+    const open = [this.startNode], closed = [], path = [];
 
-    for (let i = 0; i < neighbors.length; i++) {
-      const neighbor = neighbors[i];
-      if (neighbor.traversable || closed.indexOf(neighbor) !== -1) {
-          continue;
+    while (open.length > 0) {
+      const current = this.findLowestFCost(open);
+      open.splice(open.indexOf(current), 1);
+      closed.push(current);
+
+      if (current === this.targetNode) {
+        return this.reconstructPath(path, current);
       }
-      const oldPath = neighbor.fCost;
-      const newPath = neighbor.getFCost();
 
-      if (newPath < oldPath || closed.indexOf(neighbor) === -1) {
-        neighbor.fCost = newPath;
-        neighbor.parent = current;
+      const neighbors = current.neighbors;
 
-        if (open.indexOf(neighbor) === -1) {
-          open.push(neighbor);
+      for (let i = 0; i < neighbors.length; i++) {
+        const neighbor = neighbors[i];
+        if (neighbor.traversable || closed.indexOf(neighbor) !== -1) {
+            continue;
+        }
+        const oldPath = neighbor.fCost;
+        const newPath = neighbor.getFCost();
+
+        if (newPath < oldPath || closed.indexOf(neighbor) === -1) {
+          neighbor.fCost = newPath;
+          neighbor.parent = current;
+
+          if (open.indexOf(neighbor) === -1) {
+            open.push(neighbor);
+          }
         }
       }
     }
   }
 
-};
-
-function findLowestFCost(open) {
-  let lowest = open[0];
-  for (let i = 1; i < open.length; i++) {
-    const nextNode = open[i];
-    if (lowest.fCost > nextNode.fCost) {
-      lowest = nextNode;
-    }
+  reconstructPath() {
+    // calls parent from targetNode back to startNode
   }
-  return lowest;
-}
 
-function calculateGCost(current, neighbor) {
-  return current.gCost + 1;
-}
+  findLowestFCost(open) {
+    let lowest = open[0];
+    for (let i = 1; i < open.length; i++) {
+      const nextNode = open[i];
+      if (lowest.fCost > nextNode.fCost) {
+        lowest = nextNode;
+      }
+    }
+    return lowest;
+  }
 
+  updateFCost(current, neighbor) {
+    return this.calculateGCost(current, neighbor) + this.calculateHCost;
+  }
 
+  calculateGCost(current, neighbor) {
+    // one is just the distance between current and neighbor since we will only
+    // calculateGCost when we are evaluating neighbors in cardinal directions
+    return current.gCost + 1;
+  }
 
-function calculateHCost(node, goal) {
-  const dx = Math.abs(node.x - goal.x);
-  const dy = Math.abs(node.y - goal.y);
-  return 1 * (dx * dy);
-}
-
-function reconstructPath() {
-  // Calls parent to reconstruct path
+  calculateHCost(node, goal) {
+    const dx = Math.abs(node.x - goal.x);
+    const dy = Math.abs(node.y - goal.y);
+    return 1 * (dx * dy);
+  }
 }
