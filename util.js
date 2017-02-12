@@ -61,10 +61,9 @@ class BinaryMinHeap {
   }
 
   heapifyUp(index) {
-    const heapifyNode = this.store[index],
-    parentIndex = this.getParentIndex(index);
-
-    if (parentIndex > 0) {
+    if (index > 0) {
+      const heapifyNode = this.store[index],
+      parentIndex = this.getParentIndex(index);
       const parent = this.store[parentIndex];
 
       if (this.comparator(heapifyNode, parent) === 1) return;
