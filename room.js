@@ -1,8 +1,9 @@
 export default class Room {
-  constructor(minWidth, maxWidth, minHeight, maxHeight, mapWidth, mapHeight) {
+  constructor(minWidth, maxWidth, minHeight, maxHeight, map) {
     this.width = this.getRandomNumber(minWidth, maxWidth);
     this.height = this.getRandomNumber(minHeight, maxHeight);
-    this.absolutePosition = this.getRandomPosition(mapWidth, mapHeight);
+    this.map = map;
+    this.absolutePosition = this.getRandomPosition(map[0].length, map.length);
     this.corners = this.getCorners();
   }
 
@@ -15,60 +16,48 @@ export default class Room {
     };
   }
 
-  getCoordinates() {
-    const coordinates = [];
+  updateNodes() {
     const absX = this.absolutePosition.x, absY = this.absolutePosition.y;
     const absXLimit = absX + this.width - 1;
     const absYLimit = absY + this.height - 1;
     for (let y = absY ; y <=  absYLimit; y++) {
       for (let x = absX ; x <= absXLimit; x++) {
-        const coordinate = {pos: {y: y, x: x}};
+        const node = this.map[y][x];
         if (y === absY) {
           switch (x) {
             case (absX):
-              coordinate.type = 'd1';
+              node.type = 'd1';
               break;
             case (absXLimit):
-              coordinate.type = 'd3';
+              node.type = 'd3';
               break;
             default:
-              coordinate.type = 'd2';
+              node.type = 'd2';
           }
         } else if (y === absYLimit) {
           switch (x) {
             case (absX):
-              coordinate.type = 'd7';
+              node.type = 'd7';
               break;
             case (absXLimit):
-              coordinate.type = 'd9';
+              node.type = 'd9';
               break;
             default:
-              coordinate.type = 'd8';
+              node.type = 'd8';
           }
         } else {
           switch (x) {
             case (absX):
-              coordinate.type = 'd4';
+              node.type = 'd4';
               break;
             case (absXLimit):
-              coordinate.type = 'd6';
+              node.type = 'd6';
               break;
             default:
-              coordinate.type = 'd5';
+              node.type = 'd5';
           }
         }
-        coordinates.push(coordinate);
       }
-    }
-    return coordinates;
-  }
-
-  render(ctx, tiles, w, h) {
-    const coordinates = this.getCoordinates();
-    for (let i = 0; i < coordinates.length; i++) {
-      const coord = coordinates[i];
-      ctx.drawImage(tiles[coord.type], coord.pos.x * w, coord.pos.y * h, w, h);
-      ctx.strokeRect(coord.pos.x * w, coord.pos.y * h, w, h);
     }
   }
 

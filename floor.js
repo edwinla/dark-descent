@@ -1,4 +1,5 @@
 import Room from './room';
+import MapNode from './map_node';
 
 export default class Floor {
   constructor(canvasEl, tilesSrc, mapWidth, mapHeight) {
@@ -7,9 +8,9 @@ export default class Floor {
     this.tiles = {};
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
-    this.rooms = this.generateRooms(5, 10, 5, 10, 100, 7);
-
     this.map = this.getBackgroundMap(mapWidth, mapHeight);
+    this.rooms = this.generateRooms(6, 10, 6, 10, 100, 7);
+
 
     this.loadTiles(tilesSrc);
   }
@@ -19,7 +20,8 @@ export default class Floor {
     for (let y = 0; y < mapHeight; y++) {
       const row = [];
       for (let x = 0; x < mapWidth; x++) {
-        row.push('w1');
+        const newMapNode = new MapNode(y, x, 'w1');
+        row.push(newMapNode);
       }
       backgroundMap.push(row);
     }
@@ -39,8 +41,7 @@ export default class Floor {
         maxWidth,
         minHeight,
         maxHeight,
-        this.mapWidth,
-        this.mapHeight
+        this.map
       );
 
       for (let j = 0; j < rooms.length; j++) {
@@ -49,6 +50,7 @@ export default class Floor {
         }
       }
 
+      newRoom.updateNodes();
       rooms.push(newRoom);
     }
 
@@ -76,19 +78,17 @@ export default class Floor {
 
   render() {
     const w = 32, h = 32;
+
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
         const tile = this.map[i][j];
-        if (tile !== 'w1') {
+        if (tile.type !== 'w1') {
           this.ctx.drawImage(this.tiles.w1, j * w, i * h, w, h);
         }
-        this.ctx.drawImage(this.tiles[tile], j * w, i * h, w, h);
+        this.ctx.drawImage(this.tiles[tile.type], j * w, i * h, w, h);
       }
     }
 
-    for (let i = 0; i < this.rooms.length; i++) {
-      this.rooms[i].render(this.ctx, this.tiles, w, h);
-    }
   }
 
 }
