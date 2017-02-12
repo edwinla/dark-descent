@@ -1,5 +1,8 @@
 export default class MapNode {
-  constructor(coord) {
-    this.coord = coord;
+  constructor(yCoord, xCoord) {
+    this.yCoord = yCoord;
+    this.xCoord = xCoord;
   }
+
+  
 }

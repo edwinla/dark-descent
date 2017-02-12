@@ -28,9 +28,11 @@ import MapNode from './map_node';
 
 function createNodesFromMap(map) {
   const nodes = [];
-  map.forEach(coord => {
-    const newNode = new Node(coord);
-    nodes.push(nodes);
+  map.forEach(yCoord => {
+    map.forEach(xCoord => {
+      const newNode = new Node(yCoord, xCoord);
+      nodes.push(newNode);
+    });
   });
   return nodes;
 }
@@ -70,10 +72,29 @@ const pathfinder = (startNode, targetNode) => {
 
 };
 
-function findLowestFCost() {
+function findLowestFCost(open) {
+  let lowest = open[0];
+  for (let i = 1; i < open.length; i++) {
+    const nextNode = open[i];
+    if (lowest.fCost > nextNode.fCost) {
+      lowest = nextNode;
+    }
+  }
+  return lowest;
+}
 
+function calculateGCost(current, neighbor) {
+  return current.gCost + 1;
+}
+
+
+
+function calculateHCost(node, goal) {
+  const dx = Math.abs(node.x - goal.x);
+  const dy = Math.abs(node.y - goal.y);
+  return 1 * (dx * dy);
 }
 
 function reconstructPath() {
-
+  // Calls parent to reconstruct path
 }
