@@ -29,6 +29,6 @@ const tileSet1 = {
 
 document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('main');
-  const floor = new Floor(canvasEl, tileSet1, 30, 30);
+  const floor = new Floor(canvasEl, tileSet1, 50, 50);
   window.floor = floor;
 });
