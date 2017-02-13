@@ -9,7 +9,7 @@ export default class Floor {
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
     this.map = this.getBackgroundMap(mapWidth, mapHeight);
-    this.rooms = this.generateRooms(6, 10, 6, 10, 100, 7);
+    this.rooms = this.generateRooms(8, 14, 8, 14, 200, 7);
 
 
     this.loadTiles(tilesSrc);
@@ -86,6 +86,7 @@ export default class Floor {
           this.ctx.drawImage(this.tiles.w1, j * w, i * h, w, h);
         }
         this.ctx.drawImage(this.tiles[tile.type], j * w, i * h, w, h);
+        this.ctx.strokeRect(j * w, i * h, w, h);
       }
     }
 
