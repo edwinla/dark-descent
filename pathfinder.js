@@ -1,3 +1,5 @@
+import BinaryMinHeap from 'util.js';
+
 /*
 
 OPEN // set of nodes to be evaluated
@@ -35,35 +37,43 @@ export default class Path {
     this.aStarPathFinder();
   }
 
+  fCostComparator(node1, node2) {
+    if (node1.fCost > node2.fCost) {
+      return 1;
+    } else if (node1.fCost < node2.fCost) {
+      return -1;
+    } else return 0;
+  }
+
   aStarPathFinder() {
-    const open = [this.startNode], closed = [], path = [];
+    const open = new BinaryMinHeap(this.fCostComparator),
+    closed = [], path = [];
+
+    open.push(this.startNode);
 
     while (open.length > 0) {
-      const current = this.findLowestFCost(open);
-      open.splice(open.indexOf(current), 1);
+      const current = open.extract();
       closed.push(current);
 
       if (current === this.targetNode) {
         return this.reconstructPath(path, current);
       }
 
-      const neighbors = current.neighbors;
+      const neighbors = current.getNeighbors();
 
       for (let i = 0; i < neighbors.length; i++) {
         const neighbor = neighbors[i];
-        if (neighbor.traversable || closed.indexOf(neighbor) !== -1) {
-            continue;
-        }
-        const oldPath = neighbor.fCost;
-        const newPath = neighbor.getFCost();
 
-        if (newPath < oldPath || closed.indexOf(neighbor) === -1) {
+        if (!neighbor.traversable || closed.indexOf(neighbor)) continue;
+
+        const oldPath = neighbor.fCost;
+        const newPath = neighbor.updateFCost(current, neighbor);
+
+        if (closed.indexOf(neighbor) === -1 || newPath < oldPath) {
           neighbor.fCost = newPath;
           neighbor.parent = current;
 
-          if (open.indexOf(neighbor) === -1) {
-            open.push(neighbor);
-          }
+          if (open.store.indexOf(neighbor) === -1) open.push(neighbor);
         }
       }
     }
@@ -73,30 +83,19 @@ export default class Path {
     // calls parent from targetNode back to startNode
   }
 
-  findLowestFCost(open) {
-    let lowest = open[0];
-    for (let i = 1; i < open.length; i++) {
-      const nextNode = open[i];
-      if (lowest.fCost > nextNode.fCost) {
-        lowest = nextNode;
-      }
-    }
-    return lowest;
-  }
-
   updateFCost(current, neighbor) {
-    return this.calculateGCost(current, neighbor) + this.calculateHCost;
+    return this.calculateGCost(current) + this.calculateHCost(neighbor);
   }
 
-  calculateGCost(current, neighbor) {
+  calculateGCost(current) {
     // one is just the distance between current and neighbor since we will only
     // calculateGCost when we are evaluating neighbors in cardinal directions
     return current.gCost + 1;
   }
 
-  calculateHCost(node, goal) {
-    const dx = Math.abs(node.x - goal.x);
-    const dy = Math.abs(node.y - goal.y);
+  calculateHCost(node) {
+    const dx = Math.abs(node.x - this.targetNode.x);
+    const dy = Math.abs(node.y - this.targetNode.y);
     return 1 * (dx * dy);
   }
 }
