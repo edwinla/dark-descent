@@ -23,6 +23,10 @@ export default class Room {
     return this.door;
   }
 
+  openPath() {
+
+  }
+
   linearizeEdges() {
     const absX = this.absolutePosition.x, absY = this.absolutePosition.y;
     const absXLimit = absX + this.width - 1;
@@ -47,6 +51,32 @@ export default class Room {
     return edges;
   }
 
+  addBuffer() {
+    const absX = this.absolutePosition.x - 1,
+    absY = this.absolutePosition.y - 1,
+    absXLimit = absX + this.width + 1,
+    absYLimit = absY + this.height + 1;
+
+    let y = absX;
+    while (y <= absYLimit) {
+      let x = absX;
+      while (x <= absXLimit) {
+        const node = this.map[y][x];
+        node.type = 'w2';
+
+        switch (x) {
+          case absX:
+          case absXLimit:
+            x += this.width + 1;
+            break;
+          default:
+            x++;
+        }
+      }
+      y++;
+    }
+  }
+
   updateNodes() {
     const absX = this.absolutePosition.x, absY = this.absolutePosition.y;
     const absXLimit = absX + this.width - 1;
@@ -55,8 +85,6 @@ export default class Room {
       for (let x = absX ; x <= absXLimit; x++) {
         const node = this.map[y][x];
         node.type = 'd5';
-
-
 
         // if (y === absY) {
         //   switch (x) {
