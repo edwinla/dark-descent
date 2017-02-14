@@ -1,4 +1,4 @@
-class BinaryMinHeap {
+export class BinaryMinHeap {
   constructor(comparator) {
     this.store = [];
     this.comparator = comparator;
