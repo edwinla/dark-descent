@@ -1,4 +1,4 @@
-import BinaryMinHeap from 'util.js';
+import {BinaryMinHeap} from './util.js';
 
 /*
 
@@ -31,7 +31,6 @@ export default class Path {
     this.startNode = startNode;
     this.targetNode = targetNode;
     this.map = map;
-
     this.path = [];
 
     this.aStarPathFinder();
@@ -49,17 +48,19 @@ export default class Path {
     const open = new BinaryMinHeap(this.fCostComparator),
     closed = [], path = [];
 
-    open.push(this.startNode);
+    // Initially there is no G cost of the start node, so we just use H cost;
+    this.startNode.fCost = this.calculateHCost(this.startNode);
 
-    while (open.length > 0) {
+    open.push(this.startNode);
+    while (open.count() > 0) {
       const current = open.extract();
       closed.push(current);
 
       if (current === this.targetNode) {
-        return this.reconstructPath(path, current);
+        return this.reconstructPath();
       }
 
-      const neighbors = current.getNeighbors();
+      const neighbors = current.getNeighbors(this.map);
 
       for (let i = 0; i < neighbors.length; i++) {
         const neighbor = neighbors[i];
@@ -79,8 +80,14 @@ export default class Path {
     }
   }
 
-  reconstructPath() {
-    // calls parent from targetNode back to startNode
+  reconstructPath(closed) {
+    let currentNode = this.targetNode;
+
+    while (currentNode !== this.startNode) {
+      const parentNode = currentNode.parent;
+      this.path.push(parentNode);
+      currentNode = parentNode;
+    }
   }
 
   updateFCost(current, neighbor) {
