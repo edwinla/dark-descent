@@ -24,7 +24,15 @@ export default class Room {
   }
 
   openPath() {
+    const coords = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
+    for (let i = 0; i < coords.length; i++) {
+      const node = this.map[coords[i][0]][coords[i][1]];
+      if (node.type === 'w2') {
+        node.type = 'w1';
+        return;
+      }
+    }
   }
 
   linearizeEdges() {
