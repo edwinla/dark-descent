@@ -27,7 +27,9 @@ export default class Room {
     const coords = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
     for (let i = 0; i < coords.length; i++) {
-      const node = this.map[coords[i][0]][coords[i][1]];
+      const x = this.door.x + coords[i][1];
+      const y = this.door.y + coords[i][0];
+      const node = this.map[y][x];
       if (node.type === 'w2') {
         node.type = 'w1';
         return;
@@ -85,7 +87,7 @@ export default class Room {
     }
   }
 
-  updateNodes() {
+  drawMain() {
     const absX = this.absolutePosition.x, absY = this.absolutePosition.y;
     const absXLimit = absX + this.width - 1;
     const absYLimit = absY + this.height - 1;
@@ -130,6 +132,13 @@ export default class Room {
         // }
       }
     }
+  }
+
+  render() {
+    this.drawMain();
+    this.addBuffer();
+    this.generateDoorLocation();
+    this.openPath();
   }
 
   getRandomNumber(min, max) {

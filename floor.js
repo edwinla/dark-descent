@@ -33,7 +33,7 @@ export default class Floor {
     let i = 0;
 
     loop1:
-    while (rooms.length < maxRooms && i < attempts) {
+    while (rooms.length < 2 && i < attempts) {
       i++;
 
       const newRoom = new Room(
@@ -50,7 +50,7 @@ export default class Floor {
         }
       }
 
-      newRoom.updateNodes();
+      newRoom.render();
       rooms.push(newRoom);
     }
 
