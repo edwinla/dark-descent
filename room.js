@@ -19,7 +19,8 @@ export default class Room {
   }
 
   generateDoorLocation() {
-    this.door = this.edges[Math.floor(Math.random() * (this.edges.length + 1))];
+    this.door = this.edges[Math.floor(Math.random() * (this.edges.length))];
+    this.door.isDoor = true;
     return this.door;
   }
 
@@ -67,20 +68,20 @@ export default class Room {
     absXLimit = absX + this.width + 1,
     absYLimit = absY + this.height + 1;
 
-    let y = absX;
+    let y = absY;
     while (y <= absYLimit) {
       let x = absX;
       while (x <= absXLimit) {
         const node = this.map[y][x];
         node.type = 'w2';
 
-        switch (x) {
-          case absX:
-          case absXLimit:
-            x += this.width + 1;
+        switch (y) {
+          case absY:
+          case absYLimit:
+            x++;
             break;
           default:
-            x++;
+            x += this.width + 1;
         }
       }
       y++;
@@ -95,41 +96,6 @@ export default class Room {
       for (let x = absX ; x <= absXLimit; x++) {
         const node = this.map[y][x];
         node.type = 'd5';
-
-        // if (y === absY) {
-        //   switch (x) {
-        //     case (absX):
-        //       node.type = 'd1';
-        //       break;
-        //     case (absXLimit):
-        //       node.type = 'd3';
-        //       break;
-        //     default:
-        //       node.type = 'd2';
-        //   }
-        // } else if (y === absYLimit) {
-        //   switch (x) {
-        //     case (absX):
-        //       node.type = 'd7';
-        //       break;
-        //     case (absXLimit):
-        //       node.type = 'd9';
-        //       break;
-        //     default:
-        //       node.type = 'd8';
-        //   }
-        // } else {
-        //   switch (x) {
-        //     case (absX):
-        //       node.type = 'd4';
-        //       break;
-        //     case (absXLimit):
-        //       node.type = 'd6';
-        //       break;
-        //     default:
-        //       node.type = 'd5';
-        //   }
-        // }
       }
     }
   }
