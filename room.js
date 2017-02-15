@@ -5,9 +5,14 @@ export default class Room {
     this.width = randomNumber(minWidth, maxWidth);
     this.height = randomNumber(minHeight, maxHeight);
     this.map = map;
-    this.absolutePosition = this.getRandomPosition(map[0].length, map.length);
+    this.absPos = this.getRandomPosition(map[0].length, map.length);
     this.corners = this.getCorners();
+  }
+
+  render() {
     this.edges = this.linearizeEdges();
+    this.drawMain();
+    this.addBuffer();
   }
 
   getRandomPosition(mapWidth, mapHeight) {
@@ -41,7 +46,7 @@ export default class Room {
   }
 
   linearizeEdges() {
-    const absX = this.absolutePosition.x, absY = this.absolutePosition.y;
+    const absX = this.absPos.x, absY = this.absPos.y;
     const absXLimit = absX + this.width - 1;
     const absYLimit = absY + this.height - 1;
 
@@ -65,8 +70,8 @@ export default class Room {
   }
 
   addBuffer() {
-    const absX = this.absolutePosition.x - 1,
-    absY = this.absolutePosition.y - 1,
+    const absX = this.absPos.x - 1,
+    absY = this.absPos.y - 1,
     absXLimit = absX + this.width + 1,
     absYLimit = absY + this.height + 1;
 
@@ -91,7 +96,7 @@ export default class Room {
   }
 
   drawMain() {
-    const absX = this.absolutePosition.x, absY = this.absolutePosition.y;
+    const absX = this.absPos.x, absY = this.absPos.y;
     const absXLimit = absX + this.width - 1;
     const absYLimit = absY + this.height - 1;
     for (let y = absY ; y <=  absYLimit; y++) {
@@ -102,30 +107,23 @@ export default class Room {
     }
   }
 
-  render() {
-    this.drawMain();
-    this.addBuffer();
-  }
-
   getCorners() {
-    // We add a gap size of '1' so that rooms are not directly touching
-    // Note: Adding the height/width accounts for the gap size already
     return {
       nw: {
-        x: this.absolutePosition.x - 2,
-        y: this.absolutePosition.y - 2
+        x: this.absPos.x - 2,
+        y: this.absPos.y - 2
       },
       ne: {
-        x: this.absolutePosition.x + this.width + 1,
-        y: this.absolutePosition.y - 2
+        x: this.absPos.x + this.width + 1,
+        y: this.absPos.y - 2
       },
       sw: {
-        x: this.absolutePosition.x - 2,
-        y: this.absolutePosition.y + this.height + 1,
+        x: this.absPos.x - 2,
+        y: this.absPos.y + this.height + 1,
       },
       se: {
-        x: this.absolutePosition.x + this.width + 1,
-        y: this.absolutePosition.y + this.height + 1
+        x: this.absPos.x + this.width + 1,
+        y: this.absPos.y + this.height + 1
       }
     };
   }
