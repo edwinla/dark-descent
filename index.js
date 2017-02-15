@@ -1,5 +1,6 @@
 import Floor from './floor';
 import Room from './room';
+import Path from './pathfinder';
 
 const tilesSrc = {
   w1: "./assets/images/PNG/mapTile_187.png",
@@ -16,6 +17,7 @@ const tilesSrc = {
 
 const tileSet1 = {
   w1: "./assets/images/tiles/ground_tile_water_256_water.png",
+  w2: "./assets/images/tiles/paving_01_tile_256_01.png",
   d1: "./assets/images/tiles/ground_tile_water_256_nw.png",
   d2: "./assets/images/tiles/ground_tile_water_256_north_1.png",
   d3: "./assets/images/tiles/ground_tile_water_256_ne.png",
@@ -30,5 +32,4 @@ const tileSet1 = {
 document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('main');
   const floor = new Floor(canvasEl, tileSet1, 50, 50);
-  window.floor = floor;
 });

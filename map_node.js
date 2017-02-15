@@ -34,23 +34,6 @@ export default class MapNode {
       if (this.traversable(map, pos)) neighbors.push(map[y][x]);
     });
 
-    //
-    //
-    // if (this.y > 0) {
-    //   const north = map[this.y - 1][this.x];
-    //
-    //   neighbors.push(map[this.y - 1][this.x]);
-    // }
-    // if (this.y < map.length) {
-    //   neighbors.push(map[this.y + 1][this.x]);
-    // }
-    // if (this.x > 0) {
-    //   neighbors.push(map[this.y][this.x - 1]);
-    // }
-    // if (this.x < map[0].length) {
-    //   neighbors.push(map[this.y][this.x + 1]);
-    // }
-
     return neighbors;
   }
 }
