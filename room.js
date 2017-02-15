@@ -1,7 +1,9 @@
+import {randomNumber} from './util';
+
 export default class Room {
   constructor(minWidth, maxWidth, minHeight, maxHeight, map) {
-    this.width = this.getRandomNumber(minWidth, maxWidth);
-    this.height = this.getRandomNumber(minHeight, maxHeight);
+    this.width = randomNumber(minWidth, maxWidth);
+    this.height = randomNumber(minHeight, maxHeight);
     this.map = map;
     this.absolutePosition = this.getRandomPosition(map[0].length, map.length);
     this.corners = this.getCorners();
@@ -12,8 +14,8 @@ export default class Room {
     const xUpperLimit = mapWidth - this.width - 3;
     const yUpperLimit = mapHeight - this.height - 3;
     return {
-      x: this.getRandomNumber(3, xUpperLimit),
-      y: this.getRandomNumber(3, yUpperLimit)
+      x: randomNumber(3, xUpperLimit),
+      y: randomNumber(3, yUpperLimit)
     };
   }
 
@@ -103,12 +105,6 @@ export default class Room {
   render() {
     this.drawMain();
     this.addBuffer();
-  }
-
-  getRandomNumber(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   getCorners() {
