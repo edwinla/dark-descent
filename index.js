@@ -32,4 +32,5 @@ const tileSet1 = {
 document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('main');
   const floor = new Floor(canvasEl, tileSet1, 50, 50);
+  floor.render();
 });

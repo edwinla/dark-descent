@@ -5,15 +5,18 @@ import Path from './path';
 export default class Floor {
   constructor(canvasEl, tilesSrc, mapWidth, mapHeight) {
     this.tilesLoaded = 0;
+    this.tilesSrc = tilesSrc;
     this.ctx = canvasEl.getContext('2d');
     this.tiles = {};
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
-    this.map = this.getBackgroundMap(mapWidth, mapHeight);
+  }
+
+  render() {
+    this.map = this.getBackgroundMap(this.mapWidth, this.mapHeight);
     this.rooms = this.generateRooms(8, 14, 8, 14, 200, 7);
     this.paths = this.generatePaths();
-
-    this.loadTiles(tilesSrc);
+    this.loadTiles(this.tilesSrc);
   }
 
   getBackgroundMap(mapWidth, mapHeight) {
@@ -32,7 +35,7 @@ export default class Floor {
   generateRooms(minWidth, maxWidth, minHeight, maxHeight, attempts, maxRooms) {
     const rooms = [];
     let i = 0;
-
+    
     loop1:
     while (rooms.length < 7 && i < attempts) {
       i++;
@@ -87,11 +90,11 @@ export default class Floor {
   init(count) {
     this.tilesLoaded++;
     if (this.tilesLoaded === count) {
-      this.render();
+      this.draw();
     }
   }
 
-  render() {
+  draw() {
     const w = 32, h = 32;
 
     for (let i = 0; i < this.map.length; i++) {
@@ -106,7 +109,7 @@ export default class Floor {
     }
   }
 
-  draw(path) {
+  drawTest(path) {
     const w = 32, h = 32;
 
     for (let i = 0; i < path.length; i++) {
