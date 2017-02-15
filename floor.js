@@ -89,7 +89,16 @@ export default class Floor {
         this.ctx.strokeRect(j * w, i * h, w, h);
       }
     }
+  }
 
+  draw(path) {
+    const w = 32, h = 32;
+
+    for (let i = 0; i < path.length; i++) {
+      const node = path[i];
+      this.ctx.drawImage(this.tiles.d5, node.x * w, node.y * h, w, h);
+      this.ctx.strokeRect(node.x * w, node.y * h, w, h);
+    }
   }
 
 }
