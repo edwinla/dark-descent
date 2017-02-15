@@ -40,10 +40,13 @@ export class BinaryMinHeap {
     }
   }
 
+  recompareNode(node) {
+    this.heapifyDown(this.store.indexOf(node));
+  }
+
   heapifyDown(index) {
     const heapifyNode = this.store[index],
     childIndices = this.getChildIndices(index);
-
     if (childIndices.length > 0) {
       let swapIndex = null;
 
@@ -53,6 +56,8 @@ export class BinaryMinHeap {
           swapIndex = childIndex;
         }
       });
+
+      if (!swapIndex) return;
 
       this.swapNodes(heapifyNode, index, swapIndex);
 
@@ -74,8 +79,8 @@ export class BinaryMinHeap {
     }
   }
 
-  swapNodes(heapifyNode, index, swapIndex) {
-    this.store[index] = this.store[swapIndex];
+  swapNodes(heapifyNode, currentIndex, swapIndex) {
+    this.store[currentIndex] = this.store[swapIndex];
     this.store[swapIndex] = heapifyNode;
   }
 
