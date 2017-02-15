@@ -1,6 +1,6 @@
 import Floor from './floor';
 import Room from './room';
-import Path from './pathfinder';
+import Path from './path';
 
 const tilesSrc = {
   w1: "./assets/images/PNG/mapTile_187.png",

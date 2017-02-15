@@ -6,7 +6,6 @@ export default class Room {
     this.absolutePosition = this.getRandomPosition(map[0].length, map.length);
     this.corners = this.getCorners();
     this.edges = this.linearizeEdges();
-    this.door = null;
   }
 
   getRandomPosition(mapWidth, mapHeight) {
@@ -19,17 +18,18 @@ export default class Room {
   }
 
   generateDoorLocation() {
-    this.door = this.edges[Math.floor(Math.random() * (this.edges.length))];
-    this.door.isDoor = true;
-    return this.door;
+    const door = this.edges[Math.floor(Math.random() * (this.edges.length))];
+    this.openPath(door);
+    door.isDoor = true;
+    return door;
   }
 
-  openPath() {
+  openPath(door) {
     const coords = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
     for (let i = 0; i < coords.length; i++) {
-      const x = this.door.x + coords[i][1];
-      const y = this.door.y + coords[i][0];
+      const x = door.x + coords[i][1];
+      const y = door.y + coords[i][0];
       const node = this.map[y][x];
       if (node.type === 'w2') {
         node.type = 'w1';
@@ -103,8 +103,6 @@ export default class Room {
   render() {
     this.drawMain();
     this.addBuffer();
-    this.generateDoorLocation();
-    this.openPath();
   }
 
   getRandomNumber(min, max) {

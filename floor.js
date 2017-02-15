@@ -1,5 +1,6 @@
 import Room from './room';
 import MapNode from './map_node';
+import Path from './path';
 
 export default class Floor {
   constructor(canvasEl, tilesSrc, mapWidth, mapHeight) {
@@ -10,7 +11,7 @@ export default class Floor {
     this.mapHeight = mapHeight;
     this.map = this.getBackgroundMap(mapWidth, mapHeight);
     this.rooms = this.generateRooms(8, 14, 8, 14, 200, 7);
-
+    this.paths = this.generatePaths();
 
     this.loadTiles(tilesSrc);
   }
@@ -33,7 +34,7 @@ export default class Floor {
     let i = 0;
 
     loop1:
-    while (rooms.length < 2 && i < attempts) {
+    while (rooms.length < 7 && i < attempts) {
       i++;
 
       const newRoom = new Room(
@@ -55,6 +56,20 @@ export default class Floor {
     }
 
     return rooms;
+  }
+
+  generatePaths() {
+    const paths = [];
+    for (let i = 0; i < this.rooms.length - 1; i++) {
+      const door1 = this.rooms[i].generateDoorLocation();
+      const door2 = this.rooms[i + 1].generateDoorLocation();
+      const path = new Path(door1, door2, this.map);
+      paths.push(path);
+    }
+
+    paths.forEach(path => path.render());
+
+    return paths;
   }
 
   loadTiles(tilesSrc) {
