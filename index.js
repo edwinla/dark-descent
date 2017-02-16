@@ -31,5 +31,6 @@ const tileSet1 = {
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('main');
   const ctx = canvas.getContext('2d');
-  const game = new Game(canvas, ctx, tileSet1);
+  const tileSize = { w: 32, h: 32 };
+  const game = new Game(canvas, ctx, tileSet1, tileSize);
 });
