@@ -13,10 +13,22 @@ export default class Game {
 
     this.start();
     this.toggleMovement();
+    window.addEventListener('resize', this.resize.bind(this));
+  }
+
+  draw() {
+    this.floor.draw();
   }
 
   start() {
     this.floor.render();
+  }
+
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+
+    this.floor.draw();
   }
 
   toggleMovement() {
