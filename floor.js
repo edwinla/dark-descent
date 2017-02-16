@@ -3,10 +3,10 @@ import MapNode from './map_node';
 import Path from './path';
 
 export default class Floor {
-  constructor(canvasEl, tilesSrc, mapWidth, mapHeight) {
+  constructor(ctx, tileSet, mapWidth, mapHeight) {
     this.tilesLoaded = 0;
-    this.tilesSrc = tilesSrc;
-    this.ctx = canvasEl.getContext('2d');
+    this.tileSet = tileSet;
+    this.ctx = ctx;
     this.tiles = {};
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
@@ -16,7 +16,7 @@ export default class Floor {
     this.map = this.getBackgroundMap(this.mapWidth, this.mapHeight);
     this.rooms = this.generateRooms(8, 14, 8, 14, 200, 7);
     this.paths = this.generatePaths();
-    this.loadTiles(this.tilesSrc);
+    this.loadTiles(this.tileSet);
   }
 
   getBackgroundMap(mapWidth, mapHeight) {
@@ -35,7 +35,7 @@ export default class Floor {
   generateRooms(minWidth, maxWidth, minHeight, maxHeight, attempts, maxRooms) {
     const rooms = [];
     let i = 0;
-    
+
     loop1:
     while (rooms.length < 7 && i < attempts) {
       i++;
@@ -75,14 +75,14 @@ export default class Floor {
     return paths;
   }
 
-  loadTiles(tilesSrc) {
-    const tilesSrcKeys = Object.keys(tilesSrc);
-    for (let i = 0; i < tilesSrcKeys.length; i++) {
-      const tile = tilesSrcKeys[i];
+  loadTiles(tileSet) {
+    const tileSetKeys = Object.keys(tileSet);
+    for (let i = 0; i < tileSetKeys.length; i++) {
+      const tile = tileSetKeys[i];
       this.tiles[tile] = new Image();
-      this.tiles[tile].src = tilesSrc[tile];
+      this.tiles[tile].src = tileSet[tile];
       this.tiles[tile].onload = () => {
-        this.init(tilesSrcKeys.length);
+        this.init(tileSetKeys.length);
       };
     }
   }
@@ -106,16 +106,6 @@ export default class Floor {
         this.ctx.drawImage(this.tiles[tile.type], j * w, i * h, w, h);
         this.ctx.strokeRect(j * w, i * h, w, h);
       }
-    }
-  }
-
-  drawTest(path) {
-    const w = 32, h = 32;
-
-    for (let i = 0; i < path.length; i++) {
-      const node = path[i];
-      this.ctx.drawImage(this.tiles.d5, node.x * w, node.y * h, w, h);
-      this.ctx.strokeRect(node.x * w, node.y * h, w, h);
     }
   }
 

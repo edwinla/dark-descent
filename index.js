@@ -1,6 +1,4 @@
-import Floor from './floor';
-import Room from './room';
-import Path from './path';
+import Game from './game';
 
 const tilesSrc = {
   w1: "./assets/images/PNG/mapTile_187.png",
@@ -26,11 +24,12 @@ const tileSet1 = {
   d6: "./assets/images/tiles/ground_tile_water_256_east_1.png",
   d7: "./assets/images/tiles/ground_tile_water_256_sw.png",
   d8: "./assets/images/tiles/ground_tile_water_256_south_1.png",
-  d9: "./assets/images/tiles/ground_tile_water_256_se.png"
+  d9: "./assets/images/tiles/ground_tile_water_256_se.png",
+  u1: "./assets/images/tiles/snow_02_tile_256_01.png"
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const canvasEl = document.getElementById('main');
-  const floor = new Floor(canvasEl, tileSet1, 50, 50);
-  floor.render();
+  const canvas = document.getElementById('main');
+  const ctx = canvas.getContext('2d');
+  const game = new Game(canvas, ctx, tileSet1);
 });
