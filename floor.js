@@ -3,20 +3,27 @@ import MapNode from './map_node';
 import Path from './path';
 
 export default class Floor {
-  constructor(ctx, tileSet, mapWidth, mapHeight) {
+  constructor(ctx, tileSet, tileSize, mapWidth, mapHeight) {
     this.tilesLoaded = 0;
     this.tileSet = tileSet;
+    this.tileSize = tileSize;
     this.ctx = ctx;
     this.tiles = {};
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
-  }
-
-  render() {
     this.map = this.getBackgroundMap(this.mapWidth, this.mapHeight);
     this.rooms = this.generateRooms(8, 14, 8, 14, 200, 7);
     this.paths = this.generatePaths();
+  }
+
+  render() {
     this.loadTiles(this.tileSet);
+  }
+
+  drawSingle(type, coord) {
+    const {w, h} = this.tileSize, {x, y} = coord;
+    this.ctx.drawImage(this.tiles[type], x * w, y * h, w, h);
+    return this.map[y][x];
   }
 
   getBackgroundMap(mapWidth, mapHeight) {
@@ -95,7 +102,7 @@ export default class Floor {
   }
 
   draw() {
-    const w = 32, h = 32;
+    const {w, h} = this.tileSize;
 
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
