@@ -3,7 +3,6 @@ import {randomNumber} from './util';
 export default class Unit {
   constructor(type, floor, ctx) {
     this.type = type;
-    this.prevType = 'd5';
     this.floor = floor;
     this.ctx = ctx;
     this.node = this.spawn();
@@ -21,7 +20,6 @@ export default class Unit {
 
   move(e) {
     e.preventDefault();
-
     const coord = Object.assign({}, { x: this.node.x, y: this.node.y });
 
     switch (e.key) {
@@ -47,12 +45,22 @@ export default class Unit {
     const nextNode = this.floor.map[coord.y][coord.x];
     if (!this.validMovement(nextNode)) return;
 
-    // remove unit from current node
-    this.floor.drawSingle(this.prevType, { x: this.node.x, y: this.node.y });
+    // update to new node and restore previous
+    this.moveUnit(nextNode);
+  }
 
-    // save type of node before drawing
-    this.prevType = nextNode.type;
-    this.node = this.floor.drawSingle(this.type, coord);
+  moveUnit(nextNode) {
+    nextNode.type = this.type;
+    this.node.restoreType();
+    this.node = nextNode;
+
+    this.x = nextNode.x;
+    this.y = nextNode.y;
+
+    this.floor.cameraPos.cx = this.x;
+    this.floor.cameraPos.cy = this.y;
+
+    this.floor.update();
   }
 
   validMovement(node) {

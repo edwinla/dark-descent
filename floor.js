@@ -26,12 +26,6 @@ export default class Floor {
     } else this.update();
   }
 
-  drawSingle(type, coord) {
-    const {x, y} = coord, ts = this.tSize;
-    this.ctx.drawImage(this.tiles[type], x * ts, y * ts, ts, ts);
-    return this.map[y][x];
-  }
-
   getBackgroundMap(mapWidth, mapHeight) {
     const backgroundMap = [];
     for (let y = 0; y < mapHeight; y++) {
@@ -105,25 +99,6 @@ export default class Floor {
     if (this.tilesLoaded === count) {
       this.update();
     }
-  }
-
-  draw() {
-    const ts = this.tSize;
-
-    for (let i = 0; i < this.fov.y; i++) {
-      for (let j = 0; j < this.fov.x; j++) {
-        const tile = this.map[i][j];
-        if (tile.type !== 'w1') {
-          this.ctx.drawImage(this.tiles.w1, j * ts, i * ts, ts, ts);
-        }
-        this.ctx.drawImage(this.tiles[tile.type], j * ts, i * ts, ts, ts);
-        this.ctx.strokeRect(j * ts, i * ts, ts, ts);
-      }
-    }
-  }
-
-  inBounds(pos) {
-    return (pos.x >= 0 && pos.x < this.mapWidth) && (pos.y >= 0 && pos.y < this.mapHeight);
   }
 
   calcBounds(tX, tY) {

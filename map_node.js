@@ -3,6 +3,7 @@ export default class MapNode {
     this.y = y;
     this.x = x;
     this.type = type;
+    this.restore = type;
     this.isDoor = false;
     this.parent = null;
     this.fCost = null;
@@ -15,6 +16,10 @@ export default class MapNode {
       if (node.isDoor || node.type === 'w1') return true;
     }
     return false;
+  }
+
+  restoreType() {
+    this.type = this.restore;
   }
 
   validPos(map, pos) {

@@ -57,6 +57,7 @@ export default class Path {
   render() {
     this.path.forEach(node => {
       node.type = 'd5';
+      node.restore = 'd5';
     });
   }
 
