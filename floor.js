@@ -3,26 +3,32 @@ import MapNode from './map_node';
 import Path from './path';
 
 export default class Floor {
-  constructor(ctx, tileSet, tileSize, mapWidth, mapHeight) {
+  constructor(ctx, tileSet, tSize, fov, mapWidth, mapHeight) {
     this.tilesLoaded = 0;
     this.tileSet = tileSet;
-    this.tileSize = tileSize;
+    this.tSize = tSize;
+    this.fov = fov;
     this.ctx = ctx;
     this.tiles = {};
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
+    this.cameraPos = {cx: 0, cy: 0};
+    this.initialRender = true;
     this.map = this.getBackgroundMap(this.mapWidth, this.mapHeight);
     this.rooms = this.generateRooms(8, 14, 8, 14, 200, 7);
     this.paths = this.generatePaths();
   }
 
   render() {
-    this.loadTiles(this.tileSet);
+    if (this.initialRender) {
+      this.initialRender = false;
+      this.loadTiles(this.tileSet);
+    } else this.update();
   }
 
   drawSingle(type, coord) {
-    const {w, h} = this.tileSize, {x, y} = coord;
-    this.ctx.drawImage(this.tiles[type], x * w, y * h, w, h);
+    const {x, y} = coord, ts = this.tSize;
+    this.ctx.drawImage(this.tiles[type], x * ts, y * ts, ts, ts);
     return this.map[y][x];
   }
 
@@ -97,23 +103,70 @@ export default class Floor {
   init(count) {
     this.tilesLoaded++;
     if (this.tilesLoaded === count) {
-      this.draw();
+      this.update();
     }
   }
 
   draw() {
-    const {w, h} = this.tileSize;
+    const ts = this.tSize;
 
-    for (let i = 0; i < this.map.length; i++) {
-      for (let j = 0; j < this.map[i].length; j++) {
+    for (let i = 0; i < this.fov.y; i++) {
+      for (let j = 0; j < this.fov.x; j++) {
         const tile = this.map[i][j];
         if (tile.type !== 'w1') {
-          this.ctx.drawImage(this.tiles.w1, j * w, i * h, w, h);
+          this.ctx.drawImage(this.tiles.w1, j * ts, i * ts, ts, ts);
         }
-        this.ctx.drawImage(this.tiles[tile.type], j * w, i * h, w, h);
-        this.ctx.strokeRect(j * w, i * h, w, h);
+        this.ctx.drawImage(this.tiles[tile.type], j * ts, i * ts, ts, ts);
+        this.ctx.strokeRect(j * ts, i * ts, ts, ts);
       }
     }
   }
 
+  inBounds(pos) {
+    return (pos.x >= 0 && pos.x < this.mapWidth) && (pos.y >= 0 && pos.y < this.mapHeight);
+  }
+
+  calcBounds(tX, tY) {
+
+    const fovX = Math.floor(this.fov.x / 2);
+    const fovY = Math.floor(this.fov.y / 2);
+
+    let camX, camY, fov = {};
+
+    if (tX + fovX >= this.mapWidth) {
+      camX = this.mapWidth - this.fov.x;
+    } else if (tX - fovX < 0) {
+      camX = 0;
+    } else camX = tX - fovX;
+
+    if (tY + fovY >= this.mapHeight) {
+      camY = this.mapHeight - this.fov.y;
+    } else if (tY - fovY < 0) {
+      camY = 0;
+    } else camY = tY - fovY;
+
+
+    return {camX: camX, camY: camY};
+  }
+
+  update(direction) {
+    const ts = this.tSize;
+    const {cy, cx} = this.cameraPos;
+    const {dy, dx} = direction || {dy: 0, dx: 0};
+
+    const {camX, camY} = this.calcBounds(cx + dx, cy + dy);
+
+    // if (!this.inBounds({x: cx + dx, y: cy + dy})) return;
+
+    for (let i = 0; i < this.fov.y; i++) {
+      for (let j = 0; j < this.fov.x; j++) {
+        const tile = this.map[camY + i][camX + j];
+        if (tile.type !== 'w1') {
+          this.ctx.drawImage(this.tiles.w1, j * ts, i * ts, ts, ts);
+        }
+        this.ctx.drawImage(this.tiles[tile.type], j * ts, i * ts, ts, ts);
+        this.ctx.strokeRect(j * ts, i * ts, ts, ts);
+      }
+    }
+  }
 }

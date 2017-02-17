@@ -11,6 +11,8 @@ export default class Unit {
 
   spawn() {
     const {x, y} = this.randomLocation();
+    this.y = y;
+    this.x = x;
     const node = this.floor.map[y][x];
     node.type = this.type;
 

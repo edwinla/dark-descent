@@ -2,13 +2,17 @@ import Floor from './floor';
 import Unit from './unit';
 
 export default class Game {
-  constructor(canvas, ctx, tileSet, tileSize) {
+  constructor(canvas, ctx, tileSet) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.tileSize = tileSize;
+    this.tSize = 20;
     this.tileSet = tileSet;
-    this.floor = new Floor(ctx, tileSet, tileSize, 50, 50);
+    this.floor = new Floor(ctx, tileSet, this.tSize, {x: 15, y: 15}, 50, 50);
     this.player = new Unit('u1', this.floor, ctx);
+    this.floor.cameraPos = {
+      cx: this.player.x,
+      cy: this.player.y
+    };
     this.movementEnabled = false;
 
     this.start();
@@ -16,19 +20,46 @@ export default class Game {
     window.addEventListener('resize', this.resize.bind(this));
   }
 
-  draw() {
-    this.floor.draw();
-  }
-
   start() {
-    this.floor.render();
+    this.resize();
   }
 
   resize() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    let ts, fov = {};
 
-    this.floor.draw();
+    if (window.innerWidth > window.innerHeight) {
+      ts = Math.floor(window.innerWidth / 15);
+      fov.x = 15;
+
+      let tempY = Math.floor(window.innerHeight / ts);
+
+      if (tempY < 7) {
+        fov.y = 7;
+      } else if (tempY % 2 === 0) {
+        fov.y = tempY - 1;
+      } else fov.y = tempY;
+
+    } else {
+      ts = Math.floor(window.innerHeight / 15);
+      fov.y = 15;
+
+      let tempX = Math.floor(window.innerWidth / ts);
+
+      if (tempX < 7) {
+        fov.x = 7;
+      } else if (tempX % 2 === 0) {
+        fov.x = tempX - 1;
+      } else fov.x = tempX;
+
+    }
+
+    this.canvas.width = ts * fov.x;
+    this.canvas.height = ts * fov.y;
+
+    this.floor.tSize = ts;
+    this.floor.fov = fov;
+
+    this.floor.render();
   }
 
   toggleMovement() {

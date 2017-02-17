@@ -32,10 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('main');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  
+
   const ctx = canvas.getContext('2d');
-  const tileSize = { w: 64, h: 64 };
-  const game = new Game(canvas, ctx, tileSet1, tileSize);
+  const game = new Game(canvas, ctx, tileSet1);
 
   window.canvas = canvas;
   window.game = game;
