@@ -1,33 +1,63 @@
 import Floor from './floor';
-import Unit from './unit';
+import Enemy from './enemy';
 import Player from './player';
+import Hud from './hud';
 
 export default class Game {
   constructor(canvas, ctx, tileSet) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.tSize = 20;
     this.tileSet = tileSet;
-    this.floor = new Floor(ctx, tileSet, this.tSize, {x: 15, y: 15}, 50, 50);
     this.movementEnabled = false;
-    this.initializePlayer();
 
     this.start();
   }
 
   start() {
+    this.initNewFloor();
+    this.initPlayer();
+    this.spawnEnemies(10);
+    this.initHud();
+    this.floor.hud = this.hud;
+
     this.resize();
     window.addEventListener('resize', this.resize.bind(this));
   }
 
-  initializePlayer() {
-    this.player = new Player('YG', 'u1', this.floor);
+  initNewFloor() {
+    this.floor = new Floor(this.ctx, this.tileSet, 20);
+  }
+
+  initPlayer() {
+    const health = [100, 100];
+    const weapon = {
+      name: 'determination',
+      damage: 10
+    };
+    this.player = new Player('YG', health, weapon, 'u1', this.floor);
     this.floor.cameraPos = {
       cx: this.player.x,
       cy: this.player.y
     };
 
     this.toggleMovement();
+  }
+
+  initHud() {
+    this.hud = new Hud(this.player, this.ctx);
+  }
+
+  spawnEnemies(n) {
+    const enemies = [];
+    const weapon = {
+      name: "swipe",
+      damage: "5"
+    };
+    for (let i = 0; i < n; i++) {
+      const enemy = new Enemy('Warden', [50, 50], weapon, 'u2', this.floor);
+      enemies.push(enemy);
+    }
+    this.floor.enemies = enemies;
   }
 
   resize() {
@@ -65,6 +95,7 @@ export default class Game {
     this.floor.tSize = ts;
     this.floor.fov = fov;
 
+    this.hud.updateSize(ts, fov.x);
     this.floor.render();
   }
 

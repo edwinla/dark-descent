@@ -3,11 +3,11 @@ import MapNode from './map_node';
 import Path from './path';
 
 export default class Floor {
-  constructor(ctx, tileSet, tSize, fov, mapWidth, mapHeight) {
+  constructor(ctx, tileSet, tSize, mapWidth = 50, mapHeight = 50) {
     this.tilesLoaded = 0;
     this.tileSet = tileSet;
     this.tSize = tSize;
-    this.fov = fov;
+    this.fov = {x: 15, y: 15};
     this.ctx = ctx;
     this.tiles = {};
     this.mapWidth = mapWidth;
@@ -120,7 +120,6 @@ export default class Floor {
       camY = 0;
     } else camY = tY - fovY;
 
-
     return {camX: camX, camY: camY};
   }
 
@@ -130,8 +129,6 @@ export default class Floor {
     const {dy, dx} = direction || {dy: 0, dx: 0};
 
     const {camX, camY} = this.calcBounds(cx + dx, cy + dy);
-
-    // if (!this.inBounds({x: cx + dx, y: cy + dy})) return;
 
     for (let i = 0; i < this.fov.y; i++) {
       for (let j = 0; j < this.fov.x; j++) {
@@ -143,5 +140,7 @@ export default class Floor {
         this.ctx.strokeRect(j * ts, i * ts, ts, ts);
       }
     }
+
+    this.hud.render();
   }
 }
