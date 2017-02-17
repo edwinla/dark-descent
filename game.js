@@ -1,5 +1,6 @@
 import Floor from './floor';
 import Unit from './unit';
+import Player from './player';
 
 export default class Game {
   constructor(canvas, ctx, tileSet) {
@@ -8,20 +9,25 @@ export default class Game {
     this.tSize = 20;
     this.tileSet = tileSet;
     this.floor = new Floor(ctx, tileSet, this.tSize, {x: 15, y: 15}, 50, 50);
-    this.player = new Unit('u1', this.floor, ctx);
-    this.floor.cameraPos = {
-      cx: this.player.x,
-      cy: this.player.y
-    };
     this.movementEnabled = false;
+    this.initializePlayer();
 
     this.start();
-    this.toggleMovement();
-    window.addEventListener('resize', this.resize.bind(this));
   }
 
   start() {
     this.resize();
+    window.addEventListener('resize', this.resize.bind(this));
+  }
+
+  initializePlayer() {
+    this.player = new Player('YG', 'u1', this.floor);
+    this.floor.cameraPos = {
+      cx: this.player.x,
+      cy: this.player.y
+    };
+
+    this.toggleMovement();
   }
 
   resize() {
@@ -63,7 +69,7 @@ export default class Game {
   }
 
   toggleMovement() {
-    const movePlayer = this.player.move.bind(this.player);
+    const movePlayer = this.player.attackMove.bind(this.player);
 
     if (this.movementEnabled) {
       this.movementEnabled = false;
