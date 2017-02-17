@@ -1,23 +1,34 @@
 import {randomNumber} from './util';
 
 export default class Unit {
-  constructor(type, floor) {
+  constructor(name, health, weapon, type, floor) {
+    this.name = name;
+    this.health = health;
+    this.weapon = weapon;
     this.type = type;
     this.floor = floor;
     this.node = this.spawn();
   }
 
   spawn() {
-    const {x, y} = this.randomLocation();
-    this.y = y;
-    this.x = x;
-    const node = this.floor.map[y][x];
+    let node;
+
+    while (true) {
+        const {x, y} = this.randomLocation();
+        node = this.floor.map[y][x];
+
+        if (this.validNode(node)) break;
+    }
+
+    this.y = node.y;
+    this.x = node.x;
     node.type = this.type;
+    node.unit = this;
 
     return node;
   }
 
-  validMovement(node) {
+  validNode(node) {
     return node.type === 'd5';
   }
 

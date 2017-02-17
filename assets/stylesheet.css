@@ -6,7 +6,16 @@
 html, body {
   width: 100%;
   height: 100%;
+	background-color: black;
 }
 canvas {
   display: block;
+}
+div.hud {
+	float: left;
+	position: relative;
+	top: -200px;
+	z-index: 100;
+	color: white;
+	font-size: 30px;
 }
