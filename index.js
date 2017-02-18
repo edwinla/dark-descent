@@ -25,7 +25,8 @@ const tileSet1 = {
   d7: "./assets/images/tiles/ground_tile_water_256_sw.png",
   d8: "./assets/images/tiles/ground_tile_water_256_south_1.png",
   d9: "./assets/images/tiles/ground_tile_water_256_se.png",
-  u1: "./assets/images/tiles/snow_02_tile_256_01.png"
+  u1: "./assets/images/tiles/snow_02_tile_256_01.png",
+  u2: "./assets/images/tiles/lava_tile_256_02.png"
 };
 
 document.addEventListener('DOMContentLoaded', () => {

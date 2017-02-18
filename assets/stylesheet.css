@@ -7,15 +7,34 @@ html, body {
   width: 100%;
   height: 100%;
 	background-color: black;
+	font-family: 'Exo 2', sans-serif;
 }
 canvas {
   display: block;
 }
-div.hud {
-	float: left;
+
+div.hud-bottom {
+	display: flex;
+	justify-content: flex-start;
 	position: relative;
-	top: -200px;
-	z-index: 100;
+	top: -70px;
 	color: white;
-	font-size: 30px;
+	font-size: 14px;
+}
+
+div.hud-bottom div {
+	height: 70px;
+	border: 1px solid white;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+#events {
+	font-weight: 300;
+	display: flex;
+	flex-direction: column;
+	line-height: 16px;
+	overflow-x: hidden;
+	overflow-y: visible;
 }

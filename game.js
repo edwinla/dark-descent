@@ -95,7 +95,7 @@ export default class Game {
     this.floor.tSize = ts;
     this.floor.fov = fov;
 
-    this.hud.updateSize(ts, fov.x);
+    this.hud.updateSize(ts, fov.x, fov.y);
     this.floor.render();
   }
 

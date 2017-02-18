@@ -35,6 +35,7 @@ export default class Player extends Unit {
 
     if (this.isEnemyNode(nextNode)) {
       this.attack(nextNode.unit);
+      this.updateHud();
     } else if (!this.validNode(nextNode)) {
       return;
     } else {
@@ -42,19 +43,22 @@ export default class Player extends Unit {
     }
   }
 
+  addEvent(event) {
+    this.hud.updateEvents(event);
+  }
+
   attack(enemy) {
     enemy.health[0] -= this.weapon.damage;
-    console.log(`You dealt ${this.weapon.damage} to ${enemy.name} using ${this.weapon.name}!`);
-    console.log(`${enemy.name} health: ${enemy.health[0]}/${enemy.health[1]}`);
-    if (enemy.health[0] <= 0) {
+    let damageEvent = this.damageEvent(enemy);
+    this.addEvent(damageEvent);
+
+    if (enemy.health[0] === 0) {
       enemy.terminate();
     } else {
       this.health[0] -= enemy.weapon.damage;
-      console.log(`${enemy.name} struck you for ${enemy.weapon.damage} HP.`);
-      console.log(`Your health: ${this.health[0]}/${this.health[1]}`);
+      damageEvent = enemy.damageEvent(this);
+      this.addEvent(damageEvent);
     }
-
-    this.updateHud();
   }
 
   updateHud() {

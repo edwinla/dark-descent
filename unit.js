@@ -32,6 +32,13 @@ export default class Unit {
     return node.type === 'd5';
   }
 
+  damageEvent(def) {
+    return (
+      `${this.name} dealt ${this.weapon.damage} damage to ${def.name} using
+      ${def.weapon.name}! ${def.name} health => ${def.health[0]}/${def.health[1]}`
+    );
+  }
+
   randomLocation() {
     const room = this.floor.rooms[randomNumber(0, this.floor.rooms.length - 1)];
     let y = randomNumber(room.absPos.y, room.absPos.y + room.height - 1);
