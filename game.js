@@ -66,6 +66,9 @@ export default class Game {
     };
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+    this.ctx.fillStyle = "#000000";
+    this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
     const canvas = document.getElementById("main");
 
     canvas.style.justifyContent = 'center';

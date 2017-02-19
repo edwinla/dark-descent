@@ -99,9 +99,16 @@ export default class Floor {
 
   generateWalls() {
     const validwalls = ['wn', 'ws', 'we', 'ww', 'wnw', 'wne', 'wsw', 'wse'];
-    for (let i = 1; i < this.mapHeight - 1; i++) {
-      for (let j = 1; j < this.mapWidth - 1; j++) {
+    for (let i = 0; i < this.mapHeight; i++) {
+      for (let j = 0; j < this.mapWidth; j++) {
         const c = this.map[i][j];
+
+        if (i === 0 || i === this.mapHeight - 1 || j === 0 || j === this.mapWidth - 1) {
+          c.type = 'wb';
+          c.restoreType = 'wb';
+          continue;
+        }
+
         if (c.type !== 'w1') continue;
 
         let newtype = 'w';
