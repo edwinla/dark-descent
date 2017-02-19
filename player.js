@@ -17,17 +17,25 @@ export default class Player extends Unit {
       case 'w':
       case 'ArrowUp':
         coord.y -= 1;
+        this.type = 'hn';
+        this.node.type = 'hn';
         break;
       case 's':
       case 'ArrowDown':
         coord.y += 1;
+        this.type = 'hs';
+        this.node.type = 'hs';
         break;
       case 'a':
       case 'ArrowLeft':
         coord.x -= 1;
+        this.type = 'hw';
+        this.node.type = 'hw';
         break;
       case 'd':
       case 'ArrowRight':
+      this.type = 'he';
+      this.node.type = 'he';
         coord.x += 1;
     }
 

@@ -212,6 +212,8 @@ export default class Floor {
   }
 
   update(direction) {
+    const types = ['u2', 'hn', 'hs', 'he', 'hw'];
+
     const ts = this.tSize;
     const {cy, cx} = this.cameraPos;
     const {dy, dx} = direction || {dy: 0, dx: 0};
@@ -221,16 +223,75 @@ export default class Floor {
     for (let i = 0; i < this.fov.y; i++) {
       for (let j = 0; j < this.fov.x; j++) {
         const tile = this.map[camY + i][camX + j];
+        const xPos = j * ts;
+        const yPos = i * ts;
 
         this.ctx.webkitImageSmoothingEnabled = false;
         this.ctx.mozImageSmoothingEnabled = false;
         this.ctx.imageSmoothingEnabled = false;
+        this.ctx.clearRect(xPos, yPos, ts, ts);
 
-        this.ctx.drawImage(this.tiles[tile.type], j * ts, i * ts, ts, ts);
+        if (types.indexOf(tile.type) !== -1) {
+          this.ctx.drawImage(this.tiles.d5, xPos, yPos, ts, ts);
+        }
+
+        this.ctx.drawImage(this.tiles[tile.type], xPos, yPos, ts, ts);
         // this.ctx.strokeRect(j * ts, i * ts, ts, ts);
+
+        this.darken(tile, xPos, yPos, ts);
       }
     }
+    console.log(this.cameraPos.cx, this.cameraPos.cy);
+
+    // this.darken(this.fov.x * 64, this.fov.y * 64, 'black', 0.3);
+    // this.lighten(this.cameraPos.cx, this.cameraPos.cy, 100, '#FFFFE0');
 
     // this.hud.render();
   }
+
+  darken(tile, xPos, yPos, ts) {
+    const xDiff = Math.abs(this.cameraPos.cx - tile.x);
+    const yDiff = Math.abs(this.cameraPos.cy - tile.y);
+    let alpha = 0.85;
+
+    this.ctx.fillStyle = 'black';
+    if (yDiff === 5 && xDiff <= 1) {
+      alpha = 0.15;
+    } else if (yDiff === 4 && xDiff <= 2) {
+      alpha = xDiff < 2 ? 0 : 0.15;
+    } else if (yDiff === 3 && xDiff <= 3) {
+      alpha = xDiff < 3 ? 0 : 0.15;
+    } else if (yDiff === 2 && xDiff <= 4) {
+      alpha = xDiff < 4 ? 0 : 0.15;
+    } else if (yDiff <= 1 && xDiff <= 5) {
+      alpha = xDiff < 5 ? 0 : 0.15;
+    }
+
+    this.ctx.globalAlpha = alpha;
+    this.ctx.fillRect(xPos, yPos, ts, ts);
+    this.ctx.globalAlpha = 1;
+
+  }
+
+  // lighten(x, y, radius, color) {
+  //   this.ctx.save();
+  //   var rnd = 0.03 * Math.sin(1.1 * Date.now() / 1000);
+  //   radius = radius * (1 + rnd);
+  //   this.ctx.globalCompositeOperation = 'lighter';
+  //   this.ctx.fillStyle = '#1a1400';
+  //   this.ctx.beginPath();
+  //   this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
+  //   this.ctx.globalAlpha = 0.8;
+  //   this.ctx.fill();
+  //   this.ctx.globalAlpha = 1;
+  //   // this.ctx.fillStyle = color;
+  //   // this.ctx.beginPath();
+  //   // this.ctx.arc(x, y, radius * 0.90+rnd, 0, 2 * Math.PI);
+  //   // this.ctx.fill();
+  //   // this.ctx.beginPath();
+  //   // this.ctx.arc(x, y, radius * 0.4+rnd, 0, 2 * Math.PI);
+  //   // this.ctx.fill();
+  //   this.ctx.restore();
+  // }
+
 }

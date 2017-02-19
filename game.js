@@ -33,7 +33,7 @@ export default class Game {
       name: 'determination',
       damage: 10
     };
-    this.player = new Player('YG', health, weapon, 'u1', this.floor);
+    this.player = new Player('YG', health, weapon, 'hs', this.floor);
     this.floor.cameraPos = {
       cx: this.player.x,
       cy: this.player.y

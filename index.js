@@ -41,7 +41,10 @@ const CaveTileset = {
   wsw: "./assets/images/cave/cave_solid_sw.png",
   wse: "./assets/images/cave/cave_solid_se.png",
   d5: "./assets/images/cave/cave_base.png",
-  u1: "./assets/images/char/char_s_b.png",
+  hs: "./assets/images/char/char_s.png",
+  he: "./assets/images/char/char_e.png",
+  hn: "./assets/images/char/char_n.png",
+  hw: "./assets/images/char/char_w.png",
   u2: "./assets/images/imposter/imposter_s_b.png"
 };
 
