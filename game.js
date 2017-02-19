@@ -9,7 +9,6 @@ export default class Game {
     this.ctx = ctx;
     this.tileSet = tileSet;
     this.movementEnabled = false;
-
     this.start();
   }
 
@@ -25,7 +24,7 @@ export default class Game {
   }
 
   initNewFloor() {
-    this.floor = new Floor(this.ctx, this.tileSet, 20);
+    this.floor = new Floor(this.ctx, this.tileSet);
   }
 
   initPlayer() {
@@ -61,43 +60,58 @@ export default class Game {
   }
 
   resize() {
-    let ts, fov = {};
+    this.floor.fov = {
+      x: Math.floor(window.innerWidth / 64),
+      y: Math.floor(window.innerHeight / 64)
+    };
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    const canvas = document.getElementById("main");
 
-    if (window.innerWidth > window.innerHeight) {
-      ts = Math.floor(window.innerWidth / 15);
-      fov.x = 15;
+    canvas.style.justifyContent = 'center';
 
-      let tempY = Math.floor(window.innerHeight / ts);
-
-      if (tempY < 7) {
-        fov.y = 7;
-      } else if (tempY % 2 === 0) {
-        fov.y = tempY - 1;
-      } else fov.y = tempY;
-
-    } else {
-      ts = Math.floor(window.innerHeight / 15);
-      fov.y = 15;
-
-      let tempX = Math.floor(window.innerWidth / ts);
-
-      if (tempX < 7) {
-        fov.x = 7;
-      } else if (tempX % 2 === 0) {
-        fov.x = tempX - 1;
-      } else fov.x = tempX;
-
-    }
-
-    this.canvas.width = ts * fov.x;
-    this.canvas.height = ts * fov.y;
-
-    this.floor.tSize = ts;
-    this.floor.fov = fov;
-
-    this.hud.updateSize(ts, fov.x, fov.y);
+    // this.hud.updateSize(ts, fov.x, fov.y);
     this.floor.render();
   }
+
+  // resize() {
+  //   let ts, fov = {};
+  //
+  //   if (window.innerWidth > window.innerHeight) {
+  //     ts = Math.floor(window.innerWidth / 15);
+  //     fov.x = 15;
+  //
+  //     let tempY = Math.floor(window.innerHeight / ts);
+  //
+  //     if (tempY < 7) {
+  //       fov.y = 7;
+  //     } else if (tempY % 2 === 0) {
+  //       fov.y = tempY - 1;
+  //     } else fov.y = tempY;
+  //
+  //   } else {
+  //     ts = Math.floor(window.innerHeight / 15);
+  //     fov.y = 15;
+  //
+  //     let tempX = Math.floor(window.innerWidth / ts);
+  //
+  //     if (tempX < 7) {
+  //       fov.x = 7;
+  //     } else if (tempX % 2 === 0) {
+  //       fov.x = tempX - 1;
+  //     } else fov.x = tempX;
+  //
+  //   }
+  //
+  //   this.canvas.width = ts * fov.x;
+  //   this.canvas.height = ts * fov.y;
+  //
+  //   this.floor.tSize = ts;
+  //   this.floor.fov = fov;
+  //
+  //   this.hud.updateSize(ts, fov.x, fov.y);
+  //   this.floor.render();
+  // }
 
   toggleMovement() {
     const movePlayer = this.player.attackMove.bind(this.player);

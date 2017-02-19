@@ -28,7 +28,7 @@ export default class MapNode {
     (pos[1] < map[0].length && pos[1] > 0);
   }
 
-  getNeighbors(map) {
+  getTraversableNeighbors(map) {
     const neighbors = [];
     const dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
@@ -38,6 +38,28 @@ export default class MapNode {
       const pos = [y, x];
 
       if (this.traversable(map, pos)) neighbors.push(map[y][x]);
+    });
+
+    return neighbors;
+  }
+
+  allNeighbors(map) {
+    const dirs = [
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+      [0, 1],
+      [1, 1],
+      [1, 0],
+      [-1, -1],
+      [0, -1],
+    ];
+
+    let neighbors = [];
+
+    dirs.forEach(dir => {
+      const neighbor = map[this.y + dir[0]][this.x + dir[1]];
+      neighbors.push(neighbor);
     });
 
     return neighbors;

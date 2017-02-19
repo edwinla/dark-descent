@@ -34,7 +34,7 @@ export default class Path {
         return this.reconstructPath();
       }
 
-      const neighbors = current.getNeighbors(this.map);
+      const neighbors = current.getTraversableNeighbors(this.map);
       for (let i = 0; i < neighbors.length; i++) {
         const neighbor = neighbors[i];
 

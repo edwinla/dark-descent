@@ -29,13 +29,33 @@ const tileSet1 = {
   u2: "./assets/images/tiles/lava_tile_256_02.png"
 };
 
+const CaveTileset = {
+  w1: "./assets/images/cave/cave_void.png",
+  wb: "./assets/images/cave/cave_solid.png",
+  wn: "./assets/images/cave/cave_solid_n.png",
+  we: "./assets/images/cave/cave_solid_e.png",
+  ww: "./assets/images/cave/cave_solid_w.png",
+  wnw: "./assets/images/cave/cave_solid_nw.png",
+  wne: "./assets/images/cave/cave_solid_ne.png",
+  ws: "./assets/images/cave/cave_solid_s.png",
+  wsw: "./assets/images/cave/cave_solid_sw.png",
+  wse: "./assets/images/cave/cave_solid_se.png",
+  d5: "./assets/images/cave/cave_base.png",
+  u1: "./assets/images/char/char_s_b.png",
+  u2: "./assets/images/imposter/imposter_s_b.png"
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('main');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
   const ctx = canvas.getContext('2d');
-  const game = new Game(canvas, ctx, tileSet1);
+  ctx.webkitImageSmoothingEnabled = false;
+  ctx.mozImageSmoothingEnabled = false;
+  ctx.imageSmoothingEnabled = false;
+
+  const game = new Game(canvas, ctx, CaveTileset);
 
   window.canvas = canvas;
   window.game = game;

@@ -2,6 +2,7 @@ import {randomNumber} from './util';
 
 export default class Room {
   constructor(minWidth, maxWidth, minHeight, maxHeight, map) {
+    this.id = null;
     this.width = randomNumber(minWidth, maxWidth);
     this.height = randomNumber(minHeight, maxHeight);
     this.map = map;
@@ -12,7 +13,7 @@ export default class Room {
   render() {
     this.edges = this.linearizeEdges();
     this.drawMain();
-    this.addBuffer();
+    // this.addBuffer();
   }
 
   getRandomPosition(mapWidth, mapHeight) {
