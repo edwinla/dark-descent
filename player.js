@@ -5,10 +5,10 @@ export default class Player extends Unit {
     super(name);
     this.type = 'hs';
     this.hp = [100, 100];
-    this.weap = {name: 'determination', damage: 10};
+    this.weap = {name: 'iron sword', damage: 15};
     this.mana = [100, 100];
     this.lvl = 1;
-    this.xp = [0, 100];
+    this.xp = 0;
   }
 
   moveAttempt() {
@@ -52,6 +52,7 @@ export default class Player extends Unit {
     // this.addEvent(damageEvent);
 
     if (enemy.hp[0] === 0) {
+      this.xpGainedFrom(enemy);
       return enemy.terminate();
     } else {
       this.hp[0] -= enemy.weap.damage;
@@ -63,6 +64,26 @@ export default class Player extends Unit {
       // this.addEvent(damageEvent);
     }
 
+  }
+
+  xpGainedFrom(enemy) {
+    const xpGained = (enemy.hp[1] / 2) + enemy.weap.damage;
+    this.xp += xpGained;
+    this.updateHud('xp');
+
+    if (this.xpTnl()) this.lvlUp();
+  }
+
+  xpTnl() {
+    return this.xp >= ((this.lvl + 1) * 100);
+  }
+
+  lvlUp() {
+    this.lvl += 1;
+    this.hp = [(this.lvl * 100), (this.lvl * 100)];
+
+    this.updateHud('xp');
+    this.updateHud('lvl');
   }
 
   updateHud(attr) {

@@ -322,7 +322,7 @@ export default class Floor {
   spawnEnemies(n) {
     const weapon = {
       name: "swipe",
-      damage: "5"
+      damage: 5
     };
 
     for (let i = 0; i < n; i++) {

@@ -4,6 +4,7 @@ export default class Hud {
     player.hud = this;
     this.ctx = ctx;
     this.currentFloor = 0;
+    this.events = [];
     this.classes = [
       'name',
       'lvl',
@@ -15,13 +16,16 @@ export default class Hud {
       'floor'
     ];
 
-    this.initializeDOM();
+    this.initialize();
   }
 
-  initializeDOM() {
-    this.classes.forEach((clss) => {
+  initialize() {
+    for (let i = 0; i < this.classes.length; i++) {
+      const clss = this.classes[i];
       this[clss + 'DOM'] = document.querySelector(`.${clss}`);
-    });
+
+      if (i < 6) this.updatePlayer(clss);
+    }
   }
 
   updateFloor(floor) {
@@ -36,12 +40,14 @@ export default class Hud {
       case 'name':
       case 'lvl':
       case 'xp':
-      case 'weap':
         this[attr + 'DOM'].firstChild.nodeValue = value;
         break;
       case 'hp':
       case 'mana':
         this[attr + 'DOM'].firstChild.nodeValue = `${value[0]} / ${value[1]}`;
+        break;
+      case 'weap':
+        this[attr + 'DOM'].firstChild.nodeValue = value.name;
     }
   }
 
