@@ -56,6 +56,8 @@ export default class Game {
     };
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+
+    this.floor.render();
   }
 
   playerAction() {

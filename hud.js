@@ -24,7 +24,6 @@ export default class Hud {
   }
 
   render() {
-
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0, 0, this.ts * this.width, this.ts);
     this.ctx.fillRect(

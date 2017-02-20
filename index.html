@@ -4,12 +4,44 @@
     <meta charset="utf-8">
     <script type="text/javascript" src="./bundle.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/stylesheet.css">
+    <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <title></title>
   </head>
   <body>
-    <div className="canvas">
+    <div class="container">
       <canvas id="main"></canvas>
+      <div class="hud">
+        <div class="hud-top">
+          <div>
+            <span class="name">Name: YG</span>
+          </div>
+          <div>
+            <span class="lvl">Level: 1</span>
+            <span class="xp">XP: 240</span>
+          </div>
+          <div>
+            <span>HP:</span>
+            <span class="hp">100 / 100</span>
+          </div>
+          <div>
+            <span>Mana:</span>
+            <span class="mana">100 / 100</span>
+          </div>
+          <div>
+            <span>Weapon: </span>
+            <span class="weap">iron sword</span>
+          </div>
+        </div>
+        <div class="hud-bottom">
+          <div class="events">
+            <span>Enemy monster...</span>
+            <span>YG sliced enemy monster.</span>
+          </div>
+          <div class="floor">
+            <span>Floor level: 1</span>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
