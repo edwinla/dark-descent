@@ -66,9 +66,7 @@ export default class Game {
 
     if (nextNode.isEnemyNode()) {
       this.playerAttack(nextNode);
-    } else if (!this.floor.validNode(nextNode)) {
-      return;
-    } else {
+    } else if (this.floor.validNode(nextNode)) {
       this.playerMove(nextNode);
     }
 

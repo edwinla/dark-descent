@@ -37,6 +37,8 @@ export default class Player extends Unit {
         pos.x += 1;
     }
 
+    this.node.type = this.type;
+
     return pos;
   }
 
