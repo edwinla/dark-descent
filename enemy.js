@@ -1,8 +1,8 @@
 import Unit from './unit';
 
 export default class Enemy extends Unit {
-  constructor(name, health, weapon, type, floor) {
-    super(name, health, weapon, type, floor);
+  constructor(name, health, weapon, type) {
+    super(name, health, weapon, type);
   }
 
   terminate() {

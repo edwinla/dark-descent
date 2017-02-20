@@ -1,54 +1,43 @@
 import Unit from './unit';
 
 export default class Player extends Unit {
-  constructor(name, health, weapon, type, floor) {
-    super(name, health, weapon, type, floor);
-
+  constructor(name) {
+    super(name);
+    this.type = 'hs';
+    this.health = [100, 100];
+    this.weapon = {name: 'determination', damage: 10};
     this.mana = [100, 100];
     this.level = 1;
     this.exp = [0, 100];
   }
 
-  attackMove(e) {
-    e.preventDefault();
-    const coord = Object.assign({}, { x: this.node.x, y: this.node.y });
+  moveAttempt() {
+    event.preventDefault();
+    const pos = Object.assign({}, { x: this.node.x, y: this.node.y });
 
-    switch (e.key) {
+    switch (event.key) {
       case 'w':
       case 'ArrowUp':
-        coord.y -= 1;
+        pos.y -= 1;
         this.type = 'hn';
-        this.node.type = 'hn';
         break;
       case 's':
       case 'ArrowDown':
-        coord.y += 1;
+        pos.y += 1;
         this.type = 'hs';
-        this.node.type = 'hs';
         break;
       case 'a':
       case 'ArrowLeft':
-        coord.x -= 1;
+        pos.x -= 1;
         this.type = 'hw';
-        this.node.type = 'hw';
         break;
       case 'd':
       case 'ArrowRight':
-      this.type = 'he';
-      this.node.type = 'he';
-        coord.x += 1;
+        this.type = 'he';
+        pos.x += 1;
     }
 
-    const nextNode = this.floor.map[coord.y][coord.x];
-
-    if (this.isEnemyNode(nextNode)) {
-      this.attack(nextNode.unit);
-      this.updateHud();
-    } else if (!this.validNode(nextNode)) {
-      return;
-    } else {
-      this.move(nextNode);
-    }
+    return pos;
   }
 
   addEvent(event) {
@@ -73,23 +62,13 @@ export default class Player extends Unit {
     this.hud.render();
   }
 
-  isEnemyNode(node) {
-    return node.type === 'u2';
-  }
 
   move(nextNode) {
     nextNode.type = this.type;
     nextNode.unit = this;
+
     this.node.restore();
     this.node = nextNode;
-
-    this.x = nextNode.x;
-    this.y = nextNode.y;
-
-    this.floor.cameraPos.cx = this.x;
-    this.floor.cameraPos.cy = this.y;
-
-    this.floor.update();
   }
 
 }

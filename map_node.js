@@ -43,6 +43,12 @@ export default class MapNode {
     return neighbors;
   }
 
+  isEnemyNode() {
+    if (this.unit) return this.unit.type === 'u2' ? true : false;
+
+    return false;
+  }
+
   allNeighbors(map) {
     const dirs = [
       [-1, -1],

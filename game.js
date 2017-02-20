@@ -9,18 +9,24 @@ export default class Game {
     this.ctx = ctx;
     this.tileSet = tileSet;
     this.movementEnabled = false;
-    this.start();
+
+    this.enterNewLevel();
   }
 
-  start() {
+  enterNewLevel() {
     this.initNewFloor();
-    this.initPlayer();
-    this.spawnEnemies(10);
-    this.initHud();
-    this.floor.hud = this.hud;
 
-    this.resize();
-    window.addEventListener('resize', this.resize.bind(this));
+    if (!this.player) {
+      this.resize();
+      window.addEventListener('resize', this.resize.bind(this));
+
+      this.initPlayer();
+      this.initHud();
+    } else {
+      this.floor.spawnPlayer(this.player);
+    }
+
+    this.floor.render();
   }
 
   initNewFloor() {
@@ -28,35 +34,19 @@ export default class Game {
   }
 
   initPlayer() {
-    const health = [100, 100];
-    const weapon = {
-      name: 'determination',
-      damage: 10
-    };
-    this.player = new Player('YG', health, weapon, 'hs', this.floor);
-    this.floor.cameraPos = {
-      cx: this.player.x,
-      cy: this.player.y
-    };
+    // create a new player
+    this.player = new Player('YG');
 
+    // add player to floor at random location
+    this.floor.spawnPlayer(this.player);
+
+    // enable movement by adding an event listener
     this.toggleMovement();
   }
 
   initHud() {
     this.hud = new Hud(this.player, this.ctx);
-  }
-
-  spawnEnemies(n) {
-    const enemies = [];
-    const weapon = {
-      name: "swipe",
-      damage: "5"
-    };
-    for (let i = 0; i < n; i++) {
-      const enemy = new Enemy('Warden', [50, 50], weapon, 'u2', this.floor);
-      enemies.push(enemy);
-    }
-    this.floor.enemies = enemies;
+    this.floor.hud = this.hud;
   }
 
   resize() {
@@ -66,65 +56,35 @@ export default class Game {
     };
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
-    this.ctx.fillStyle = "#000000";
-    this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-
-    const canvas = document.getElementById("main");
-
-    canvas.style.justifyContent = 'center';
-
-    // this.hud.updateSize(ts, fov.x, fov.y);
-    this.floor.render();
   }
 
-  // resize() {
-  //   let ts, fov = {};
-  //
-  //   if (window.innerWidth > window.innerHeight) {
-  //     ts = Math.floor(window.innerWidth / 15);
-  //     fov.x = 15;
-  //
-  //     let tempY = Math.floor(window.innerHeight / ts);
-  //
-  //     if (tempY < 7) {
-  //       fov.y = 7;
-  //     } else if (tempY % 2 === 0) {
-  //       fov.y = tempY - 1;
-  //     } else fov.y = tempY;
-  //
-  //   } else {
-  //     ts = Math.floor(window.innerHeight / 15);
-  //     fov.y = 15;
-  //
-  //     let tempX = Math.floor(window.innerWidth / ts);
-  //
-  //     if (tempX < 7) {
-  //       fov.x = 7;
-  //     } else if (tempX % 2 === 0) {
-  //       fov.x = tempX - 1;
-  //     } else fov.x = tempX;
-  //
-  //   }
-  //
-  //   this.canvas.width = ts * fov.x;
-  //   this.canvas.height = ts * fov.y;
-  //
-  //   this.floor.tSize = ts;
-  //   this.floor.fov = fov;
-  //
-  //   this.hud.updateSize(ts, fov.x, fov.y);
-  //   this.floor.render();
-  // }
+  playerAction() {
+    const pos = this.player.moveAttempt();
+    const nextNode = this.floor.map[pos.y][pos.x];
+
+    if (nextNode.isEnemyNode()) {
+      this.player.attack(nextNode);
+    } else if (!this.floor.validNode(nextNode)) {
+      return;
+    } else {
+      this.player.move(nextNode);
+      this.floor.updateCameraPos();
+    }
+
+    this.floor.update();
+
+    if (this.player.node.isHole) {
+      this.enterNewLevel();
+    }
+  }
 
   toggleMovement() {
-    const movePlayer = this.player.attackMove.bind(this.player);
-
     if (this.movementEnabled) {
       this.movementEnabled = false;
-      window.removeEventListener('keydown', movePlayer);
+      window.removeEventListener('keydown', this.playerAction.bind(this));
       return;
     }
-    window.addEventListener('keydown', movePlayer);
+    window.addEventListener('keydown', this.playerAction.bind(this));
     this.movementEnabled = true;
   }
 }

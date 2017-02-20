@@ -1,6 +1,9 @@
 import Room from './room';
 import MapNode from './map_node';
 import Path from './path';
+import Enemy from './enemy';
+import {randomNumber} from './util';
+
 
 export default class Floor {
   constructor(ctx, tileSet, mapWidth = 50, mapHeight = 50) {
@@ -13,6 +16,7 @@ export default class Floor {
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
     this.cameraPos = {cx: 0, cy: 0};
+    this.enemies = [];
     this.initialRender = true;
     this.initialize();
   }
@@ -23,6 +27,7 @@ export default class Floor {
     this.paths = this.generatePaths();
     this.removeGaps();
     this.generateWalls();
+    this.placeHole();
   }
 
   render() {
@@ -30,6 +35,36 @@ export default class Floor {
       this.initialRender = false;
       this.loadTiles(this.tileSet);
     } else this.update();
+  }
+
+  placeHole() {
+    let holeNode = null;
+
+    while (!holeNode) {
+      const pos = this.randomLocation();
+      const node = this.map[pos.y][pos.x];
+
+      if (node.type === 'd5') holeNode = node;
+    }
+
+    holeNode.isHole = true;
+    console.log(holeNode.x, holeNode.y);
+
+    this.hole = holeNode;
+  }
+
+  randomLocation() {
+    let node;
+
+    do {
+      const room = this.rooms[randomNumber(0, this.rooms.length - 1)];
+      let y = randomNumber(room.absPos.y, room.absPos.y + room.height - 1);
+      let x = randomNumber(room.absPos.x, room.absPos.x + room.width - 1);
+
+      node = this.map[y][x];
+    } while (!this.validNode(node));
+
+    return node;
   }
 
   getBackgroundMap(mapWidth, mapHeight) {
@@ -134,7 +169,6 @@ export default class Floor {
     }
   }
 
-
   generateRooms(minWidth, maxWidth, minHeight, maxHeight, attempts, maxRooms) {
     const rooms = [];
     let i = 0;
@@ -227,31 +261,31 @@ export default class Floor {
 
     const {camX, camY} = this.calcBounds(cx + dx, cy + dy);
 
+    this.ctx.fillStyle = "#000000";
+    this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
     for (let i = 0; i < this.fov.y; i++) {
       for (let j = 0; j < this.fov.x; j++) {
         const tile = this.map[camY + i][camX + j];
         const xPos = j * ts;
         const yPos = i * ts;
+        const tileType = tile.isHole ? 'ch' : tile.type;
 
         this.ctx.webkitImageSmoothingEnabled = false;
         this.ctx.mozImageSmoothingEnabled = false;
         this.ctx.imageSmoothingEnabled = false;
         this.ctx.clearRect(xPos, yPos, ts, ts);
 
-        if (types.indexOf(tile.type) !== -1) {
+        if (types.indexOf(tile.type) !== -1 || tile.isHole) {
           this.ctx.drawImage(this.tiles.d5, xPos, yPos, ts, ts);
         }
 
-        this.ctx.drawImage(this.tiles[tile.type], xPos, yPos, ts, ts);
+        this.ctx.drawImage(this.tiles[tileType], xPos, yPos, ts, ts);
         // this.ctx.strokeRect(j * ts, i * ts, ts, ts);
 
         this.darken(tile, xPos, yPos, ts);
       }
     }
-    console.log(this.cameraPos.cx, this.cameraPos.cy);
-
-    // this.darken(this.fov.x * 64, this.fov.y * 64, 'black', 0.3);
-    // this.lighten(this.cameraPos.cx, this.cameraPos.cy, 100, '#FFFFE0');
 
     // this.hud.render();
   }
@@ -280,25 +314,37 @@ export default class Floor {
 
   }
 
-  // lighten(x, y, radius, color) {
-  //   this.ctx.save();
-  //   var rnd = 0.03 * Math.sin(1.1 * Date.now() / 1000);
-  //   radius = radius * (1 + rnd);
-  //   this.ctx.globalCompositeOperation = 'lighter';
-  //   this.ctx.fillStyle = '#1a1400';
-  //   this.ctx.beginPath();
-  //   this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
-  //   this.ctx.globalAlpha = 0.8;
-  //   this.ctx.fill();
-  //   this.ctx.globalAlpha = 1;
-  //   // this.ctx.fillStyle = color;
-  //   // this.ctx.beginPath();
-  //   // this.ctx.arc(x, y, radius * 0.90+rnd, 0, 2 * Math.PI);
-  //   // this.ctx.fill();
-  //   // this.ctx.beginPath();
-  //   // this.ctx.arc(x, y, radius * 0.4+rnd, 0, 2 * Math.PI);
-  //   // this.ctx.fill();
-  //   this.ctx.restore();
-  // }
+  updateCameraPos() {
+    const node = this.player.node;
+    this.cameraPos = Object.assign({}, {cx: node.x, cy: node.y});
+  }
+
+  spawnEnemies(n) {
+    const weapon = {
+      name: "swipe",
+      damage: "5"
+    };
+
+    for (let i = 0; i < n; i++) {
+      const enemy = new Enemy('Warden', [50, 50], weapon, 'u2');
+      const node = this.randomLocation();
+
+      enemy.spawn(node);
+
+      this.enemies.push(enemy);
+    }
+  }
+
+  spawnPlayer(player) {
+    player.spawn(this.randomLocation());
+    this.player = player;
+
+    this.updateCameraPos();
+  }
+
+  validNode(node) {
+    return node.type === 'd5' || node.type === 'ch';
+  }
+
 
 }
