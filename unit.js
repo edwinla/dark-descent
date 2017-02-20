@@ -1,8 +1,8 @@
 export default class Unit {
-  constructor(name, health, weapon, type) {
+  constructor(name, hp, weap, type) {
     this.name = name;
-    this.health = health;
-    this.weapon = weapon;
+    this.hp = hp;
+    this.weap = weap;
     this.type = type;
   }
 

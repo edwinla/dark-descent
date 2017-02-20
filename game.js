@@ -46,7 +46,7 @@ export default class Game {
 
   initHud() {
     this.hud = new Hud(this.player, this.ctx);
-    this.floor.hud = this.hud;
+    this.hud.updateFloor(this.floor);
   }
 
   resize() {
@@ -65,12 +65,11 @@ export default class Game {
     const nextNode = this.floor.map[pos.y][pos.x];
 
     if (nextNode.isEnemyNode()) {
-      this.player.attack(nextNode);
+      this.playerAttack(nextNode);
     } else if (!this.floor.validNode(nextNode)) {
       return;
     } else {
-      this.player.move(nextNode);
-      this.floor.updateCameraPos();
+      this.playerMove(nextNode);
     }
 
     this.floor.update();
@@ -78,6 +77,16 @@ export default class Game {
     if (this.player.node.isHole) {
       this.enterNewLevel();
     }
+  }
+
+  playerMove(node) {
+    this.player.move(node);
+    this.floor.updateCameraPos();
+  }
+
+  playerAttack(node) {
+    const enemyDefeated = this.player.attack(node);
+    if (enemyDefeated) this.floor.removeEnemy(enemyDefeated);
   }
 
   toggleMovement() {

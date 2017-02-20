@@ -4,11 +4,11 @@ export default class Player extends Unit {
   constructor(name) {
     super(name);
     this.type = 'hs';
-    this.health = [100, 100];
-    this.weapon = {name: 'determination', damage: 10};
+    this.hp = [100, 100];
+    this.weap = {name: 'determination', damage: 10};
     this.mana = [100, 100];
-    this.level = 1;
-    this.exp = [0, 100];
+    this.lvl = 1;
+    this.xp = [0, 100];
   }
 
   moveAttempt() {
@@ -44,24 +44,30 @@ export default class Player extends Unit {
     this.hud.updateEvents(event);
   }
 
-  attack(enemy) {
-    enemy.health[0] -= this.weapon.damage;
-    let damageEvent = this.damageEvent(enemy);
-    this.addEvent(damageEvent);
+  attack(node) {
+    const enemy = node.unit;
+    enemy.hp[0] -= this.weap.damage;
+    console.log(enemy.hp);
+    // let damageEvent = this.damageEvent(enemy);
+    // this.addEvent(damageEvent);
 
-    if (enemy.health[0] === 0) {
-      enemy.terminate();
+    if (enemy.hp[0] === 0) {
+      return enemy.terminate();
     } else {
-      this.health[0] -= enemy.weapon.damage;
-      damageEvent = enemy.damageEvent(this);
-      this.addEvent(damageEvent);
+      this.hp[0] -= enemy.weap.damage;
+      console.log(this.hp);
+
+      this.updateHud('hp');
+      return false;
+      // damageEvent = enemy.damageEvent(this);
+      // this.addEvent(damageEvent);
     }
+
   }
 
-  updateHud() {
-    this.hud.render();
+  updateHud(attr) {
+    this.hud.updatePlayer(attr);
   }
-
 
   move(nextNode) {
     nextNode.type = this.type;

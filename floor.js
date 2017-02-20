@@ -28,6 +28,7 @@ export default class Floor {
     this.removeGaps();
     this.generateWalls();
     this.placeHole();
+    this.spawnEnemies(20);
   }
 
   render() {
@@ -287,7 +288,6 @@ export default class Floor {
       }
     }
 
-    // this.hud.render();
   }
 
   darken(tile, xPos, yPos, ts) {
@@ -333,6 +333,11 @@ export default class Floor {
 
       this.enemies.push(enemy);
     }
+  }
+
+  removeEnemy(enemy) {
+    const enemyIdx = this.enemies.indexOf(enemy);
+    this.enemies.splice(enemyIdx, 1);
   }
 
   spawnPlayer(player) {

@@ -3,59 +3,46 @@ export default class Hud {
     this.player = player;
     player.hud = this;
     this.ctx = ctx;
-    this.ts = 20;
-    this.width = 15;
-    this.height = 15;
-    this.currentFloor = 1;
+    this.currentFloor = 0;
+    this.classes = [
+      'name',
+      'lvl',
+      'xp',
+      'hp',
+      'mana',
+      'weap',
+      'events',
+      'floor'
+    ];
+
+    this.initializeDOM();
   }
 
-  updateFloor(details) {
-    this.currentFloor = details.floor;
-    this.enemiesRemaining = details.enemyCount;
-    this.boss = details.boss;
-
-    this.render();
+  initializeDOM() {
+    this.classes.forEach((clss) => {
+      this[clss + 'DOM'] = document.querySelector(`.${clss}`);
+    });
   }
 
-  updateSize(ts, width, height) {
-    this.ts = ts;
-    this.width = width;
-    this.height = height;
+  updateFloor(floor) {
+    this.currentFloor += 1;
+    this.enemiesRemaining = floor.enemies.length;
+    // this.boss = floor.boss;
   }
 
-  render() {
-    this.ctx.fillStyle = 'black';
-    this.ctx.fillRect(0, 0, this.ts * this.width, this.ts);
-    this.ctx.fillRect(
-      0,
-      (this.height - 1) * this.ts,
-      this.ts * this.width,
-      this.ts
-    );
-
-    this.topDisplay();
-  }
-
-  topDisplay() {
-    const display = (
-      `Name: ${this.player.name}  ` +
-      `Health: ${this.player.health[0]}/${this.player.health[1]}  ` +
-      `Mana: ${this.player.mana[0]}/${this.player.mana[1]}  ` +
-      `Level: ${this.player.level}  ` +
-      `Exp: ${this.player.exp[0]}/${this.player.exp[1]}  ` +
-      `Weapon: ${this.player.weapon.name} (Atk: ${this.player.weapon.damage})`
-    );
-
-    this.ctx.font = `${this.ts * .3}px Arial`;
-    this.ctx.textAlign = 'center';
-    this.ctx.textBaseline = 'middle';
-    this.ctx.fillStyle = 'white';
-
-    this.ctx.fillText(
-      display,
-      ((this.ts * this.width) / 2),
-      (this.ts / 2)
-    );
+  updatePlayer(attr) {
+    const value = this.player[attr];
+    switch (attr) {
+      case 'name':
+      case 'lvl':
+      case 'xp':
+      case 'weap':
+        this[attr + 'DOM'].firstChild.nodeValue = value;
+        break;
+      case 'hp':
+      case 'mana':
+        this[attr + 'DOM'].firstChild.nodeValue = `${value[0]} / ${value[1]}`;
+    }
   }
 
   updateEvents(event) {
