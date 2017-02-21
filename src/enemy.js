@@ -6,7 +6,6 @@ export default class Enemy extends Unit {
   }
 
   terminate() {
-    console.log(`${this.name} has been slain!`);
     this.node.restore();
     return this;
   }

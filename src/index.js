@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const game = new Game(playerName, canvas, ctx, CaveTileset);
   }
 
+  const hud = document.querySelector('.hud');
+
   const modal = document.querySelector('.modal-menu');
   const newgame = document.querySelector('.new-game');
 
@@ -62,7 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
   newgame.onsubmit = function() {
     event.preventDefault();
 
-    modal.style.display = "none";
+    hud.style.display = 'flex';
+    modal.style.display = 'none';
     newGame(playerName.value);
   };
 

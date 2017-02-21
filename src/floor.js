@@ -50,7 +50,7 @@ export default class Floor {
     }
 
     holeNode.isHole = true;
-    console.log(holeNode.x, holeNode.y);
+    // console.log(holeNode.x, holeNode.y);
 
     this.hole = holeNode;
   }

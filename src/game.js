@@ -88,7 +88,10 @@ export default class Game {
 
   playerAttack(node) {
     const enemyDefeated = this.player.attack(node);
-    if (enemyDefeated) this.floor.removeEnemy(enemyDefeated);
+    if (enemyDefeated) {
+      this.floor.removeEnemy(enemyDefeated);
+      this.hud.updateEnemies(this.floor.enemies);
+    }
   }
 
   toggleMovement() {

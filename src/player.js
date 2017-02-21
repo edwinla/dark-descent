@@ -5,7 +5,7 @@ export default class Player extends Unit {
     super(name);
     this.type = 'hs';
     this.hp = [100, 100];
-    this.weap = {name: 'iron sword', damage: 15};
+    this.weap = {name: 'iron sword', damage: 25};
     this.mana = [100, 100];
     this.lvl = 1;
     this.xp = 0;

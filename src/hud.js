@@ -13,7 +13,8 @@ export default class Hud {
       'mana',
       'weap',
       'events',
-      'floor'
+      'floor-num',
+      'remain'
     ];
 
     this.initialize();
@@ -30,8 +31,15 @@ export default class Hud {
 
   updateFloor(floor) {
     this.currentFloor += 1;
-    this.enemiesRemaining = floor.enemies.length;
+    this['floor-numDOM'].firstChild.nodeValue = this.currentFloor;
+
+    this.updateEnemies(floor.enemies);
     // this.boss = floor.boss;
+  }
+
+  updateEnemies(enemies) {
+    this.enemiesRemaining = enemies.length;
+    this['remainDOM'].firstChild.nodeValue = this.enemiesRemaining;
   }
 
   updatePlayer(attr) {
@@ -72,7 +80,6 @@ export default class Hud {
     if (this.currentFloor > 1) {
       event = `You fall down a hole, deeper into the dungeon.`;
     }
-    console.log(this.currentFloor);
     this.updateEvents(event);
   }
 
