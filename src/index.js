@@ -43,30 +43,34 @@ const CaveTileset = {
   m22: "./assets/images/monsters/monster_21.png",
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  function newGame(playerName) {
-    const canvas = document.getElementById('main');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 
-    const ctx = canvas.getContext('2d');
-    const game = new Game(playerName, canvas, ctx, CaveTileset);
-  }
+const newGame = (playerName) => {
+  const canvas = document.getElementById('main');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const ctx = canvas.getContext('2d');
+  const game = new Game(playerName, canvas, ctx, CaveTileset);
+};
+
+const displayMenuScreen = () => {
+
 
   const hud = document.querySelector('.hud');
-
   const modal = document.querySelector('.modal-menu');
   const newgame = document.querySelector('.new-game');
-
   const playerName = document.querySelector('.player-name');
   playerName.focus();
 
-  newgame.onsubmit = function() {
+  newgame.onsubmit = () => {
     event.preventDefault();
 
     hud.style.display = 'flex';
     modal.style.display = 'none';
     newGame(playerName.value);
   };
+};
 
+document.addEventListener('DOMContentLoaded', () => {
+  displayMenuScreen();
 });

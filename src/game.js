@@ -93,10 +93,12 @@ export default class Game {
   }
 
   playerAttack(node) {
-    const enemyDefeated = this.player.attack(node);
-    if (enemyDefeated) {
-      this.floor.removeEnemy(enemyDefeated);
+    const result = this.player.attack(node);
+    if (result instanceof Enemy) {
+      this.floor.removeEnemy(result);
       this.hud.updateEnemies(this.floor.enemies);
+    } else if (result instanceof Player) {
+      this.gameOver();
     }
   }
 
@@ -108,5 +110,18 @@ export default class Game {
     }
     window.addEventListener('keydown', this.playerAction.bind(this));
     this.movementEnabled = true;
+  }
+
+  gameOver() {
+    this.hud.updateEvents('You have died.');
+
+    const modal = document.querySelector('.modal-gameover');
+    modal.style.display = 'block';
+
+    window.onclick = function() {
+      if (event.target !== modal) {
+        location.reload(true);
+      }
+    };
   }
 }

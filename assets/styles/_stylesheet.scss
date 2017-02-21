@@ -93,7 +93,7 @@ html, body {
   }
 
 	.modal {
-    display: block;
+    display: none;
     position: fixed;
     z-index: 10;
     padding-top: calc(50vh - 150px);
@@ -103,10 +103,12 @@ html, body {
     height: 100%;
     // overflow: auto;
     background-color: rgba(32, 23, 40, 1);
-    background-color: rgba(32, 23, 40, 0.6);
+    background-color: rgba(32, 23, 40, 0.8);
 	}
 
 	.modal-menu {
+		display: block;
+
 		div {
 			display: flex;
 			flex-direction: column;
@@ -161,6 +163,23 @@ html, body {
 						cursor: pointer;
 					}
 				}
+			}
+		}
+	}
+
+	.modal-gameover {
+		display: none;
+
+		div {
+			height: 300px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			p {
+				color: #eeeeee;
+				font-family: 'Golden Sun', sans-serif;
+				font-size: 48px;
 			}
 		}
 	}

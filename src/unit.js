@@ -14,10 +14,8 @@ export default class Unit {
     return node;
   }
 
-  damageEvent(def) {
-    return (
-      `${this.name} dealt ${this.weapon.damage} damage to ${def.name} using
-      ${def.weapon.name}! ${def.name} health => ${def.health[0]}/${def.health[1]}`
-    );
+  damages(enemy) {
+    enemy.hp[0] -= this.weap.damage;
+    if (enemy.hp[0] < 0) enemy.hp[0] = 0;
   }
 }

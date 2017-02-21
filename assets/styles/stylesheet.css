@@ -65,7 +65,7 @@ html, body {
         .container .hud .hud-bottom .floor span {
           font-size: 16px; }
   .container .modal {
-    display: block;
+    display: none;
     position: fixed;
     z-index: 10;
     padding-top: calc(50vh - 150px);
@@ -74,47 +74,60 @@ html, body {
     width: 100%;
     height: 100%;
     background-color: #201728;
-    background-color: rgba(32, 23, 40, 0.6); }
-  .container .modal-menu div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #201728;
-    margin: auto;
-    height: 300px;
-    padding: 20px;
-    width: 80%; }
-    .container .modal-menu div .title {
-      color: #eeeeee;
-      font-family: 'Taranis', sans-serif;
-      font-size: 48px;
-      letter-spacing: -7px; }
-      .container .modal-menu div .title .title-capitalize {
-        color: #eeeeee;
-        font-size: 64px; }
-    .container .modal-menu div form {
+    background-color: rgba(32, 23, 40, 0.8); }
+  .container .modal-menu {
+    display: block; }
+    .container .modal-menu div {
       display: flex;
-      flex-direction: column; }
-      .container .modal-menu div form input {
-        margin-bottom: 60px;
-        outline: none;
-        text-align: center;
-        background-color: transparent;
-        height: 40px;
-        width: 300px;
-        font-family: 'Golden Sun', sans-serif;
-        font-size: 30px;
-        color: white; }
-      .container .modal-menu div form button {
-        color: #ffffff;
-        font-size: 30px;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #201728;
+      margin: auto;
+      height: 300px;
+      padding: 20px;
+      width: 80%; }
+      .container .modal-menu div .title {
+        color: #eeeeee;
         font-family: 'Taranis', sans-serif;
-        background-color: transparent;
-        outline: none; }
-        .container .modal-menu div form button:hover {
-          color: #aaaaaa;
-          text-decoration: none;
-          cursor: pointer; }
+        font-size: 48px;
+        letter-spacing: -7px; }
+        .container .modal-menu div .title .title-capitalize {
+          color: #eeeeee;
+          font-size: 64px; }
+      .container .modal-menu div form {
+        display: flex;
+        flex-direction: column; }
+        .container .modal-menu div form input {
+          margin-bottom: 60px;
+          outline: none;
+          text-align: center;
+          background-color: transparent;
+          height: 40px;
+          width: 300px;
+          font-family: 'Golden Sun', sans-serif;
+          font-size: 30px;
+          color: white; }
+        .container .modal-menu div form button {
+          color: #ffffff;
+          font-size: 30px;
+          font-family: 'Taranis', sans-serif;
+          background-color: transparent;
+          outline: none; }
+          .container .modal-menu div form button:hover {
+            color: #aaaaaa;
+            text-decoration: none;
+            cursor: pointer; }
+  .container .modal-gameover {
+    display: none; }
+    .container .modal-gameover div {
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
+      .container .modal-gameover div p {
+        color: #eeeeee;
+        font-family: 'Golden Sun', sans-serif;
+        font-size: 48px; }
 
 /*# sourceMappingURL=stylesheet.css.map */
