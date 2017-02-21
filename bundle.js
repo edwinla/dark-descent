@@ -291,9 +291,10 @@ var Unit = function () {
       return node;
     }
   }, {
-    key: "damageEvent",
-    value: function damageEvent(def) {
-      return this.name + " dealt " + this.weapon.damage + " damage to " + def.name + " using\n      " + def.weapon.name + "! " + def.name + " health => " + def.health[0] + "/" + def.health[1];
+    key: "damages",
+    value: function damages(enemy) {
+      enemy.hp[0] -= this.weap.damage;
+      if (enemy.hp[0] < 0) enemy.hp[0] = 0;
     }
   }]);
 
@@ -436,10 +437,12 @@ var Game = function () {
   }, {
     key: 'playerAttack',
     value: function playerAttack(node) {
-      var enemyDefeated = this.player.attack(node);
-      if (enemyDefeated) {
-        this.floor.removeEnemy(enemyDefeated);
+      var result = this.player.attack(node);
+      if (result instanceof _enemy2.default) {
+        this.floor.removeEnemy(result);
         this.hud.updateEnemies(this.floor.enemies);
+      } else if (result instanceof _player2.default) {
+        this.gameOver();
       }
     }
   }, {
@@ -452,6 +455,20 @@ var Game = function () {
       }
       window.addEventListener('keydown', this.playerAction.bind(this));
       this.movementEnabled = true;
+    }
+  }, {
+    key: 'gameOver',
+    value: function gameOver() {
+      this.hud.updateEvents('You have died.');
+
+      var modal = document.querySelector('.modal-gameover');
+      modal.style.display = 'block';
+
+      window.onclick = function () {
+        if (event.target !== modal) {
+          location.reload(true);
+        }
+      };
     }
   }]);
 
@@ -1308,20 +1325,20 @@ var Player = function (_Unit) {
     key: 'attack',
     value: function attack(node) {
       var enemy = node.unit;
-      enemy.hp[0] -= this.weap.damage;
+      this.damages(enemy);
 
       this.hud.addBattleEvent(this, enemy);
 
-      if (enemy.hp[0] <= 0) {
+      if (enemy.hp[0] === 0) {
         this.xpGainedFrom(enemy);
         return enemy.terminate();
       } else {
-        this.hp[0] -= enemy.weap.damage;
+        enemy.damages(this);
 
         this.hud.addBattleEvent(enemy, this);
-
         this.updateHud('hp');
-        return false;
+
+        if (this.hp[0] === 0) return this;
       }
     }
   }, {
@@ -1606,21 +1623,20 @@ var CaveTileset = {
   m22: "./assets/images/monsters/monster_21.png"
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-  function newGame(playerName) {
-    var canvas = document.getElementById('main');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+var newGame = function newGame(playerName) {
+  var canvas = document.getElementById('main');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-    var ctx = canvas.getContext('2d');
-    var game = new _game2.default(playerName, canvas, ctx, CaveTileset);
-  }
+  var ctx = canvas.getContext('2d');
+  var game = new _game2.default(playerName, canvas, ctx, CaveTileset);
+};
+
+var displayMenuScreen = function displayMenuScreen() {
 
   var hud = document.querySelector('.hud');
-
   var modal = document.querySelector('.modal-menu');
   var newgame = document.querySelector('.new-game');
-
   var playerName = document.querySelector('.player-name');
   playerName.focus();
 
@@ -1631,6 +1647,10 @@ document.addEventListener('DOMContentLoaded', function () {
     modal.style.display = 'none';
     newGame(playerName.value);
   };
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  displayMenuScreen();
 });
 
 /***/ })
