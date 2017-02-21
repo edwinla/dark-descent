@@ -9,11 +9,13 @@ export default class Game {
     this.ctx = ctx;
     this.tileSet = tileSet;
     this.movementEnabled = false;
+    this.floors = 0;
 
     this.enterNewLevel();
   }
 
   enterNewLevel() {
+    this.floors += 1;
     this.initNewFloor();
 
     if (!this.player) {
@@ -31,7 +33,7 @@ export default class Game {
   }
 
   initNewFloor() {
-    this.floor = new Floor(this.ctx, this.tileSet);
+    this.floor = new Floor(this.floors, this.ctx, this.tileSet);
   }
 
   initPlayer() {

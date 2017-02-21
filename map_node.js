@@ -1,3 +1,5 @@
+import Enemy from './enemy';
+
 export default class MapNode {
   constructor(y, x, type) {
     this.y = y;
@@ -44,9 +46,7 @@ export default class MapNode {
   }
 
   isEnemyNode() {
-    if (this.unit) return this.unit.type === 'u2' ? true : false;
-
-    return false;
+    return (this.unit instanceof Enemy);
   }
 
   allNeighbors(map) {

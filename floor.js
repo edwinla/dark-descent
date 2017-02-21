@@ -6,7 +6,8 @@ import {randomNumber} from './util';
 
 
 export default class Floor {
-  constructor(ctx, tileSet, mapWidth = 50, mapHeight = 50) {
+  constructor(num, ctx, tileSet, mapWidth = 50, mapHeight = 50) {
+    this.number = num;
     this.tilesLoaded = 0;
     this.tileSet = tileSet;
     this.tSize = 64;
@@ -262,7 +263,7 @@ export default class Floor {
 
     const {camX, camY} = this.calcBounds(cx + dx, cy + dy);
 
-    this.ctx.fillStyle = "#000000";
+    this.ctx.fillStyle = "#201728";
     this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
     for (let i = 0; i < this.fov.y; i++) {
@@ -277,7 +278,7 @@ export default class Floor {
         this.ctx.imageSmoothingEnabled = false;
         this.ctx.clearRect(xPos, yPos, ts, ts);
 
-        if (types.indexOf(tile.type) !== -1 || tile.isHole) {
+        if (tile.unit || tile.isHole) {
           this.ctx.drawImage(this.tiles.d5, xPos, yPos, ts, ts);
         }
 
@@ -321,12 +322,23 @@ export default class Floor {
 
   spawnEnemies(n) {
     const weapon = {
-      name: "swipe",
+      name: "maul",
       damage: 5
     };
 
     for (let i = 0; i < n; i++) {
-      const enemy = new Enemy('Warden', [50, 50], weapon, 'u2');
+      const monsterhp = 50 * this.number;
+      const monsterweap = {
+        name: 'maul',
+        damage: 10 * this.number
+      };
+      const enemy = new Enemy(
+        'monster',
+        [monsterhp, monsterhp],
+        monsterweap,
+        `m${this.number}`
+      );
+
       const node = this.randomLocation();
 
       enemy.spawn(node);

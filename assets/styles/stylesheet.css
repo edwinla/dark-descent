@@ -33,6 +33,8 @@ html, body {
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start; }
+      .container .hud .hud-top div {
+        margin-bottom: 7px; }
     .container .hud .hud-bottom {
       width: 100%;
       display: flex;
@@ -43,5 +45,12 @@ html, body {
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start; }
+        .container .hud .hud-bottom .events span {
+          margin-top: 5px;
+          font-size: 12px; }
+      .container .hud .hud-bottom .floor {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end; }
 
 /*# sourceMappingURL=stylesheet.css.map */

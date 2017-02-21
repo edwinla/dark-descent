@@ -35,15 +35,17 @@ html, body {
     align-items: flex-start;
 
     .hud-top {
-      // position: absolute;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
+
+			div {
+				margin-bottom: 7px;
+			}
     }
 
     .hud-bottom {
-      // position: absolute;
       width: 100%;
       display: flex;
       flex-direction: row;
@@ -54,7 +56,19 @@ html, body {
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
+
+
+				span {
+					margin-top: 5px;
+					font-size: 12px;
+				}
       }
+
+			.floor {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+			}
     }
 
   }

@@ -1,34 +1,5 @@
 import Game from './game';
 
-const tilesSrc = {
-  w1: "./assets/images/PNG/mapTile_187.png",
-  d1: "./assets/images/PNG/mapTile_001.png",
-  d2: "./assets/images/PNG/mapTile_002.png",
-  d3: "./assets/images/PNG/mapTile_003.png",
-  d4: "./assets/images/PNG/mapTile_016.png",
-  d5: "./assets/images/PNG/mapTile_017.png",
-  d6: "./assets/images/PNG/mapTile_018.png",
-  d7: "./assets/images/PNG/mapTile_031.png",
-  d8: "./assets/images/PNG/mapTile_032.png",
-  d9: "./assets/images/PNG/mapTile_033.png",
-};
-
-const tileSet1 = {
-  w1: "./assets/images/tiles/ground_tile_water_256_water.png",
-  w2: "./assets/images/tiles/paving_01_tile_256_01.png",
-  d1: "./assets/images/tiles/ground_tile_water_256_nw.png",
-  d2: "./assets/images/tiles/ground_tile_water_256_north_1.png",
-  d3: "./assets/images/tiles/ground_tile_water_256_ne.png",
-  d4: "./assets/images/tiles/ground_tile_water_256_west_1.png",
-  d5: "./assets/images/tiles/ground_tile_256_1.png",
-  d6: "./assets/images/tiles/ground_tile_water_256_east_1.png",
-  d7: "./assets/images/tiles/ground_tile_water_256_sw.png",
-  d8: "./assets/images/tiles/ground_tile_water_256_south_1.png",
-  d9: "./assets/images/tiles/ground_tile_water_256_se.png",
-  u1: "./assets/images/tiles/snow_02_tile_256_01.png",
-  u2: "./assets/images/tiles/lava_tile_256_02.png"
-};
-
 const CaveTileset = {
   w1: "./assets/images/cave/cave_void.png",
   wb: "./assets/images/cave/cave_solid.png",
@@ -42,11 +13,35 @@ const CaveTileset = {
   wse: "./assets/images/cave/cave_solid_se.png",
   ch: "./assets/images/cave/cave_hole1.png",
   d5: "./assets/images/cave/cave_base.png",
+  cv: "./assets/images/cave/cave_void.png",
   hs: "./assets/images/char/char_s.png",
   he: "./assets/images/char/char_e.png",
   hn: "./assets/images/char/char_n.png",
   hw: "./assets/images/char/char_w.png",
-  u2: "./assets/images/imposter/imposter_s_b.png"
+  m1: "./assets/images/monsters/monster_00.png",
+  m2: "./assets/images/monsters/monster_01.png",
+  m3: "./assets/images/monsters/monster_02.png",
+  m4: "./assets/images/monsters/monster_03.png",
+  m5: "./assets/images/monsters/monster_04.png",
+  m6: "./assets/images/monsters/monster_05.png",
+  m7: "./assets/images/monsters/monster_06.png",
+  m8: "./assets/images/monsters/monster_07.png",
+  m9: "./assets/images/monsters/monster_08.png",
+  m10: "./assets/images/monsters/monster_09.png",
+  m11: "./assets/images/monsters/monster_10.png",
+  m12: "./assets/images/monsters/monster_11.png",
+  m13: "./assets/images/monsters/monster_12.png",
+  m14: "./assets/images/monsters/monster_13.png",
+  m15: "./assets/images/monsters/monster_14.png",
+  m16: "./assets/images/monsters/monster_15.png",
+  m17: "./assets/images/monsters/monster_16.png",
+  m18: "./assets/images/monsters/monster_17.png",
+  m19: "./assets/images/monsters/monster_18.png",
+  m20: "./assets/images/monsters/monster_19.png",
+  m21: "./assets/images/monsters/monster_20.png",
+  m22: "./assets/images/monsters/monster_21.png",
+  m23: "./assets/images/monsters/monster_22.png",
+  m24: "./assets/images/monsters/monster_23.png"
 };
 
 document.addEventListener('DOMContentLoaded', () => {
