@@ -1,13 +1,13 @@
-# Torrey Pines
+# Dark Descent
 
 ## Background
-Torrey Pines is a rogue-like dungeon crawler with the possibility of unlimited levels and high replay value due to procedural generation of each depth/floor.
+Dark Descent is a rogue-like dungeon crawler with the possibility of unlimited levels and high replay value due to procedural generation of each depth/floor.
 
 The game is built on vanilla JavaScript without any external libraries and works on any browser that supports requestAnimationFrame.
 
 ## Functionality & MVP
 
-With Torrey Pines, players will be able to:
+With Dark Descent, players will be able to:
 
 - [ ] Start a new game
 - [ ] Procedural-generated content
