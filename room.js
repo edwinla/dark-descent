@@ -103,8 +103,8 @@ export default class Room {
     for (let y = absY ; y <=  absYLimit; y++) {
       for (let x = absX ; x <= absXLimit; x++) {
         const node = this.map[y][x];
-        node.type = 'd5';
-        node.restoreType = 'd5';
+        node.type = 'cb';
+        node.restoreType = 'cb';
       }
     }
   }

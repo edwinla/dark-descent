@@ -12,12 +12,13 @@ const CaveTileset = {
   wsw: "./assets/images/cave/cave_solid_sw.png",
   wse: "./assets/images/cave/cave_solid_se.png",
   ch: "./assets/images/cave/cave_hole1.png",
-  d5: "./assets/images/cave/cave_base.png",
+  cb: "./assets/images/cave/cave_base.png",
   cv: "./assets/images/cave/cave_void.png",
   hs: "./assets/images/char/char_s.png",
   he: "./assets/images/char/char_e.png",
   hn: "./assets/images/char/char_n.png",
   hw: "./assets/images/char/char_w.png",
+  m0: "./assets/images/monsters/monster_23.png",
   m1: "./assets/images/monsters/monster_00.png",
   m2: "./assets/images/monsters/monster_01.png",
   m3: "./assets/images/monsters/monster_02.png",
@@ -40,8 +41,6 @@ const CaveTileset = {
   m20: "./assets/images/monsters/monster_19.png",
   m21: "./assets/images/monsters/monster_20.png",
   m22: "./assets/images/monsters/monster_21.png",
-  m23: "./assets/images/monsters/monster_22.png",
-  m24: "./assets/images/monsters/monster_23.png"
 };
 
 document.addEventListener('DOMContentLoaded', () => {

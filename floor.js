@@ -46,7 +46,7 @@ export default class Floor {
       const pos = this.randomLocation();
       const node = this.map[pos.y][pos.x];
 
-      if (node.type === 'd5') holeNode = node;
+      if (node.type === 'cb') holeNode = node;
     }
 
     holeNode.isHole = true;
@@ -106,7 +106,7 @@ export default class Floor {
           let count = 0, n = 0, s = 0, e = 0, w = 0, solids = [];
 
           dirs.forEach(dir => {
-            if (this.map[i + dir[0]][j + dir[1]].type === 'd5') {
+            if (this.map[i + dir[0]][j + dir[1]].type === 'cb') {
               count +=1;
               solids.push(dir);
             }
@@ -114,8 +114,8 @@ export default class Floor {
 
           if (count > 5) {
             removed = true;
-            tile.restoreType = 'd5';
-            tile.type = 'd5';
+            tile.restoreType = 'cb';
+            tile.type = 'cb';
           } else if (count === 5) {
             let y = 0, x = 0;
 
@@ -125,8 +125,8 @@ export default class Floor {
             });
 
             if (Math.abs(y) === 3 || Math.abs(x) === 3) {
-              tile.restoreType = 'd5';
-              tile.type = 'd5';
+              tile.restoreType = 'cb';
+              tile.type = 'cb';
             }
           }
         }
@@ -155,10 +155,10 @@ export default class Floor {
         const e = this.map[i][j + 1];
         const w = this.map[i][j - 1];
 
-        if (n.type === 'd5') newtype += 'n';
-        if (s.type === 'd5') newtype += 's';
-        if (e.type === 'd5') newtype += 'e';
-        if (w.type === 'd5') newtype += 'w';
+        if (n.type === 'cb') newtype += 'n';
+        if (s.type === 'cb') newtype += 's';
+        if (e.type === 'cb') newtype += 'e';
+        if (w.type === 'cb') newtype += 'w';
 
         if (validwalls.indexOf(newtype) !== -1) {
           c.type = newtype;
@@ -279,7 +279,7 @@ export default class Floor {
         this.ctx.clearRect(xPos, yPos, ts, ts);
 
         if (tile.unit || tile.isHole) {
-          this.ctx.drawImage(this.tiles.d5, xPos, yPos, ts, ts);
+          this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
         }
 
         this.ctx.drawImage(this.tiles[tileType], xPos, yPos, ts, ts);
@@ -336,7 +336,7 @@ export default class Floor {
         'monster',
         [monsterhp, monsterhp],
         monsterweap,
-        `m${this.number}`
+        `m${this.number % 24}`
       );
 
       const node = this.randomLocation();
@@ -360,7 +360,7 @@ export default class Floor {
   }
 
   validNode(node) {
-    return node.type === 'd5' || node.type === 'ch';
+    return node.type === 'cb' || node.type === 'ch';
   }
 
 
