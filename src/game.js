@@ -18,10 +18,15 @@ export default class Game {
   enterNewLevel() {
     this.floors += 1;
     this.initNewFloor();
+    this.floor.fov = {
+      x: Math.floor(window.innerWidth / 64),
+      y: Math.floor(window.innerHeight / 64)
+    };
 
     if (!this.player) {
-      this.resize();
       window.addEventListener('resize', this.resize.bind(this));
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
 
       this.initPlayer();
       this.initHud();
@@ -30,6 +35,7 @@ export default class Game {
       this.hud.updateFloor(this.floor);
     }
     this.hud.addFloorEvent();
+
     this.floor.render();
   }
 
