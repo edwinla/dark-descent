@@ -4,7 +4,8 @@ import Player from './player';
 import Hud from './hud';
 
 export default class Game {
-  constructor(canvas, ctx, tileSet) {
+  constructor(playerName, canvas, ctx, tileSet) {
+    this.playerName = playerName;
     this.canvas = canvas;
     this.ctx = ctx;
     this.tileSet = tileSet;
@@ -38,7 +39,7 @@ export default class Game {
 
   initPlayer() {
     // create a new player
-    this.player = new Player('YG');
+    this.player = new Player(this.playerName);
 
     // add player to floor at random location
     this.floor.spawnPlayer(this.player);

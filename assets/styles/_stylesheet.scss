@@ -1,3 +1,12 @@
+@font-face {
+	font-family: Golden Sun;
+	src: url(./gs.ttf);
+}
+@font-face {
+	font-family: Taranis;
+	src: url(./tar.ttf);
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -6,8 +15,8 @@
 html, body {
   width: 100%;
   height: 100%;
-	background-color: '#000000';
-	font-family: 'Press Start 2P', sans-serif;
+	background-color: #201728;
+	font-family: 'Golden Sun', sans-serif;
 	text-align: center;
 }
 
@@ -25,9 +34,9 @@ html, body {
 	}
 
   .hud {
-    height: calc(100% - 45px);
+    height: calc(100% - 65px);
     width: calc(100% - 50px);
-    padding: 20px 0 0 25px;
+    padding: 20px 25px 45px;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -42,6 +51,11 @@ html, body {
 
 			div {
 				margin-bottom: 7px;
+			}
+
+			span {
+				font-size: 20px;
+				font-weight: 600;
 			}
     }
 
@@ -60,7 +74,7 @@ html, body {
 
 				span {
 					margin-top: 5px;
-					font-size: 12px;
+					font-size: 14px;
 				}
       }
 
@@ -68,9 +82,79 @@ html, body {
 				display: flex;
 				flex-direction: column;
 				justify-content: flex-end;
+
+				span {
+					font-size: 14px;
+				}
 			}
     }
 
   }
 
+	.modal {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    padding-top: calc(50% - 300px); /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(32, 23, 40, 1); /* Fallback color */
+    background-color: rgba(32, 23, 40, 0.6); /* Black w/ opacity */
+	}
+
+	.modal-menu {
+		div {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			align-items: center;
+
+	    background-color: #201728;
+	    margin: auto;
+			height: 300px;
+	    padding: 20px;
+	    width: 80%;
+			border: 1px solid white;
+
+			.title {
+				color: #ffffff;
+				font-family: 'Taranis', sans-serif;
+				font-size: 48px;
+			}
+
+			form {
+				display: flex;
+				flex-direction: column;
+
+				input {
+					margin-bottom: 60px;
+					outline: none;
+					text-align: center;
+					background-color: transparent;
+					height: 40px;
+					width: 300px;
+
+					font-family: 'Golden Sun', sans-serif;
+					font-size: 30px;
+					color: white;
+				}
+
+				button {
+					color: #ffffff;
+					font-size: 30px;
+					font-family: 'Golden Sun', sans-serif;
+					background-color: transparent;
+
+					&:hover {
+						color: #aaaaaa;
+						text-decoration: none;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+	}
 }

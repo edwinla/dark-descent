@@ -44,17 +44,26 @@ const CaveTileset = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.getElementById('main');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  function newGame(playerName) {
+    const canvas = document.getElementById('main');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  const ctx = canvas.getContext('2d');
-  ctx.webkitImageSmoothingEnabled = false;
-  ctx.mozImageSmoothingEnabled = false;
-  ctx.imageSmoothingEnabled = false;
+    const ctx = canvas.getContext('2d');
+    const game = new Game(playerName, canvas, ctx, CaveTileset);
+  }
 
-  const game = new Game(canvas, ctx, CaveTileset);
+  const modal = document.querySelector('.modal-menu');
+  const newgame = document.querySelector('.new-game');
 
-  window.canvas = canvas;
-  window.game = game;
+  const playerName = document.querySelector('.player-name');
+  playerName.focus();
+
+  newgame.onsubmit = function() {
+    event.preventDefault();
+
+    modal.style.display = "none";
+    newGame(playerName.value);
+  };
+
 });

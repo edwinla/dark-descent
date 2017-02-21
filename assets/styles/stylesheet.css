@@ -1,3 +1,9 @@
+@font-face {
+  font-family: Golden Sun;
+  src: url(./gs.ttf); }
+@font-face {
+  font-family: Taranis;
+  src: url(./tar.ttf); }
 * {
   margin: 0;
   padding: 0;
@@ -6,8 +12,8 @@
 html, body {
   width: 100%;
   height: 100%;
-  background-color: '#000000';
-  font-family: 'Press Start 2P', sans-serif;
+  background-color: #201728;
+  font-family: 'Golden Sun', sans-serif;
   text-align: center; }
 
 .container {
@@ -20,9 +26,9 @@ html, body {
     position: absolute;
     display: block; }
   .container .hud {
-    height: calc(100% - 45px);
+    height: calc(100% - 65px);
     width: calc(100% - 50px);
-    padding: 20px 0 0 25px;
+    padding: 20px 25px 45px;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -35,6 +41,9 @@ html, body {
       align-items: flex-start; }
       .container .hud .hud-top div {
         margin-bottom: 7px; }
+      .container .hud .hud-top span {
+        font-size: 20px;
+        font-weight: 600; }
     .container .hud .hud-bottom {
       width: 100%;
       display: flex;
@@ -47,10 +56,70 @@ html, body {
         align-items: flex-start; }
         .container .hud .hud-bottom .events span {
           margin-top: 5px;
-          font-size: 12px; }
+          font-size: 14px; }
       .container .hud .hud-bottom .floor {
         display: flex;
         flex-direction: column;
         justify-content: flex-end; }
+        .container .hud .hud-bottom .floor span {
+          font-size: 14px; }
+  .container .modal {
+    display: block;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 10;
+    /* Sit on top */
+    padding-top: calc(50% - 300px);
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: #201728;
+    /* Fallback color */
+    background-color: rgba(32, 23, 40, 0.6);
+    /* Black w/ opacity */ }
+  .container .modal-menu div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #201728;
+    margin: auto;
+    height: 300px;
+    padding: 20px;
+    width: 80%;
+    border: 1px solid white; }
+    .container .modal-menu div .title {
+      color: #ffffff;
+      font-family: 'Taranis', sans-serif;
+      font-size: 48px; }
+    .container .modal-menu div form {
+      display: flex;
+      flex-direction: column; }
+      .container .modal-menu div form input {
+        margin-bottom: 60px;
+        outline: none;
+        text-align: center;
+        background-color: transparent;
+        height: 40px;
+        width: 300px;
+        font-family: 'Golden Sun', sans-serif;
+        font-size: 30px;
+        color: white; }
+      .container .modal-menu div form button {
+        color: #ffffff;
+        font-size: 30px;
+        font-family: 'Golden Sun', sans-serif;
+        background-color: transparent; }
+        .container .modal-menu div form button:hover {
+          color: #aaaaaa;
+          text-decoration: none;
+          cursor: pointer; }
 
 /*# sourceMappingURL=stylesheet.css.map */
