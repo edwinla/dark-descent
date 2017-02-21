@@ -1,10 +1,6 @@
 # npm
 node_modules
 
-# webpack
-bundle.js
-bundle.js.map
-
 # sass
 .sass-cache
 stylesheet.css.map
