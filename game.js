@@ -24,8 +24,9 @@ export default class Game {
       this.initHud();
     } else {
       this.floor.spawnPlayer(this.player);
+      this.hud.updateFloor(this.floor);
     }
-
+    this.hud.addFloorEvent();
     this.floor.render();
   }
 

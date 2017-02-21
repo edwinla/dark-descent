@@ -293,7 +293,7 @@ export default class Floor {
   darken(tile, xPos, yPos, ts) {
     const xDiff = Math.abs(this.cameraPos.cx - tile.x);
     const yDiff = Math.abs(this.cameraPos.cy - tile.y);
-    let alpha = 0.85;
+    let alpha = 0.55;
 
     this.ctx.fillStyle = 'black';
     if (yDiff === 5 && xDiff <= 1) {

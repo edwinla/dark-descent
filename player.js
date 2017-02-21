@@ -49,43 +49,45 @@ export default class Player extends Unit {
   attack(node) {
     const enemy = node.unit;
     enemy.hp[0] -= this.weap.damage;
-    console.log(enemy.hp);
-    // let damageEvent = this.damageEvent(enemy);
-    // this.addEvent(damageEvent);
 
-    if (enemy.hp[0] === 0) {
+    this.hud.addBattleEvent(this, enemy);
+
+    if (enemy.hp[0] <= 0) {
       this.xpGainedFrom(enemy);
       return enemy.terminate();
     } else {
       this.hp[0] -= enemy.weap.damage;
-      console.log(this.hp);
+
+      this.hud.addBattleEvent(enemy, this);
 
       this.updateHud('hp');
       return false;
-      // damageEvent = enemy.damageEvent(this);
-      // this.addEvent(damageEvent);
     }
-
   }
 
   xpGainedFrom(enemy) {
     const xpGained = (enemy.hp[1] / 2) + enemy.weap.damage;
     this.xp += xpGained;
-    this.updateHud('xp');
+
+    this.updateHud('xp', enemy);
+    this.hud.addXPEvent(xpGained, enemy);
 
     if (this.xpTnl()) this.lvlUp();
   }
 
   xpTnl() {
-    return this.xp >= ((this.lvl + 1) * 100);
+    return this.xp >= (this.lvl * 100);
   }
 
   lvlUp() {
     this.lvl += 1;
+    this.xp = 0;
     this.hp = [(this.lvl * 100), (this.lvl * 100)];
 
     this.updateHud('xp');
     this.updateHud('lvl');
+    this.updateHud('hp');
+    this.hud.addLvlUpEvent();
   }
 
   updateHud(attr) {

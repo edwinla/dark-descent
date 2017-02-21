@@ -51,13 +51,43 @@ export default class Hud {
     }
   }
 
-  updateEvents(event) {
-    const eventsNode = document.getElementById('events');
-    const span = document.createElement('span');
-    const text = document.createTextNode(event);
-    span.appendChild(text);
-    eventsNode.appendChild(span);
-    eventsNode.scrollTop = eventsNode.scrollHeight;
+  addBattleEvent(off, def) {
+    const event = `${off.name} dealt ${off.weap.damage} to ${def.name}!`;
+    this.updateEvents(event);
   }
 
+  addXPEvent(xp, enemy) {
+    const event = `You gained ${xp}xp from slaying ${enemy.name}.`;
+    this.updateEvents(event);
+  }
+
+  addLvlUpEvent() {
+    const currentlvl = this.player.lvl;
+    const event = `You lvled up from ${currentlvl - 1} to ${currentlvl}`;
+    this.updateEvents(event);
+  }
+
+  addFloorEvent() {
+    let event = `You descend into the dungeon...`;
+    if (this.currentFloor > 1) {
+      event = `You fall down a hole, deeper into the dungeon.`;
+    }
+    console.log(this.currentFloor);
+    this.updateEvents(event);
+  }
+
+  updateEvents(event) {
+    this.events.push(event);
+
+    const eventsNode = document.querySelector('.events');
+    const span = document.createElement('span');
+    const text = document.createTextNode(event);
+
+    span.appendChild(text);
+    eventsNode.insertBefore(span, eventsNode.firstChild);
+
+    if (eventsNode.childNodes.length > 5) {
+      eventsNode.removeChild(eventsNode.lastChild);
+    }
+  }
 }
