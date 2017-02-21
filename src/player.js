@@ -48,20 +48,20 @@ export default class Player extends Unit {
 
   attack(node) {
     const enemy = node.unit;
-    enemy.hp[0] -= this.weap.damage;
+    this.damages(enemy);
 
     this.hud.addBattleEvent(this, enemy);
 
-    if (enemy.hp[0] <= 0) {
+    if (enemy.hp[0] === 0) {
       this.xpGainedFrom(enemy);
       return enemy.terminate();
     } else {
-      this.hp[0] -= enemy.weap.damage;
+      enemy.damages(this);
 
       this.hud.addBattleEvent(enemy, this);
-
       this.updateHud('hp');
-      return false;
+
+      if (this.hp[0] === 0) return this;
     }
   }
 
