@@ -68,7 +68,7 @@ html, body {
     display: block;
     position: fixed;
     z-index: 10;
-    padding-top: calc(50% - 300px);
+    padding-top: calc(50vh - 150px);
     left: 0;
     top: 0;
     width: 100%;
@@ -84,14 +84,14 @@ html, body {
     margin: auto;
     height: 300px;
     padding: 20px;
-    width: 80%;
-    border: 1px solid white; }
+    width: 80%; }
     .container .modal-menu div .title {
-      color: #ffffff;
+      color: #eeeeee;
       font-family: 'Taranis', sans-serif;
       font-size: 48px;
       letter-spacing: -7px; }
       .container .modal-menu div .title .title-capitalize {
+        color: #eeeeee;
         font-size: 64px; }
     .container .modal-menu div form {
       display: flex;
@@ -109,7 +109,7 @@ html, body {
       .container .modal-menu div form button {
         color: #ffffff;
         font-size: 30px;
-        font-family: 'Golden Sun', sans-serif;
+        font-family: 'Taranis', sans-serif;
         background-color: transparent;
         outline: none; }
         .container .modal-menu div form button:hover {

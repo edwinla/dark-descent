@@ -96,7 +96,7 @@ html, body {
     display: block;
     position: fixed;
     z-index: 10;
-    padding-top: calc(50% - 300px);
+    padding-top: calc(50vh - 150px);
     left: 0;
     top: 0;
     width: 100%;
@@ -118,15 +118,15 @@ html, body {
 			height: 300px;
 	    padding: 20px;
 	    width: 80%;
-			border: 1px solid white;
 
 			.title {
-				color: #ffffff;
+				color: #eeeeee;
 				font-family: 'Taranis', sans-serif;
 				font-size: 48px;
 				letter-spacing: -7px;
 
 				.title-capitalize {
+					color: #eeeeee;
 					font-size: 64px;
 				}
 			}
@@ -151,7 +151,7 @@ html, body {
 				button {
 					color: #ffffff;
 					font-size: 30px;
-					font-family: 'Golden Sun', sans-serif;
+					font-family: 'Taranis', sans-serif;
 					background-color: transparent;
 					outline: none;
 
