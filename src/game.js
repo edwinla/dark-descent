@@ -12,6 +12,9 @@ export default class Game {
     this.movementEnabled = false;
     this.floors = 0;
 
+
+    this.playerAction = this.playerAction.bind(this);
+
     this.enterNewLevel();
   }
 
@@ -105,14 +108,15 @@ export default class Game {
   toggleMovement() {
     if (this.movementEnabled) {
       this.movementEnabled = false;
-      window.removeEventListener('keydown', this.playerAction.bind(this));
+      window.removeEventListener('keydown', this.playerAction);
       return;
     }
-    window.addEventListener('keydown', this.playerAction.bind(this));
+    window.addEventListener('keydown', this.playerAction);
     this.movementEnabled = true;
   }
 
   gameOver() {
+    this.toggleMovement();
     this.hud.updateEvents('You have died.');
 
     const modal = document.querySelector('.modal-gameover');

@@ -8,6 +8,8 @@
 }
 
 * {
+	font-family: inherit;
+	color: inherit;
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -16,6 +18,7 @@ html, body {
   width: 100%;
   height: 100%;
 	background-color: #201728;
+	color: #eee;
 	font-family: 'Golden Sun', sans-serif;
 	text-align: center;
 }
@@ -96,7 +99,7 @@ html, body {
     display: none;
     position: fixed;
     z-index: 10;
-    padding-top: calc(50vh - 150px);
+    padding-top: calc(50vh - 250px);
     left: 0;
     top: 0;
     width: 100%;
@@ -106,7 +109,7 @@ html, body {
     background-color: rgba(32, 23, 40, 0.8);
 	}
 
-	.modal-menu {
+	.modal-main {
 		display: block;
 
 		div {
@@ -117,53 +120,153 @@ html, body {
 
 	    background-color: #201728;
 	    margin: auto;
-			height: 300px;
-	    padding: 20px;
 	    width: 80%;
 
 			.title {
-				color: #eeeeee;
+				margin-bottom: 20px;
+				color: sandybrown;
 				font-family: 'Taranis', sans-serif;
 				font-size: 48px;
+				font-weight: 600;
 				letter-spacing: -7px;
 
 				.title-capitalize {
-					color: #eeeeee;
+					color: sandybrown;
 					font-size: 64px;
 				}
 			}
 
-			form {
+			.main-menu {
 				display: flex;
-				flex-direction: column;
-
-				input {
-					margin-bottom: 60px;
-					outline: none;
-					text-align: center;
-					background-color: transparent;
-					height: 40px;
-					width: 300px;
-
-					font-family: 'Golden Sun', sans-serif;
-					font-size: 30px;
-					color: white;
-				}
+				height: 300px;
 
 				button {
-					color: #ffffff;
 					font-size: 30px;
-					font-family: 'Taranis', sans-serif;
 					background-color: transparent;
 					outline: none;
 
 					&:hover {
-						color: #aaaaaa;
-						text-decoration: none;
+						color: sandybrown;
+						font-weight: 600;
 						cursor: pointer;
 					}
 				}
 			}
+
+			.new-game {
+				display: none;
+				padding-top: 30px;
+				form {
+					display: flex;
+					flex-direction: column;
+
+					input {
+						margin-bottom: 60px;
+						outline: none;
+						text-align: center;
+						background-color: transparent;
+						height: 40px;
+						width: 350px;
+						font-size: 30px;
+						color: white;
+					}
+
+					button {
+						color: #ffffff;
+						font-size: 30px;
+						background-color: transparent;
+						outline: none;
+
+						&:hover {
+							font-weight: 600;
+							color: sandybrown;
+							cursor: pointer;
+						}
+					}
+				}
+
+				.back-menu {
+					margin-top: 25px;
+					color: #ffffff;
+					font-size: 30px;
+					background-color: transparent;
+					outline: none;
+
+					&:hover {
+						font-weight: 600;
+						color: sandybrown;
+						cursor: pointer;
+					}
+				}
+			}
+
+			.how-to {
+				display: none;
+				flex-direction: column;
+				justify-content: space-between;
+				height: 370px;
+
+				p {
+					font-size: 20px;
+				}
+
+				div {
+					display: flex;
+					justify-content: flex-start;
+
+					p {
+						padding-bottom: 12px;
+						&:first-child {
+							padding-bottom: 18px;
+						}
+					}
+				}
+
+				button {
+					padding-top: 10px;
+					font-size: 30px;
+					color: sandybrown;
+					background-color: transparent;
+					outline: none;
+
+					&:hover {
+						font-weight: 600;
+						cursor: pointer;
+					}
+				}
+			}
+
+			.about {
+				display: none;
+				width: 600px;
+				height: 350px;
+
+				p {
+					line-height: 22px;
+				}
+
+				button {
+					font-size: 30px;
+					color: sandybrown;
+					background-color: transparent;
+					outline: none;
+
+					&:hover {
+						font-weight: 600;
+						cursor: pointer;
+					}
+				}
+
+				a {
+					color: sandybrown;
+
+					&:hover {
+						font-weight: 600;
+						cursor: pointer;
+					}
+				}
+			}
+
 		}
 	}
 
