@@ -347,6 +347,8 @@ var Game = function () {
     this.movementEnabled = false;
     this.floors = 0;
 
+    this.playerAction = this.playerAction.bind(this);
+
     this.enterNewLevel();
   }
 
@@ -450,15 +452,16 @@ var Game = function () {
     value: function toggleMovement() {
       if (this.movementEnabled) {
         this.movementEnabled = false;
-        window.removeEventListener('keydown', this.playerAction.bind(this));
+        window.removeEventListener('keydown', this.playerAction);
         return;
       }
-      window.addEventListener('keydown', this.playerAction.bind(this));
+      window.addEventListener('keydown', this.playerAction);
       this.movementEnabled = true;
     }
   }, {
     key: 'gameOver',
     value: function gameOver() {
+      this.toggleMovement();
       this.hud.updateEvents('You have died.');
 
       var modal = document.querySelector('.modal-gameover');
@@ -1624,6 +1627,8 @@ var CaveTileset = {
 };
 
 var newGame = function newGame(playerName) {
+  if (!/\w/.test(playerName)) playerName = 'player1';
+
   var canvas = document.getElementById('main');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -1633,23 +1638,54 @@ var newGame = function newGame(playerName) {
 };
 
 var displayMenuScreen = function displayMenuScreen() {
-
   var hud = document.querySelector('.hud');
-  var modal = document.querySelector('.modal-menu');
-  var newgame = document.querySelector('.new-game');
+  var modal = document.querySelector('.modal-main');
+  var entergame = document.querySelector('.enter-game');
   var playerName = document.querySelector('.player-name');
   playerName.focus();
 
-  newgame.onsubmit = function () {
+  entergame.addEventListener('submit', function () {
     event.preventDefault();
 
     hud.style.display = 'flex';
     modal.style.display = 'none';
     newGame(playerName.value);
-  };
+  });
 };
 
 document.addEventListener('DOMContentLoaded', function () {
+
+  var mainmenu = document.querySelector('.main-menu');
+  var menubuttons = document.getElementsByClassName('menu-button');
+
+  var newgame = document.querySelector('.new-game');
+  var howto = document.querySelector('.how-to');
+  var about = document.querySelector('.about');
+
+  menubuttons[0].addEventListener('click', function () {
+    mainmenu.style.display = 'none';
+    newgame.style.display = 'flex';
+  });
+
+  menubuttons[1].addEventListener('click', function () {
+    mainmenu.style.display = 'none';
+    howto.style.display = 'flex';
+  });
+
+  menubuttons[2].addEventListener('click', function () {
+    mainmenu.style.display = 'none';
+    about.style.display = 'flex';
+  });
+
+  var backbuttons = document.getElementsByClassName('back-menu');
+
+  Array.from(backbuttons).forEach(function (el) {
+    el.addEventListener('click', function () {
+      el.parentElement.style.display = 'none';
+      mainmenu.style.display = 'flex';
+    });
+  });
+
   displayMenuScreen();
 });
 
