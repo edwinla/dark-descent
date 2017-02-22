@@ -43,8 +43,9 @@ const CaveTileset = {
   m22: "./assets/images/monsters/monster_21.png",
 };
 
-
 const newGame = (playerName) => {
+  if (!(/\w/).test(playerName)) playerName = 'player1';
+
   const canvas = document.getElementById('main');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -54,23 +55,53 @@ const newGame = (playerName) => {
 };
 
 const displayMenuScreen = () => {
-
-
   const hud = document.querySelector('.hud');
-  const modal = document.querySelector('.modal-menu');
-  const newgame = document.querySelector('.new-game');
+  const modal = document.querySelector('.modal-main');
+  const entergame = document.querySelector('.enter-game');
   const playerName = document.querySelector('.player-name');
   playerName.focus();
 
-  newgame.onsubmit = () => {
+  entergame.addEventListener('submit', () => {
     event.preventDefault();
 
     hud.style.display = 'flex';
     modal.style.display = 'none';
     newGame(playerName.value);
-  };
+  });
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  const mainmenu = document.querySelector('.main-menu');
+  const menubuttons = document.getElementsByClassName('menu-button');
+
+  const newgame = document.querySelector('.new-game');
+  const howto = document.querySelector('.how-to');
+  const about = document.querySelector('.about');
+
+  menubuttons[0].addEventListener('click', () => {
+    mainmenu.style.display = 'none';
+    newgame.style.display = 'flex';
+  });
+
+  menubuttons[1].addEventListener('click', () => {
+    mainmenu.style.display = 'none';
+    howto.style.display = 'flex';
+  });
+
+  menubuttons[2].addEventListener('click', () => {
+    mainmenu.style.display = 'none';
+    about.style.display = 'flex';
+  });
+
+  const backbuttons = document.getElementsByClassName('back-menu');
+
+  Array.from(backbuttons).forEach((el) => {
+    el.addEventListener('click', () => {
+      el.parentElement.style.display = 'none';
+      mainmenu.style.display = 'flex';
+    });
+  });
+
   displayMenuScreen();
 });
