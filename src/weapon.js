@@ -33,13 +33,13 @@ export default class Weapon {
 
   calcWeapon(num) {
     const identifier = num % 23;
-    const type = identifier > 9 ? identifier : `0${identifier}`;
+    const type = identifier > 9 ? `isw${identifier}` : `isw0${identifier}`;
     this.type = type;
     this.name = WEAPONTYPES[this.type];
     this.damage = this.rngDamage(num);
   }
 
   rngDamage(num) {
-    return (num * randomNumber(num - 2, num)) + randomNumber(0, num * 2);
+    return (num * 7) + randomNumber(0, Math.floor(num * 3 / 2)) + 5;
   }
 }

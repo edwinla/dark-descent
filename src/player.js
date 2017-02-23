@@ -1,11 +1,12 @@
 import Unit from './unit';
+import Weapon from './weapon';
 
 export default class Player extends Unit {
   constructor(name) {
     super(name);
     this.type = 'hs';
     this.hp = [100, 100];
-    this.weap = {name: 'iron sword', damage: 25};
+    this.weap = new Weapon(0);
     this.mana = [100, 100];
     this.lvl = 1;
     this.xp = 0;
@@ -46,6 +47,7 @@ export default class Player extends Unit {
 
   attack(node) {
     const enemy = node.object;
+    // debugger;
     this.damages(enemy);
 
     this.hud.addBattleEvent(this, enemy);
@@ -86,6 +88,15 @@ export default class Player extends Unit {
     this.updateHud('lvl');
     this.updateHud('hp');
     this.hud.addLvlUpEvent();
+  }
+
+  pickupItem(item) {
+    if (item instanceof Weapon) {
+      this.weap = item;
+    }
+
+    this.updateHud('weap');
+    this.hud.addItemPickupEvent(item);
   }
 
   updateHud(attr) {

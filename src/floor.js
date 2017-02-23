@@ -325,16 +325,17 @@ export default class Floor {
     };
 
     for (let i = 0; i < n; i++) {
-      const monsterhp = 50 * this.number;
+      const monsterhp = 20 * this.number;
       const monsterweap = {
         name: 'maul',
-        damage: 10 * this.number
+        damage: 5 * this.number
       };
       const enemy = new Enemy(
         'monster',
         [monsterhp, monsterhp],
         monsterweap,
-        `m${this.number % 24}`
+        `m${this.number % 24}`,
+        this.number
       );
 
       const node = this.randomLocation();
