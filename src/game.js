@@ -79,6 +79,8 @@ export default class Game {
 
     if (nextNode.isEnemyNode()) {
       this.playerAttack(nextNode);
+    } else if (nextNode.hasItem()) {
+      this.playerPickup(nextNode);
     } else if (this.floor.validNode(nextNode)) {
       this.playerMove(nextNode);
     }
@@ -103,6 +105,11 @@ export default class Game {
     } else if (result instanceof Player) {
       this.gameOver();
     }
+  }
+
+  playerPickup(node) {
+    this.player.pickupItem(node.object);
+    node.restore();
   }
 
   toggleMovement() {

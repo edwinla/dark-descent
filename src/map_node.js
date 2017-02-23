@@ -1,11 +1,12 @@
 import Enemy from './enemy';
+import Weapon from './weapon';
 
 export default class MapNode {
   constructor(y, x, type) {
     this.y = y;
     this.x = x;
     this.type = type;
-    this.restoreType = type;
+    this.object = null;
     this.isDoor = false;
     this.parent = null;
     this.fCost = null;
@@ -20,9 +21,8 @@ export default class MapNode {
     return false;
   }
 
-  restore() {
-    this.unit = null;
-    this.type = this.restoreType;
+  restore(item) {
+    this.object = item ? item : null;
   }
 
   validPos(map, pos) {
@@ -46,7 +46,11 @@ export default class MapNode {
   }
 
   isEnemyNode() {
-    return (this.unit instanceof Enemy);
+    return (this.object instanceof Enemy);
+  }
+
+  hasItem() {
+    return this.object instanceof Weapon;
   }
 
   allNeighbors(map) {

@@ -83,6 +83,11 @@ export default class Hud {
     this.updateEvents(event);
   }
 
+  addItemPickupEvent(item) {
+    const event = `You have found a(n) ${item.name}!`;
+    this.updateEvents(event);
+  }
+
   updateEvents(event) {
     this.events.push(event);
 
