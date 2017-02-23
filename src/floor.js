@@ -114,7 +114,6 @@ export default class Floor {
 
           if (count > 5) {
             removed = true;
-            tile.restoreType = 'cb';
             tile.type = 'cb';
           } else if (count === 5) {
             let y = 0, x = 0;
@@ -125,7 +124,6 @@ export default class Floor {
             });
 
             if (Math.abs(y) === 3 || Math.abs(x) === 3) {
-              tile.restoreType = 'cb';
               tile.type = 'cb';
             }
           }
@@ -142,7 +140,6 @@ export default class Floor {
 
         if (i === 0 || i === this.mapHeight - 1 || j === 0 || j === this.mapWidth - 1) {
           c.type = 'wb';
-          c.restoreType = 'wb';
           continue;
         }
 
@@ -162,10 +159,8 @@ export default class Floor {
 
         if (validwalls.indexOf(newtype) !== -1) {
           c.type = newtype;
-          c.restoreType = newtype;
         } else {
           c.type = 'wb';
-          c.restoreType = 'wb';
         }
       }
     }
@@ -271,18 +266,21 @@ export default class Floor {
         const tile = this.map[camY + i][camX + j];
         const xPos = j * ts;
         const yPos = i * ts;
-        const tileType = tile.isHole ? 'ch' : tile.type;
 
         this.ctx.webkitImageSmoothingEnabled = false;
         this.ctx.mozImageSmoothingEnabled = false;
         this.ctx.imageSmoothingEnabled = false;
         this.ctx.clearRect(xPos, yPos, ts, ts);
 
-        if (tile.unit || tile.isHole) {
+        if (tile.object || tile.isHole) {
           this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
+
+          if (tile.isHole) this.ctx.drawImage(this.tiles.ch, xPos, yPos, ts, ts);
+          if (tile.object) this.ctx.drawImage(this.tiles[tile.object.type], xPos, yPos, ts, ts);
+        } else {
+          this.ctx.drawImage(this.tiles[tile.type], xPos, yPos, ts, ts);
         }
 
-        this.ctx.drawImage(this.tiles[tileType], xPos, yPos, ts, ts);
         // this.ctx.strokeRect(j * ts, i * ts, ts, ts);
 
         this.darken(tile, xPos, yPos, ts);
@@ -360,8 +358,6 @@ export default class Floor {
   }
 
   validNode(node) {
-    return node.type === 'cb' || node.type === 'ch';
+    return node.type === 'cb' && (!node.object || node.isHole);
   }
-
-
 }

@@ -7,6 +7,7 @@ export default class Enemy extends Unit {
 
   terminate() {
     this.node.restore();
+    this.node = null;
     return this;
   }
 

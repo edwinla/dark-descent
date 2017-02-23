@@ -7,8 +7,7 @@ export default class Unit {
   }
 
   spawn(node) {
-    node.type = this.type;
-    node.unit = this;
+    node.object = this;
     this.node = node;
 
     return node;

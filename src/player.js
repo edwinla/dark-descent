@@ -37,8 +37,6 @@ export default class Player extends Unit {
         pos.x += 1;
     }
 
-    this.node.type = this.type;
-
     return pos;
   }
 
@@ -47,7 +45,7 @@ export default class Player extends Unit {
   }
 
   attack(node) {
-    const enemy = node.unit;
+    const enemy = node.object;
     this.damages(enemy);
 
     this.hud.addBattleEvent(this, enemy);
@@ -95,8 +93,7 @@ export default class Player extends Unit {
   }
 
   move(nextNode) {
-    nextNode.type = this.type;
-    nextNode.unit = this;
+    nextNode.object = this;
 
     this.node.restore();
     this.node = nextNode;

@@ -5,7 +5,7 @@ export default class MapNode {
     this.y = y;
     this.x = x;
     this.type = type;
-    this.restoreType = type;
+    this.object = null;
     this.isDoor = false;
     this.parent = null;
     this.fCost = null;
@@ -21,8 +21,7 @@ export default class MapNode {
   }
 
   restore() {
-    this.unit = null;
-    this.type = this.restoreType;
+    this.object = null;
   }
 
   validPos(map, pos) {
@@ -46,7 +45,7 @@ export default class MapNode {
   }
 
   isEnemyNode() {
-    return (this.unit instanceof Enemy);
+    return (this.object instanceof Enemy);
   }
 
   allNeighbors(map) {
