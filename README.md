@@ -22,7 +22,7 @@ The main `game` class holds a procedurally generated `floor` as the player is ab
 Since the map tiles used restrained the type of traversable terrain for the player, gap-filling and wall-placement algorithms were additionally used to ensure that each floor was free of visual bugs.
 
 ## Future Directions
-[ ] Animated battles using JavaScrit's `requestAnimationFrame`
-[ ] Enemy movement based on player proximity and pathfinding algorithm
-[ ] Inventory slots and on-click item usage
-[ ] Story-driven; with friendly NPCs with interactive dialogue
+- Animated battles using JavaScript's `requestAnimationFrame`
+- Enemy movement based on player proximity and pathfinding algorithm
+- Inventory slots and on-click item usage
+- Story-driven; with friendly NPCs with interactive dialogue
