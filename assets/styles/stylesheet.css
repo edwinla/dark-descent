@@ -60,6 +60,8 @@ html, body {
         .container .hud .hud-bottom .events span {
           margin-top: 5px;
           font-size: 14px; }
+          .container .hud .hud-bottom .events span:first-of-type {
+            font-size: 20px; }
       .container .hud .hud-bottom .floor {
         display: flex;
         flex-direction: column;
