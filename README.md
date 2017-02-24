@@ -7,11 +7,9 @@ Dark Descent is a rogue-like dungeon crawler written in pure JavaScript without 
 
 ## Features and Implementation
 
-![image of main menu](docs/screenshots/main_menu.png)
+Players are able to quickly navigate through the menu options as each screen is pre-loaded as a part of the DOM as soon as the page loads and event listeners are bound to each menu option (as an overlay modal) for fast CSS display toggling.
 
-Users are able to quickly navigate through the menu options as each screen is pre-loaded as a part of the DOM as soon as the page loads and event listeners are bound to each menu option (as an overlay modal) for fast CSS display toggling.
-
-![image of basic floor](docs/screenshots/dungeon_basic.png)
+![slideshow of entering the game](docs/screenshots/main_menu/tutorial.gif)
 
 The game's map is drawn by the native canvas API available to plain JavaScript. Player interfaces such as the HUD, main menu, and events log represent the HTML DOM and are dynamically changed as the player interacts with his environment.
 
@@ -19,10 +17,12 @@ The game's map is drawn by the native canvas API available to plain JavaScript. 
 
 The main `game` class holds a procedurally generated `floor` as the player is able to clear the level and find the pit to the next depth. Each `floor` class generates a random number of `room` instances of varying sizes. Rooms are then connected via a `path` class that uses A* pathfinding in conjunction with a `BinaryMinHeap` data structure to for fast lookup (of the shortest path).
 
+![slideshow of map generation](docs/screenshots/map_slideshow.gif)
+
 Since the map tiles used restrained the type of traversable terrain for the player, gap-filling and wall-placement algorithms were additionally used to ensure that each floor was free of visual bugs.
 
 ## Future Directions
-[ ] Animated battles using JavaScrit's `requestAnimationFrame`
-[ ] Enemy movement based on player proximity and pathfinding algorithm
-[ ] Inventory slots and on-click item usage
-[ ] Story-driven; with friendly NPCs with interactive dialogue
+- Animated battles using JavaScript's `requestAnimationFrame`
+- Enemy movement based on player proximity and pathfinding algorithm
+- Inventory slots and on-click item usage
+- Story-driven; with friendly NPCs with interactive dialogue

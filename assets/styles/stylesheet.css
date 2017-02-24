@@ -115,7 +115,8 @@ html, body {
           font-size: 64px; }
       .container .modal-main div .main-menu {
         display: flex;
-        height: 300px; }
+        margin-top: 80px;
+        height: 200px; }
         .container .modal-main div .main-menu button {
           font-size: 30px;
           background-color: transparent;
