@@ -109,7 +109,7 @@ export default class Floor {
   darken(tile, xPos, yPos, ts) {
     const xDiff = Math.abs(this.cameraPos.cx - tile.x);
     const yDiff = Math.abs(this.cameraPos.cy - tile.y);
-    let alpha = 0.55;
+    let alpha = 0.75;
 
     this.ctx.fillStyle = 'black';
     if (yDiff === 5 && xDiff <= 1) {
@@ -322,10 +322,10 @@ export default class Floor {
     };
 
     for (let i = 0; i < n; i++) {
-      const monsterhp = 20 * this.number;
+      const monsterhp = this.number * 50;
       const monsterweap = {
         name: 'maul',
-        damage: 5 * this.number
+        damage: 4 * this.number
       };
       const enemy = new Enemy(
         'monster',

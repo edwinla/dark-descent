@@ -7,7 +7,6 @@ export default class Player extends Unit {
     this.type = 'hs';
     this.hp = [100, 100];
     this.weap = new Weapon(0);
-    this.mana = [100, 100];
     this.lvl = 1;
     this.xp = 0;
   }

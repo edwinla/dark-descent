@@ -10,7 +10,6 @@ export default class Hud {
       'lvl',
       'xp',
       'hp',
-      'mana',
       'weap',
       'events',
       'floor-num',
@@ -50,7 +49,6 @@ export default class Hud {
         this[attr + 'DOM'].firstChild.nodeValue = value;
         break;
       case 'hp':
-      case 'mana':
         this[attr + 'DOM'].firstChild.nodeValue = `${value[0]} / ${value[1]}`;
         break;
       case 'weap':

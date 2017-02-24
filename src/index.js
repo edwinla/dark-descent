@@ -127,4 +127,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+
+  const bgmusic = document.querySelector('audio');
+  const toggleAudio = document.querySelector('.toggle-audio');
+  bgmusic.play();
+
+  let isPlaying = true;
+  toggleAudio.addEventListener('click', () => {
+    if (isPlaying) {
+      bgmusic.pause();
+      toggleAudio.style.backgroundImage = "url('./assets/images/other/audio_off.png')";
+      isPlaying = false;
+    } else {
+      bgmusic.play();
+      toggleAudio.style.backgroundImage = "url('./assets/images/other/audio_on.png')";
+      isPlaying = true;
+    }
+  });
 });
