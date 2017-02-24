@@ -36,6 +36,23 @@ html, body {
 		display: block;
 	}
 
+	.toggle-audio {
+		position: absolute;
+		z-index: 20;
+		top: 20px;
+		right: 35px;
+		width: 32px;
+		height: 32px;
+		background-image: url('../images/other/audio_on.png');
+		background-size: cover;
+		opacity: 0.6;
+
+		&:hover {
+			cursor: pointer;
+			opacity: 1;
+		}
+	}
+
   .hud {
     height: calc(100% - 65px);
     width: calc(100% - 50px);
