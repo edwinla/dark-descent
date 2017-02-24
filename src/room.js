@@ -13,7 +13,6 @@ export default class Room {
   render() {
     this.edges = this.linearizeEdges();
     this.drawMain();
-    // this.addBuffer();
   }
 
   getRandomPosition(mapWidth, mapHeight) {
@@ -68,32 +67,6 @@ export default class Room {
     }
 
     return edges;
-  }
-
-  addBuffer() {
-    const absX = this.absPos.x - 1,
-    absY = this.absPos.y - 1,
-    absXLimit = absX + this.width + 1,
-    absYLimit = absY + this.height + 1;
-
-    let y = absY;
-    while (y <= absYLimit) {
-      let x = absX;
-      while (x <= absXLimit) {
-        const node = this.map[y][x];
-        node.type = 'w2';
-
-        switch (y) {
-          case absY:
-          case absYLimit:
-            x++;
-            break;
-          default:
-            x += this.width + 1;
-        }
-      }
-      y++;
-    }
   }
 
   drawMain() {

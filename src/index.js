@@ -77,7 +77,7 @@ const newGame = (playerName) => {
   const game = new Game(playerName, canvas, ctx, CaveTileset);
 };
 
-const displayMenuScreen = () => {
+const enterGameScreen = () => {
   const hud = document.querySelector('.hud');
   const modal = document.querySelector('.modal-main');
   const entergame = document.querySelector('.enter-game');
@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   menubuttons[0].addEventListener('click', () => {
     mainmenu.style.display = 'none';
     newgame.style.display = 'flex';
+    enterGameScreen();
   });
 
   menubuttons[1].addEventListener('click', () => {
@@ -126,5 +127,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  displayMenuScreen();
 });

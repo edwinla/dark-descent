@@ -34,7 +34,6 @@ export default class Hud {
     this['floor-numDOM'].firstChild.nodeValue = this.currentFloor;
 
     this.updateEnemies(floor.enemies);
-    // this.boss = floor.boss;
   }
 
   updateEnemies(enemies) {

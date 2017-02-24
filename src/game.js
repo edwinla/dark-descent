@@ -12,7 +12,6 @@ export default class Game {
     this.movementEnabled = false;
     this.floors = 0;
 
-
     this.playerAction = this.playerAction.bind(this);
 
     this.enterNewLevel();
@@ -47,13 +46,8 @@ export default class Game {
   }
 
   initPlayer() {
-    // create a new player
     this.player = new Player(this.playerName);
-
-    // add player to floor at random location
     this.floor.spawnPlayer(this.player);
-
-    // enable movement by adding an event listener
     this.toggleMovement();
   }
 

@@ -39,34 +39,107 @@ export default class Floor {
     } else this.update();
   }
 
-  placeHole() {
-    let holeNode = null;
-
-    while (!holeNode) {
-      const pos = this.randomLocation();
-      const node = this.map[pos.y][pos.x];
-
-      if (node.type === 'cb') holeNode = node;
+  init(count) {
+    this.tilesLoaded++;
+    if (this.tilesLoaded === count) {
+      this.update();
     }
-
-    holeNode.isHole = true;
-    // console.log(holeNode.x, holeNode.y);
-
-    this.hole = holeNode;
   }
 
-  randomLocation() {
-    let node;
+  update(direction) {
+    const types = ['u2', 'hn', 'hs', 'he', 'hw'];
 
-    do {
-      const room = this.rooms[randomNumber(0, this.rooms.length - 1)];
-      let y = randomNumber(room.absPos.y, room.absPos.y + room.height - 1);
-      let x = randomNumber(room.absPos.x, room.absPos.x + room.width - 1);
+    const ts = this.tSize;
+    const {cy, cx} = this.cameraPos;
+    const {dy, dx} = direction || {dy: 0, dx: 0};
 
-      node = this.map[y][x];
-    } while (!this.validNode(node));
+    const {camX, camY} = this.calcBounds(cx + dx, cy + dy);
 
-    return node;
+    this.ctx.fillStyle = "#201728";
+    this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+    for (let i = 0; i < this.fov.y; i++) {
+      for (let j = 0; j < this.fov.x; j++) {
+        const tile = this.map[camY + i][camX + j];
+        const xPos = j * ts;
+        const yPos = i * ts;
+
+        this.ctx.webkitImageSmoothingEnabled = false;
+        this.ctx.mozImageSmoothingEnabled = false;
+        this.ctx.imageSmoothingEnabled = false;
+        this.ctx.clearRect(xPos, yPos, ts, ts);
+
+        if (tile.object || tile.isHole) {
+          this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
+
+          if (tile.isHole) this.ctx.drawImage(this.tiles.ch, xPos, yPos, ts, ts);
+          if (tile.object) this.ctx.drawImage(this.tiles[tile.object.type], xPos, yPos, ts, ts);
+        } else {
+          this.ctx.drawImage(this.tiles[tile.type], xPos, yPos, ts, ts);
+        }
+
+        this.darken(tile, xPos, yPos, ts);
+      }
+    }
+
+  }
+
+  calcBounds(tX, tY) {
+
+    const fovX = Math.floor(this.fov.x / 2);
+    const fovY = Math.floor(this.fov.y / 2);
+
+    let camX, camY, fov = {};
+
+    if (tX + fovX >= this.mapWidth) {
+      camX = this.mapWidth - this.fov.x;
+    } else if (tX - fovX < 0) {
+      camX = 0;
+    } else camX = tX - fovX;
+
+    if (tY + fovY >= this.mapHeight) {
+      camY = this.mapHeight - this.fov.y;
+    } else if (tY - fovY < 0) {
+      camY = 0;
+    } else camY = tY - fovY;
+
+    return {camX: camX, camY: camY};
+  }
+
+  darken(tile, xPos, yPos, ts) {
+    const xDiff = Math.abs(this.cameraPos.cx - tile.x);
+    const yDiff = Math.abs(this.cameraPos.cy - tile.y);
+    let alpha = 0.55;
+
+    this.ctx.fillStyle = 'black';
+    if (yDiff === 5 && xDiff <= 1) {
+      alpha = 0.15;
+    } else if (yDiff === 4 && xDiff <= 2) {
+      alpha = xDiff < 2 ? 0 : 0.15;
+    } else if (yDiff === 3 && xDiff <= 3) {
+      alpha = xDiff < 3 ? 0 : 0.15;
+    } else if (yDiff === 2 && xDiff <= 4) {
+      alpha = xDiff < 4 ? 0 : 0.15;
+    } else if (yDiff <= 1 && xDiff <= 5) {
+      alpha = xDiff < 5 ? 0 : 0.15;
+    }
+
+    this.ctx.globalAlpha = alpha;
+    this.ctx.fillRect(xPos, yPos, ts, ts);
+    this.ctx.globalAlpha = 1;
+
+  }
+
+  loadTiles(tileSet) {
+    const tileSetKeys = Object.keys(tileSet);
+    for (let i = 0; i < tileSetKeys.length; i++) {
+      const tile = tileSetKeys[i];
+      this.tiles[tile] = new Image();
+      this.tiles[tile].src = tileSet[tile];
+      this.tiles[tile].onload = () => {
+        this.init(tileSetKeys.length);
+      };
+    }
   }
 
   getBackgroundMap(mapWidth, mapHeight) {
@@ -208,114 +281,38 @@ export default class Floor {
     return paths;
   }
 
-  loadTiles(tileSet) {
-    const tileSetKeys = Object.keys(tileSet);
-    for (let i = 0; i < tileSetKeys.length; i++) {
-      const tile = tileSetKeys[i];
-      this.tiles[tile] = new Image();
-      this.tiles[tile].src = tileSet[tile];
-      this.tiles[tile].onload = () => {
-        this.init(tileSetKeys.length);
-      };
-    }
-  }
+  placeHole() {
+    let holeNode = null;
 
-  init(count) {
-    this.tilesLoaded++;
-    if (this.tilesLoaded === count) {
-      this.update();
-    }
-  }
+    while (!holeNode) {
+      const pos = this.randomLocation();
+      const node = this.map[pos.y][pos.x];
 
-  calcBounds(tX, tY) {
-
-    const fovX = Math.floor(this.fov.x / 2);
-    const fovY = Math.floor(this.fov.y / 2);
-
-    let camX, camY, fov = {};
-
-    if (tX + fovX >= this.mapWidth) {
-      camX = this.mapWidth - this.fov.x;
-    } else if (tX - fovX < 0) {
-      camX = 0;
-    } else camX = tX - fovX;
-
-    if (tY + fovY >= this.mapHeight) {
-      camY = this.mapHeight - this.fov.y;
-    } else if (tY - fovY < 0) {
-      camY = 0;
-    } else camY = tY - fovY;
-
-    return {camX: camX, camY: camY};
-  }
-
-  update(direction) {
-    const types = ['u2', 'hn', 'hs', 'he', 'hw'];
-
-    const ts = this.tSize;
-    const {cy, cx} = this.cameraPos;
-    const {dy, dx} = direction || {dy: 0, dx: 0};
-
-    const {camX, camY} = this.calcBounds(cx + dx, cy + dy);
-
-    this.ctx.fillStyle = "#201728";
-    this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-
-    for (let i = 0; i < this.fov.y; i++) {
-      for (let j = 0; j < this.fov.x; j++) {
-        const tile = this.map[camY + i][camX + j];
-        const xPos = j * ts;
-        const yPos = i * ts;
-
-        this.ctx.webkitImageSmoothingEnabled = false;
-        this.ctx.mozImageSmoothingEnabled = false;
-        this.ctx.imageSmoothingEnabled = false;
-        this.ctx.clearRect(xPos, yPos, ts, ts);
-
-        if (tile.object || tile.isHole) {
-          this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
-
-          if (tile.isHole) this.ctx.drawImage(this.tiles.ch, xPos, yPos, ts, ts);
-          if (tile.object) this.ctx.drawImage(this.tiles[tile.object.type], xPos, yPos, ts, ts);
-        } else {
-          this.ctx.drawImage(this.tiles[tile.type], xPos, yPos, ts, ts);
-        }
-
-        // this.ctx.strokeRect(j * ts, i * ts, ts, ts);
-
-        this.darken(tile, xPos, yPos, ts);
-      }
+      if (node.type === 'cb') holeNode = node;
     }
 
+    holeNode.isHole = true;
+
+    this.hole = holeNode;
   }
 
-  darken(tile, xPos, yPos, ts) {
-    const xDiff = Math.abs(this.cameraPos.cx - tile.x);
-    const yDiff = Math.abs(this.cameraPos.cy - tile.y);
-    let alpha = 0.55;
+  randomLocation() {
+    let node;
 
-    this.ctx.fillStyle = 'black';
-    if (yDiff === 5 && xDiff <= 1) {
-      alpha = 0.15;
-    } else if (yDiff === 4 && xDiff <= 2) {
-      alpha = xDiff < 2 ? 0 : 0.15;
-    } else if (yDiff === 3 && xDiff <= 3) {
-      alpha = xDiff < 3 ? 0 : 0.15;
-    } else if (yDiff === 2 && xDiff <= 4) {
-      alpha = xDiff < 4 ? 0 : 0.15;
-    } else if (yDiff <= 1 && xDiff <= 5) {
-      alpha = xDiff < 5 ? 0 : 0.15;
-    }
+    do {
+      const room = this.rooms[randomNumber(0, this.rooms.length - 1)];
+      let y = randomNumber(room.absPos.y, room.absPos.y + room.height - 1);
+      let x = randomNumber(room.absPos.x, room.absPos.x + room.width - 1);
 
-    this.ctx.globalAlpha = alpha;
-    this.ctx.fillRect(xPos, yPos, ts, ts);
-    this.ctx.globalAlpha = 1;
+      node = this.map[y][x];
+    } while (!this.validNode(node));
 
+    return node;
   }
 
-  updateCameraPos() {
-    const node = this.player.node;
-    this.cameraPos = Object.assign({}, {cx: node.x, cy: node.y});
+  removeEnemy(enemy) {
+    const enemyIdx = this.enemies.indexOf(enemy);
+    this.enemies.splice(enemyIdx, 1);
   }
 
   spawnEnemies(n) {
@@ -346,16 +343,16 @@ export default class Floor {
     }
   }
 
-  removeEnemy(enemy) {
-    const enemyIdx = this.enemies.indexOf(enemy);
-    this.enemies.splice(enemyIdx, 1);
-  }
-
   spawnPlayer(player) {
     player.spawn(this.randomLocation());
     this.player = player;
 
     this.updateCameraPos();
+  }
+
+  updateCameraPos() {
+    const node = this.player.node;
+    this.cameraPos = Object.assign({}, {cx: node.x, cy: node.y});
   }
 
   validNode(node) {

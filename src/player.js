@@ -47,7 +47,6 @@ export default class Player extends Unit {
 
   attack(node) {
     const enemy = node.object;
-    // debugger;
     this.damages(enemy);
 
     this.hud.addBattleEvent(this, enemy);
