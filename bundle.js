@@ -727,7 +727,7 @@ var Floor = function () {
     value: function darken(tile, xPos, yPos, ts) {
       var xDiff = Math.abs(this.cameraPos.cx - tile.x);
       var yDiff = Math.abs(this.cameraPos.cy - tile.y);
-      var alpha = 0.55;
+      var alpha = 0.75;
 
       this.ctx.fillStyle = 'black';
       if (yDiff === 5 && xDiff <= 1) {
@@ -956,10 +956,10 @@ var Floor = function () {
       };
 
       for (var i = 0; i < n; i++) {
-        var monsterhp = 20 * this.number;
+        var monsterhp = this.number * 50;
         var monsterweap = {
           name: 'maul',
-          damage: 5 * this.number
+          damage: 4 * this.number
         };
         var enemy = new _enemy2.default('monster', [monsterhp, monsterhp], monsterweap, 'm' + this.number % 24, this.number);
 
@@ -1020,7 +1020,7 @@ var Hud = function () {
     this.ctx = ctx;
     this.currentFloor = 0;
     this.events = [];
-    this.classes = ['name', 'lvl', 'xp', 'hp', 'mana', 'weap', 'events', 'floor-num', 'remain'];
+    this.classes = ['name', 'lvl', 'xp', 'hp', 'weap', 'events', 'floor-num', 'remain'];
 
     this.initialize();
   }
@@ -1060,7 +1060,6 @@ var Hud = function () {
           this[attr + 'DOM'].firstChild.nodeValue = value;
           break;
         case 'hp':
-        case 'mana':
           this[attr + 'DOM'].firstChild.nodeValue = value[0] + ' / ' + value[1];
           break;
         case 'weap':
@@ -1380,7 +1379,6 @@ var Player = function (_Unit) {
     _this.type = 'hs';
     _this.hp = [100, 100];
     _this.weap = new _weapon2.default(0);
-    _this.mana = [100, 100];
     _this.lvl = 1;
     _this.xp = 0;
     return _this;
@@ -1785,6 +1783,23 @@ document.addEventListener('DOMContentLoaded', function () {
       el.parentElement.style.display = 'none';
       mainmenu.style.display = 'flex';
     });
+  });
+
+  var bgmusic = document.querySelector('audio');
+  var toggleAudio = document.querySelector('.toggle-audio');
+  bgmusic.play();
+
+  var isPlaying = true;
+  toggleAudio.addEventListener('click', function () {
+    if (isPlaying) {
+      bgmusic.pause();
+      toggleAudio.style.backgroundImage = "url('./assets/images/other/audio_off.png')";
+      isPlaying = false;
+    } else {
+      bgmusic.play();
+      toggleAudio.style.backgroundImage = "url('./assets/images/other/audio_on.png')";
+      isPlaying = true;
+    }
   });
 });
 
