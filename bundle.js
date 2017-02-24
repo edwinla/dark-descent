@@ -222,11 +222,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _unit = __webpack_require__(2);
+var _unit = __webpack_require__(3);
 
 var _unit2 = _interopRequireDefault(_unit);
 
-var _weapon = __webpack_require__(10);
+var _weapon = __webpack_require__(2);
 
 var _weapon2 = _interopRequireDefault(_weapon);
 
@@ -284,6 +284,77 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _util = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var WEAPONTYPES = {
+  isw00: 'knife',
+  isw01: 'cobalt knife',
+  isw02: 'golden knife',
+  isw03: 'demonic knife',
+  isw04: 'short sword',
+  isw05: 'iron sword',
+  isw06: 'steel sword',
+  isw07: 'empowered blade',
+  isw08: 'royal sword',
+  isw09: 'emerald blade',
+  isw10: 'draconic sword',
+  isw11: 'knights sword',
+  isw12: 'cobalt sword',
+  isw13: 'golden sword',
+  isw14: 'demonic sword',
+  isw15: 'frizuhasa',
+  isw16: 'champions broadsword',
+  isw17: 'heroic broadsword',
+  isw18: 'legendary broadsword',
+  isw19: 'terrakuugi',
+  isw20: 'izakugaken',
+  isw21: 'underworld slayer',
+  isw22: 'ragikagukenmasa'
+};
+
+var Weapon = function () {
+  function Weapon(num) {
+    _classCallCheck(this, Weapon);
+
+    this.calcWeapon(num);
+  }
+
+  _createClass(Weapon, [{
+    key: 'calcWeapon',
+    value: function calcWeapon(num) {
+      var identifier = num % 23;
+      var type = identifier > 9 ? 'isw' + identifier : 'isw0' + identifier;
+      this.type = type;
+      this.name = WEAPONTYPES[this.type];
+      this.damage = this.rngDamage(num);
+    }
+  }, {
+    key: 'rngDamage',
+    value: function rngDamage(num) {
+      return num * 7 + (0, _util.randomNumber)(0, Math.floor(num * 3 / 2)) + 5;
+    }
+  }]);
+
+  return Weapon;
+}();
+
+exports.default = Weapon;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Unit = function () {
@@ -318,7 +389,7 @@ var Unit = function () {
 exports.default = Unit;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -330,7 +401,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _floor = __webpack_require__(4);
+var _floor = __webpack_require__(5);
 
 var _floor2 = _interopRequireDefault(_floor);
 
@@ -338,11 +409,11 @@ var _enemy = __webpack_require__(1);
 
 var _enemy2 = _interopRequireDefault(_enemy);
 
-var _player = __webpack_require__(8);
+var _player = __webpack_require__(9);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _hud = __webpack_require__(5);
+var _hud = __webpack_require__(6);
 
 var _hud2 = _interopRequireDefault(_hud);
 
@@ -399,13 +470,8 @@ var Game = function () {
   }, {
     key: 'initPlayer',
     value: function initPlayer() {
-      // create a new player
       this.player = new _player2.default(this.playerName);
-
-      // add player to floor at random location
       this.floor.spawnPlayer(this.player);
-
-      // enable movement by adding an event listener
       this.toggleMovement();
     }
   }, {
@@ -503,7 +569,7 @@ var Game = function () {
 exports.default = Game;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -515,15 +581,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _room = __webpack_require__(9);
+var _room = __webpack_require__(10);
 
 var _room2 = _interopRequireDefault(_room);
 
-var _map_node = __webpack_require__(6);
+var _map_node = __webpack_require__(7);
 
 var _map_node2 = _interopRequireDefault(_map_node);
 
-var _path = __webpack_require__(7);
+var _path = __webpack_require__(8);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -579,36 +645,121 @@ var Floor = function () {
       } else this.update();
     }
   }, {
-    key: 'placeHole',
-    value: function placeHole() {
-      var holeNode = null;
-
-      while (!holeNode) {
-        var pos = this.randomLocation();
-        var node = this.map[pos.y][pos.x];
-
-        if (node.type === 'cb') holeNode = node;
+    key: 'init',
+    value: function init(count) {
+      this.tilesLoaded++;
+      if (this.tilesLoaded === count) {
+        this.update();
       }
-
-      holeNode.isHole = true;
-      // console.log(holeNode.x, holeNode.y);
-
-      this.hole = holeNode;
     }
   }, {
-    key: 'randomLocation',
-    value: function randomLocation() {
-      var node = void 0;
+    key: 'update',
+    value: function update(direction) {
+      var types = ['u2', 'hn', 'hs', 'he', 'hw'];
 
-      do {
-        var room = this.rooms[(0, _util.randomNumber)(0, this.rooms.length - 1)];
-        var y = (0, _util.randomNumber)(room.absPos.y, room.absPos.y + room.height - 1);
-        var x = (0, _util.randomNumber)(room.absPos.x, room.absPos.x + room.width - 1);
+      var ts = this.tSize;
+      var _cameraPos = this.cameraPos,
+          cy = _cameraPos.cy,
+          cx = _cameraPos.cx;
 
-        node = this.map[y][x];
-      } while (!this.validNode(node));
+      var _ref = direction || { dy: 0, dx: 0 },
+          dy = _ref.dy,
+          dx = _ref.dx;
 
-      return node;
+      var _calcBounds = this.calcBounds(cx + dx, cy + dy),
+          camX = _calcBounds.camX,
+          camY = _calcBounds.camY;
+
+      this.ctx.fillStyle = "#201728";
+      this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+      for (var i = 0; i < this.fov.y; i++) {
+        for (var j = 0; j < this.fov.x; j++) {
+          var tile = this.map[camY + i][camX + j];
+          var xPos = j * ts;
+          var yPos = i * ts;
+
+          this.ctx.webkitImageSmoothingEnabled = false;
+          this.ctx.mozImageSmoothingEnabled = false;
+          this.ctx.imageSmoothingEnabled = false;
+          this.ctx.clearRect(xPos, yPos, ts, ts);
+
+          if (tile.object || tile.isHole) {
+            this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
+
+            if (tile.isHole) this.ctx.drawImage(this.tiles.ch, xPos, yPos, ts, ts);
+            if (tile.object) this.ctx.drawImage(this.tiles[tile.object.type], xPos, yPos, ts, ts);
+          } else {
+            this.ctx.drawImage(this.tiles[tile.type], xPos, yPos, ts, ts);
+          }
+
+          this.darken(tile, xPos, yPos, ts);
+        }
+      }
+    }
+  }, {
+    key: 'calcBounds',
+    value: function calcBounds(tX, tY) {
+
+      var fovX = Math.floor(this.fov.x / 2);
+      var fovY = Math.floor(this.fov.y / 2);
+
+      var camX = void 0,
+          camY = void 0,
+          fov = {};
+
+      if (tX + fovX >= this.mapWidth) {
+        camX = this.mapWidth - this.fov.x;
+      } else if (tX - fovX < 0) {
+        camX = 0;
+      } else camX = tX - fovX;
+
+      if (tY + fovY >= this.mapHeight) {
+        camY = this.mapHeight - this.fov.y;
+      } else if (tY - fovY < 0) {
+        camY = 0;
+      } else camY = tY - fovY;
+
+      return { camX: camX, camY: camY };
+    }
+  }, {
+    key: 'darken',
+    value: function darken(tile, xPos, yPos, ts) {
+      var xDiff = Math.abs(this.cameraPos.cx - tile.x);
+      var yDiff = Math.abs(this.cameraPos.cy - tile.y);
+      var alpha = 0.55;
+
+      this.ctx.fillStyle = 'black';
+      if (yDiff === 5 && xDiff <= 1) {
+        alpha = 0.15;
+      } else if (yDiff === 4 && xDiff <= 2) {
+        alpha = xDiff < 2 ? 0 : 0.15;
+      } else if (yDiff === 3 && xDiff <= 3) {
+        alpha = xDiff < 3 ? 0 : 0.15;
+      } else if (yDiff === 2 && xDiff <= 4) {
+        alpha = xDiff < 4 ? 0 : 0.15;
+      } else if (yDiff <= 1 && xDiff <= 5) {
+        alpha = xDiff < 5 ? 0 : 0.15;
+      }
+
+      this.ctx.globalAlpha = alpha;
+      this.ctx.fillRect(xPos, yPos, ts, ts);
+      this.ctx.globalAlpha = 1;
+    }
+  }, {
+    key: 'loadTiles',
+    value: function loadTiles(tileSet) {
+      var _this = this;
+
+      var tileSetKeys = Object.keys(tileSet);
+      for (var i = 0; i < tileSetKeys.length; i++) {
+        var tile = tileSetKeys[i];
+        this.tiles[tile] = new Image();
+        this.tiles[tile].src = tileSet[tile];
+        this.tiles[tile].onload = function () {
+          _this.init(tileSetKeys.length);
+        };
+      }
     }
   }, {
     key: 'getBackgroundMap',
@@ -627,7 +778,7 @@ var Floor = function () {
   }, {
     key: 'removeGaps',
     value: function removeGaps() {
-      var _this = this;
+      var _this2 = this;
 
       var dirs = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]];
 
@@ -638,7 +789,7 @@ var Floor = function () {
 
         var _loop = function _loop(i) {
           var _loop2 = function _loop2(j) {
-            var tile = _this.map[i][j];
+            var tile = _this2.map[i][j];
             if (tile.type !== 'w1') return 'continue';
 
             var count = 0,
@@ -649,7 +800,7 @@ var Floor = function () {
                 solids = [];
 
             dirs.forEach(function (dir) {
-              if (_this.map[i + dir[0]][j + dir[1]].type === 'cb') {
+              if (_this2.map[i + dir[0]][j + dir[1]].type === 'cb') {
                 count += 1;
                 solids.push(dir);
               }
@@ -673,7 +824,7 @@ var Floor = function () {
             }
           };
 
-          for (var j = 1; j < _this.mapWidth - 1; j++) {
+          for (var j = 1; j < _this2.mapWidth - 1; j++) {
             var _ret2 = _loop2(j);
 
             if (_ret2 === 'continue') continue;
@@ -760,129 +911,41 @@ var Floor = function () {
       return paths;
     }
   }, {
-    key: 'loadTiles',
-    value: function loadTiles(tileSet) {
-      var _this2 = this;
+    key: 'placeHole',
+    value: function placeHole() {
+      var holeNode = null;
 
-      var tileSetKeys = Object.keys(tileSet);
-      for (var i = 0; i < tileSetKeys.length; i++) {
-        var _tile = tileSetKeys[i];
-        this.tiles[_tile] = new Image();
-        this.tiles[_tile].src = tileSet[_tile];
-        this.tiles[_tile].onload = function () {
-          _this2.init(tileSetKeys.length);
-        };
-      }
-    }
-  }, {
-    key: 'init',
-    value: function init(count) {
-      this.tilesLoaded++;
-      if (this.tilesLoaded === count) {
-        this.update();
-      }
-    }
-  }, {
-    key: 'calcBounds',
-    value: function calcBounds(tX, tY) {
+      while (!holeNode) {
+        var pos = this.randomLocation();
+        var node = this.map[pos.y][pos.x];
 
-      var fovX = Math.floor(this.fov.x / 2);
-      var fovY = Math.floor(this.fov.y / 2);
-
-      var camX = void 0,
-          camY = void 0,
-          fov = {};
-
-      if (tX + fovX >= this.mapWidth) {
-        camX = this.mapWidth - this.fov.x;
-      } else if (tX - fovX < 0) {
-        camX = 0;
-      } else camX = tX - fovX;
-
-      if (tY + fovY >= this.mapHeight) {
-        camY = this.mapHeight - this.fov.y;
-      } else if (tY - fovY < 0) {
-        camY = 0;
-      } else camY = tY - fovY;
-
-      return { camX: camX, camY: camY };
-    }
-  }, {
-    key: 'update',
-    value: function update(direction) {
-      var types = ['u2', 'hn', 'hs', 'he', 'hw'];
-
-      var ts = this.tSize;
-      var _cameraPos = this.cameraPos,
-          cy = _cameraPos.cy,
-          cx = _cameraPos.cx;
-
-      var _ref = direction || { dy: 0, dx: 0 },
-          dy = _ref.dy,
-          dx = _ref.dx;
-
-      var _calcBounds = this.calcBounds(cx + dx, cy + dy),
-          camX = _calcBounds.camX,
-          camY = _calcBounds.camY;
-
-      this.ctx.fillStyle = "#201728";
-      this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-
-      for (var i = 0; i < this.fov.y; i++) {
-        for (var j = 0; j < this.fov.x; j++) {
-          var _tile2 = this.map[camY + i][camX + j];
-          var xPos = j * ts;
-          var yPos = i * ts;
-
-          this.ctx.webkitImageSmoothingEnabled = false;
-          this.ctx.mozImageSmoothingEnabled = false;
-          this.ctx.imageSmoothingEnabled = false;
-          this.ctx.clearRect(xPos, yPos, ts, ts);
-
-          if (_tile2.object || _tile2.isHole) {
-            this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
-
-            if (_tile2.isHole) this.ctx.drawImage(this.tiles.ch, xPos, yPos, ts, ts);
-            if (_tile2.object) this.ctx.drawImage(this.tiles[_tile2.object.type], xPos, yPos, ts, ts);
-          } else {
-            this.ctx.drawImage(this.tiles[_tile2.type], xPos, yPos, ts, ts);
-          }
-
-          // this.ctx.strokeRect(j * ts, i * ts, ts, ts);
-
-          this.darken(_tile2, xPos, yPos, ts);
-        }
-      }
-    }
-  }, {
-    key: 'darken',
-    value: function darken(tile, xPos, yPos, ts) {
-      var xDiff = Math.abs(this.cameraPos.cx - tile.x);
-      var yDiff = Math.abs(this.cameraPos.cy - tile.y);
-      var alpha = 0.55;
-
-      this.ctx.fillStyle = 'black';
-      if (yDiff === 5 && xDiff <= 1) {
-        alpha = 0.15;
-      } else if (yDiff === 4 && xDiff <= 2) {
-        alpha = xDiff < 2 ? 0 : 0.15;
-      } else if (yDiff === 3 && xDiff <= 3) {
-        alpha = xDiff < 3 ? 0 : 0.15;
-      } else if (yDiff === 2 && xDiff <= 4) {
-        alpha = xDiff < 4 ? 0 : 0.15;
-      } else if (yDiff <= 1 && xDiff <= 5) {
-        alpha = xDiff < 5 ? 0 : 0.15;
+        if (node.type === 'cb') holeNode = node;
       }
 
-      this.ctx.globalAlpha = alpha;
-      this.ctx.fillRect(xPos, yPos, ts, ts);
-      this.ctx.globalAlpha = 1;
+      holeNode.isHole = true;
+
+      this.hole = holeNode;
     }
   }, {
-    key: 'updateCameraPos',
-    value: function updateCameraPos() {
-      var node = this.player.node;
-      this.cameraPos = Object.assign({}, { cx: node.x, cy: node.y });
+    key: 'randomLocation',
+    value: function randomLocation() {
+      var node = void 0;
+
+      do {
+        var room = this.rooms[(0, _util.randomNumber)(0, this.rooms.length - 1)];
+        var y = (0, _util.randomNumber)(room.absPos.y, room.absPos.y + room.height - 1);
+        var x = (0, _util.randomNumber)(room.absPos.x, room.absPos.x + room.width - 1);
+
+        node = this.map[y][x];
+      } while (!this.validNode(node));
+
+      return node;
+    }
+  }, {
+    key: 'removeEnemy',
+    value: function removeEnemy(enemy) {
+      var enemyIdx = this.enemies.indexOf(enemy);
+      this.enemies.splice(enemyIdx, 1);
     }
   }, {
     key: 'spawnEnemies',
@@ -908,18 +971,18 @@ var Floor = function () {
       }
     }
   }, {
-    key: 'removeEnemy',
-    value: function removeEnemy(enemy) {
-      var enemyIdx = this.enemies.indexOf(enemy);
-      this.enemies.splice(enemyIdx, 1);
-    }
-  }, {
     key: 'spawnPlayer',
     value: function spawnPlayer(player) {
       player.spawn(this.randomLocation());
       this.player = player;
 
       this.updateCameraPos();
+    }
+  }, {
+    key: 'updateCameraPos',
+    value: function updateCameraPos() {
+      var node = this.player.node;
+      this.cameraPos = Object.assign({}, { cx: node.x, cy: node.y });
     }
   }, {
     key: 'validNode',
@@ -934,7 +997,7 @@ var Floor = function () {
 exports.default = Floor;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -979,7 +1042,6 @@ var Hud = function () {
       this['floor-numDOM'].firstChild.nodeValue = this.currentFloor;
 
       this.updateEnemies(floor.enemies);
-      // this.boss = floor.boss;
     }
   }, {
     key: 'updateEnemies',
@@ -1063,7 +1125,7 @@ var Hud = function () {
 exports.default = Hud;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1079,7 +1141,7 @@ var _enemy = __webpack_require__(1);
 
 var _enemy2 = _interopRequireDefault(_enemy);
 
-var _weapon = __webpack_require__(10);
+var _weapon = __webpack_require__(2);
 
 var _weapon2 = _interopRequireDefault(_weapon);
 
@@ -1172,7 +1234,7 @@ var MapNode = function () {
 exports.default = MapNode;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1279,7 +1341,7 @@ var Path = function () {
 exports.default = Path;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1291,11 +1353,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _unit = __webpack_require__(2);
+var _unit = __webpack_require__(3);
 
 var _unit2 = _interopRequireDefault(_unit);
 
-var _weapon = __webpack_require__(10);
+var _weapon = __webpack_require__(2);
 
 var _weapon2 = _interopRequireDefault(_weapon);
 
@@ -1363,7 +1425,6 @@ var Player = function (_Unit) {
     key: 'attack',
     value: function attack(node) {
       var enemy = node.object;
-      // debugger;
       this.damages(enemy);
 
       this.hud.addBattleEvent(this, enemy);
@@ -1439,7 +1500,7 @@ var Player = function (_Unit) {
 exports.default = Player;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1472,7 +1533,6 @@ var Room = function () {
     value: function render() {
       this.edges = this.linearizeEdges();
       this.drawMain();
-      // this.addBuffer();
     }
   }, {
     key: 'getRandomPosition',
@@ -1534,33 +1594,6 @@ var Room = function () {
       return edges;
     }
   }, {
-    key: 'addBuffer',
-    value: function addBuffer() {
-      var absX = this.absPos.x - 1,
-          absY = this.absPos.y - 1,
-          absXLimit = absX + this.width + 1,
-          absYLimit = absY + this.height + 1;
-
-      var y = absY;
-      while (y <= absYLimit) {
-        var x = absX;
-        while (x <= absXLimit) {
-          var node = this.map[y][x];
-          node.type = 'w2';
-
-          switch (y) {
-            case absY:
-            case absYLimit:
-              x++;
-              break;
-            default:
-              x += this.width + 1;
-          }
-        }
-        y++;
-      }
-    }
-  }, {
     key: 'drawMain',
     value: function drawMain() {
       var absX = this.absPos.x,
@@ -1615,84 +1648,13 @@ var Room = function () {
 exports.default = Room;
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _util = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var WEAPONTYPES = {
-  isw00: 'knife',
-  isw01: 'cobalt knife',
-  isw02: 'golden knife',
-  isw03: 'demonic knife',
-  isw04: 'short sword',
-  isw05: 'iron sword',
-  isw06: 'steel sword',
-  isw07: 'empowered blade',
-  isw08: 'royal sword',
-  isw09: 'emerald blade',
-  isw10: 'draconic sword',
-  isw11: 'knights sword',
-  isw12: 'cobalt sword',
-  isw13: 'golden sword',
-  isw14: 'demonic sword',
-  isw15: 'frizuhasa',
-  isw16: 'champions broadsword',
-  isw17: 'heroic broadsword',
-  isw18: 'legendary broadsword',
-  isw19: 'terrakuugi',
-  isw20: 'izakugaken',
-  isw21: 'underworld slayer',
-  isw22: 'ragikagukenmasa'
-};
-
-var Weapon = function () {
-  function Weapon(num) {
-    _classCallCheck(this, Weapon);
-
-    this.calcWeapon(num);
-  }
-
-  _createClass(Weapon, [{
-    key: 'calcWeapon',
-    value: function calcWeapon(num) {
-      var identifier = num % 23;
-      var type = identifier > 9 ? 'isw' + identifier : 'isw0' + identifier;
-      this.type = type;
-      this.name = WEAPONTYPES[this.type];
-      this.damage = this.rngDamage(num);
-    }
-  }, {
-    key: 'rngDamage',
-    value: function rngDamage(num) {
-      return num * 7 + (0, _util.randomNumber)(0, Math.floor(num * 3 / 2)) + 5;
-    }
-  }]);
-
-  return Weapon;
-}();
-
-exports.default = Weapon;
-
-/***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _game = __webpack_require__(3);
+var _game = __webpack_require__(4);
 
 var _game2 = _interopRequireDefault(_game);
 
@@ -1775,7 +1737,7 @@ var newGame = function newGame(playerName) {
   var game = new _game2.default(playerName, canvas, ctx, CaveTileset);
 };
 
-var displayMenuScreen = function displayMenuScreen() {
+var enterGameScreen = function enterGameScreen() {
   var hud = document.querySelector('.hud');
   var modal = document.querySelector('.modal-main');
   var entergame = document.querySelector('.enter-game');
@@ -1803,6 +1765,7 @@ document.addEventListener('DOMContentLoaded', function () {
   menubuttons[0].addEventListener('click', function () {
     mainmenu.style.display = 'none';
     newgame.style.display = 'flex';
+    enterGameScreen();
   });
 
   menubuttons[1].addEventListener('click', function () {
@@ -1823,8 +1786,6 @@ document.addEventListener('DOMContentLoaded', function () {
       mainmenu.style.display = 'flex';
     });
   });
-
-  displayMenuScreen();
 });
 
 /***/ })
