@@ -495,6 +495,13 @@ var Game = function () {
   }, {
     key: 'playerAction',
     value: function playerAction() {
+      event.preventDefault();
+
+      if (event.code === 'Space') {
+        this.animateBasicAttack();
+        return;
+      }
+
       var pos = this.player.moveAttempt();
       var nextNode = this.floor.map[pos.y][pos.x];
 
@@ -511,6 +518,33 @@ var Game = function () {
       if (this.player.node.isHole) {
         this.enterNewLevel();
       }
+    }
+  }, {
+    key: 'animateBasicAttack',
+    value: function animateBasicAttack() {
+      var idx = 0,
+          fps = 10,
+          now = void 0,
+          then = Date.now(),
+          interval = 1000 / fps,
+          delta = void 0;
+
+      (function animate() {
+        var animation = requestAnimationFrame(animate.bind(this));
+        now = Date.now();
+        delta = now - then;
+
+        if (delta > interval) {
+          then = now - delta % interval;
+          this.floor.updateSingleTile('cutd0' + idx % 5);
+
+          idx++;
+          if (idx % 5 === 0) {
+            cancelAnimationFrame(animation);
+            this.floor.updateSingleTile('empty');
+          }
+        }
+      }).bind(this)();
     }
   }, {
     key: 'playerMove',
@@ -622,6 +656,7 @@ var Floor = function () {
     this.cameraPos = { cx: 0, cy: 0 };
     this.enemies = [];
     this.initialRender = true;
+    window.updateSingleTile = this.updateSingleTile.bind(this);
     this.initialize();
   }
 
@@ -653,20 +688,48 @@ var Floor = function () {
       }
     }
   }, {
-    key: 'update',
-    value: function update(direction) {
-      var types = ['u2', 'hn', 'hs', 'he', 'hw'];
-
+    key: 'updateSingleTile',
+    value: function updateSingleTile(type) {
       var ts = this.tSize;
+      var diff = { x: 0, y: 0 };
       var _cameraPos = this.cameraPos,
-          cy = _cameraPos.cy,
-          cx = _cameraPos.cx;
+          cx = _cameraPos.cx,
+          cy = _cameraPos.cy;
 
-      var _ref = direction || { dy: 0, dx: 0 },
-          dy = _ref.dy,
-          dx = _ref.dx;
 
-      var _calcBounds = this.calcBounds(cx + dx, cy + dy),
+      switch (this.player.type) {
+        case 'hn':
+          diff.y = -1;
+          break;
+        case 'hs':
+          diff.y = 1;
+          break;
+        case 'hw':
+          diff.x = -1;
+          break;
+        case 'he':
+          diff.x = 1;
+          break;
+      }
+
+      var posX = Math.floor(this.fov.x / 2) + diff.x;
+      var posY = Math.floor(this.fov.y / 2) + diff.y;
+
+      var tile = this.map[cy + diff.y][cx + diff.x];
+
+      this.ctx.clearRect(posX * ts, posY * ts, ts, ts);
+      this.ctx.drawImage(this.tiles[tile.type], posX * ts, posY * ts, ts, ts);
+      if (tile.object) {
+        this.ctx.drawImage(this.tiles[tile.object.type], posX * ts, posY * ts, ts, ts);
+      }
+      this.ctx.drawImage(this.tiles[type], posX * ts, posY * ts, ts, ts);
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      var ts = this.tSize;
+
+      var _calcBounds = this.calcBounds(),
           camX = _calcBounds.camX,
           camY = _calcBounds.camY;
 
@@ -699,7 +762,10 @@ var Floor = function () {
     }
   }, {
     key: 'calcBounds',
-    value: function calcBounds(tX, tY) {
+    value: function calcBounds() {
+      var _cameraPos2 = this.cameraPos,
+          cx = _cameraPos2.cx,
+          cy = _cameraPos2.cy;
 
       var fovX = Math.floor(this.fov.x / 2);
       var fovY = Math.floor(this.fov.y / 2);
@@ -708,17 +774,17 @@ var Floor = function () {
           camY = void 0,
           fov = {};
 
-      if (tX + fovX >= this.mapWidth) {
+      if (cx + fovX >= this.mapWidth) {
         camX = this.mapWidth - this.fov.x;
-      } else if (tX - fovX < 0) {
+      } else if (cx - fovX < 0) {
         camX = 0;
-      } else camX = tX - fovX;
+      } else camX = cx - fovX;
 
-      if (tY + fovY >= this.mapHeight) {
+      if (cy + fovY >= this.mapHeight) {
         camY = this.mapHeight - this.fov.y;
-      } else if (tY - fovY < 0) {
+      } else if (cy - fovY < 0) {
         camY = 0;
-      } else camY = tY - fovY;
+      } else camY = cy - fovY;
 
       return { camX: camX, camY: camY };
     }
@@ -1721,7 +1787,18 @@ var CaveTileset = {
   isw19: './assets/images/items/weapons/sword_19.png',
   isw20: './assets/images/items/weapons/sword_20.png',
   isw21: './assets/images/items/weapons/sword_21.png',
-  isw22: './assets/images/items/weapons/sword_22.png'
+  isw22: './assets/images/items/weapons/sword_22.png',
+  cuta00: './assets/images/effects/cut_a/cut_a_0001.png',
+  cuta01: './assets/images/effects/cut_a/cut_a_0002.png',
+  cuta02: './assets/images/effects/cut_a/cut_a_0003.png',
+  cuta03: './assets/images/effects/cut_a/cut_a_0004.png',
+  cuta04: './assets/images/effects/cut_a/cut_a_0005.png',
+  cutd00: './assets/images/effects/cut_d/cut_d_0001.png',
+  cutd01: './assets/images/effects/cut_d/cut_d_0002.png',
+  cutd02: './assets/images/effects/cut_d/cut_d_0003.png',
+  cutd03: './assets/images/effects/cut_d/cut_d_0004.png',
+  cutd04: './assets/images/effects/cut_d/cut_d_0005.png',
+  empty: './assets/images/effects/empty.png'
 };
 
 var newGame = function newGame(playerName) {
