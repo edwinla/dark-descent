@@ -11,11 +11,10 @@ export default class Player extends Unit {
     this.xp = 0;
   }
 
-  moveAttempt() {
-    event.preventDefault();
+  moveAttempt(eventKey) {
     const pos = Object.assign({}, { x: this.node.x, y: this.node.y });
 
-    switch (event.key) {
+    switch (eventKey) {
       case 'w':
       case 'ArrowUp':
         pos.y -= 1;
@@ -44,8 +43,7 @@ export default class Player extends Unit {
     this.hud.updateEvents(event);
   }
 
-  attack(node) {
-    const enemy = node.object;
+  attack(enemy) {
     this.damages(enemy);
 
     this.hud.addBattleEvent(this, enemy);

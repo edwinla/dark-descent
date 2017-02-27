@@ -2,6 +2,7 @@ import Room from './room';
 import MapNode from './map_node';
 import Path from './path';
 import Enemy from './enemy';
+import Player from './player';
 import {randomNumber} from './util';
 
 
@@ -67,8 +68,8 @@ export default class Floor {
         break;
     }
 
-    const posX = Math.floor(this.fov.x / 2) + diff.x;
-    const posY = Math.floor(this.fov.y / 2) + diff.y;
+    const posX = this.playerCanvasPos.x + diff.x;
+    const posY = this.playerCanvasPos.y + diff.y;
 
     const tile = this.map[cy + diff.y][cx + diff.x];
 
@@ -97,6 +98,10 @@ export default class Floor {
         this.ctx.mozImageSmoothingEnabled = false;
         this.ctx.imageSmoothingEnabled = false;
         this.ctx.clearRect(xPos, yPos, ts, ts);
+
+        if (tile.object instanceof Player) {
+          this.playerCanvasPos = {x: j, y: i};
+        }
 
         if (tile.object || tile.isHole) {
           this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
@@ -377,6 +382,28 @@ export default class Floor {
     this.player = player;
 
     this.updateCameraPos();
+  }
+
+  getPlayerFacingNode() {
+    const {cx, cy} = this.cameraPos;
+    const diff = { x: 0, y:0 };
+
+    switch (this.player.type) {
+      case 'hn':
+        diff.y = -1;
+        break;
+      case 'hs':
+        diff.y = 1;
+        break;
+      case 'hw':
+        diff.x = -1;
+        break;
+      case 'he':
+        diff.x = 1;
+        break;
+    }
+
+    return this.map[cy + diff.y][cx + diff.x];
   }
 
   updateCameraPos() {
