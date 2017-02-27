@@ -429,7 +429,7 @@ var Game = function () {
     this.canvas = canvas;
     this.ctx = ctx;
     this.tileSet = tileSet;
-    this.movementEnabled = false;
+    this.keydownEnabled = false;
     this.floors = 0;
 
     this.playerAction = this.playerAction.bind(this);
@@ -472,7 +472,7 @@ var Game = function () {
     value: function initPlayer() {
       this.player = new _player2.default(this.playerName);
       this.floor.spawnPlayer(this.player);
-      this.toggleMovement();
+      this.toggleKeydown();
     }
   }, {
     key: 'initHud',
@@ -498,30 +498,29 @@ var Game = function () {
       event.preventDefault();
 
       if (event.code === 'Space') {
-        this.animateBasicAttack();
+        this.playerAttack();
         return;
-      }
+      } else {
+        var pos = this.player.moveAttempt(event.key);
+        var nextNode = this.floor.map[pos.y][pos.x];
 
-      var pos = this.player.moveAttempt();
-      var nextNode = this.floor.map[pos.y][pos.x];
+        if (nextNode.hasItem()) {
+          this.playerPickup(nextNode);
+        } else if (this.floor.validNode(nextNode)) {
+          this.playerMove(nextNode);
+        }
 
-      if (nextNode.isEnemyNode()) {
-        this.playerAttack(nextNode);
-      } else if (nextNode.hasItem()) {
-        this.playerPickup(nextNode);
-      } else if (this.floor.validNode(nextNode)) {
-        this.playerMove(nextNode);
-      }
+        this.floor.update();
 
-      this.floor.update();
-
-      if (this.player.node.isHole) {
-        this.enterNewLevel();
+        if (this.player.node.isHole) {
+          this.enterNewLevel();
+        }
       }
     }
   }, {
     key: 'animateBasicAttack',
     value: function animateBasicAttack() {
+      this.toggleKeydown();
       var idx = 0,
           fps = 10,
           now = void 0,
@@ -542,6 +541,7 @@ var Game = function () {
           if (idx % 5 === 0) {
             cancelAnimationFrame(animation);
             this.floor.updateSingleTile('empty');
+            this.toggleKeydown();
           }
         }
       }).bind(this)();
@@ -554,8 +554,17 @@ var Game = function () {
     }
   }, {
     key: 'playerAttack',
-    value: function playerAttack(node) {
-      var result = this.player.attack(node);
+    value: function playerAttack() {
+      this.animateBasicAttack();
+
+      var attackNode = this.floor.getPlayerFacingNode();
+      var enemy = attackNode.object;
+      if (!(enemy instanceof _enemy2.default)) return;
+
+      debugger;
+
+      var result = this.player.attack(enemy);
+
       if (result instanceof _enemy2.default) {
         this.floor.removeEnemy(result);
         this.hud.updateEnemies(this.floor.enemies);
@@ -570,20 +579,20 @@ var Game = function () {
       node.restore();
     }
   }, {
-    key: 'toggleMovement',
-    value: function toggleMovement() {
-      if (this.movementEnabled) {
-        this.movementEnabled = false;
+    key: 'toggleKeydown',
+    value: function toggleKeydown() {
+      if (this.keydownEnabled) {
+        this.keydownEnabled = false;
         window.removeEventListener('keydown', this.playerAction);
         return;
       }
       window.addEventListener('keydown', this.playerAction);
-      this.movementEnabled = true;
+      this.keydownEnabled = true;
     }
   }, {
     key: 'gameOver',
     value: function gameOver() {
-      this.toggleMovement();
+      this.toggleKeydown();
       this.hud.updateEvents('You have died.');
 
       var modal = document.querySelector('.modal-gameover');
@@ -630,6 +639,10 @@ var _path2 = _interopRequireDefault(_path);
 var _enemy = __webpack_require__(1);
 
 var _enemy2 = _interopRequireDefault(_enemy);
+
+var _player = __webpack_require__(9);
+
+var _player2 = _interopRequireDefault(_player);
 
 var _util = __webpack_require__(0);
 
@@ -712,8 +725,8 @@ var Floor = function () {
           break;
       }
 
-      var posX = Math.floor(this.fov.x / 2) + diff.x;
-      var posY = Math.floor(this.fov.y / 2) + diff.y;
+      var posX = this.playerCanvasPos.x + diff.x;
+      var posY = this.playerCanvasPos.y + diff.y;
 
       var tile = this.map[cy + diff.y][cx + diff.x];
 
@@ -746,6 +759,10 @@ var Floor = function () {
           this.ctx.mozImageSmoothingEnabled = false;
           this.ctx.imageSmoothingEnabled = false;
           this.ctx.clearRect(xPos, yPos, ts, ts);
+
+          if (tile.object instanceof _player2.default) {
+            this.playerCanvasPos = { x: j, y: i };
+          }
 
           if (tile.object || tile.isHole) {
             this.ctx.drawImage(this.tiles.cb, xPos, yPos, ts, ts);
@@ -1045,6 +1062,32 @@ var Floor = function () {
       this.updateCameraPos();
     }
   }, {
+    key: 'getPlayerFacingNode',
+    value: function getPlayerFacingNode() {
+      var _cameraPos3 = this.cameraPos,
+          cx = _cameraPos3.cx,
+          cy = _cameraPos3.cy;
+
+      var diff = { x: 0, y: 0 };
+
+      switch (this.player.type) {
+        case 'hn':
+          diff.y = -1;
+          break;
+        case 'hs':
+          diff.y = 1;
+          break;
+        case 'hw':
+          diff.x = -1;
+          break;
+        case 'he':
+          diff.x = 1;
+          break;
+      }
+
+      return this.map[cy + diff.y][cx + diff.x];
+    }
+  }, {
     key: 'updateCameraPos',
     value: function updateCameraPos() {
       var node = this.player.node;
@@ -1135,7 +1178,7 @@ var Hud = function () {
   }, {
     key: 'addBattleEvent',
     value: function addBattleEvent(off, def) {
-      var event = off.name + ' dealt ' + off.weap.damage + ' to ' + def.name + '!';
+      var event = off.name + ' dealt ' + off.weap.damage + ' dmg to ' + def.name + '!';
       this.updateEvents(event);
     }
   }, {
@@ -1148,7 +1191,7 @@ var Hud = function () {
     key: 'addLvlUpEvent',
     value: function addLvlUpEvent() {
       var currentlvl = this.player.lvl;
-      var event = 'You lvled up from ' + (currentlvl - 1) + ' to ' + currentlvl;
+      var event = 'You leveled up from ' + (currentlvl - 1) + ' to ' + currentlvl;
       this.updateEvents(event);
     }
   }, {
@@ -1452,11 +1495,10 @@ var Player = function (_Unit) {
 
   _createClass(Player, [{
     key: 'moveAttempt',
-    value: function moveAttempt() {
-      event.preventDefault();
+    value: function moveAttempt(eventKey) {
       var pos = Object.assign({}, { x: this.node.x, y: this.node.y });
 
-      switch (event.key) {
+      switch (eventKey) {
         case 'w':
         case 'ArrowUp':
           pos.y -= 1;
@@ -1487,8 +1529,7 @@ var Player = function (_Unit) {
     }
   }, {
     key: 'attack',
-    value: function attack(node) {
-      var enemy = node.object;
+    value: function attack(enemy) {
       this.damages(enemy);
 
       this.hud.addBattleEvent(this, enemy);
