@@ -19,6 +19,7 @@ export default class Floor {
     this.cameraPos = {cx: 0, cy: 0};
     this.enemies = [];
     this.initialRender = true;
+    window.updateSingleTile = this.updateSingleTile.bind(this);
     this.initialize();
   }
 
@@ -46,14 +47,42 @@ export default class Floor {
     }
   }
 
-  update(direction) {
-    const types = ['u2', 'hn', 'hs', 'he', 'hw'];
-
+  updateSingleTile(type) {
     const ts = this.tSize;
-    const {cy, cx} = this.cameraPos;
-    const {dy, dx} = direction || {dy: 0, dx: 0};
+    const diff = { x: 0, y:0 };
+    const {cx, cy} = this.cameraPos;
 
-    const {camX, camY} = this.calcBounds(cx + dx, cy + dy);
+    switch (this.player.type) {
+      case 'hn':
+        diff.y = -1;
+        break;
+      case 'hs':
+        diff.y = 1;
+        break;
+      case 'hw':
+        diff.x = -1;
+        break;
+      case 'he':
+        diff.x = 1;
+        break;
+    }
+
+    const posX = Math.floor(this.fov.x / 2) + diff.x;
+    const posY = Math.floor(this.fov.y / 2) + diff.y;
+
+    const tile = this.map[cy + diff.y][cx + diff.x];
+
+    this.ctx.clearRect(posX*ts, posY*ts, ts, ts);
+    this.ctx.drawImage(this.tiles[tile.type], posX*ts, posY*ts, ts, ts);
+    if (tile.object) {
+      this.ctx.drawImage(this.tiles[tile.object.type], posX*ts, posY*ts, ts, ts);
+    }
+    this.ctx.drawImage(this.tiles[type], posX*ts, posY*ts, ts, ts);
+  }
+
+  update() {
+    const ts = this.tSize;
+    const {camX, camY} = this.calcBounds();
 
     this.ctx.fillStyle = "#201728";
     this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -84,24 +113,24 @@ export default class Floor {
 
   }
 
-  calcBounds(tX, tY) {
-
+  calcBounds() {
+    const {cx, cy} = this.cameraPos;
     const fovX = Math.floor(this.fov.x / 2);
     const fovY = Math.floor(this.fov.y / 2);
 
     let camX, camY, fov = {};
 
-    if (tX + fovX >= this.mapWidth) {
+    if (cx + fovX >= this.mapWidth) {
       camX = this.mapWidth - this.fov.x;
-    } else if (tX - fovX < 0) {
+    } else if (cx - fovX < 0) {
       camX = 0;
-    } else camX = tX - fovX;
+    } else camX = cx - fovX;
 
-    if (tY + fovY >= this.mapHeight) {
+    if (cy + fovY >= this.mapHeight) {
       camY = this.mapHeight - this.fov.y;
-    } else if (tY - fovY < 0) {
+    } else if (cy - fovY < 0) {
       camY = 0;
-    } else camY = tY - fovY;
+    } else camY = cy - fovY;
 
     return {camX: camX, camY: camY};
   }

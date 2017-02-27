@@ -63,7 +63,18 @@ const CaveTileset = {
   isw19 : './assets/images/items/weapons/sword_19.png',
   isw20 : './assets/images/items/weapons/sword_20.png',
   isw21 : './assets/images/items/weapons/sword_21.png',
-  isw22 : './assets/images/items/weapons/sword_22.png'
+  isw22 : './assets/images/items/weapons/sword_22.png',
+  cuta00: './assets/images/effects/cut_a/cut_a_0001.png',
+  cuta01: './assets/images/effects/cut_a/cut_a_0002.png',
+  cuta02: './assets/images/effects/cut_a/cut_a_0003.png',
+  cuta03: './assets/images/effects/cut_a/cut_a_0004.png',
+  cuta04: './assets/images/effects/cut_a/cut_a_0005.png',
+  cutd00: './assets/images/effects/cut_d/cut_d_0001.png',
+  cutd01: './assets/images/effects/cut_d/cut_d_0002.png',
+  cutd02: './assets/images/effects/cut_d/cut_d_0003.png',
+  cutd03: './assets/images/effects/cut_d/cut_d_0004.png',
+  cutd04: './assets/images/effects/cut_d/cut_d_0005.png',
+  empty: './assets/images/effects/empty.png'
 };
 
 const newGame = (playerName) => {

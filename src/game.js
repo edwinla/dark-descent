@@ -68,6 +68,13 @@ export default class Game {
   }
 
   playerAction() {
+    event.preventDefault();
+
+    if (event.code === 'Space') {
+      this.animateBasicAttack();
+      return;
+    }
+
     const pos = this.player.moveAttempt();
     const nextNode = this.floor.map[pos.y][pos.x];
 
@@ -84,6 +91,27 @@ export default class Game {
     if (this.player.node.isHole) {
       this.enterNewLevel();
     }
+  }
+
+  animateBasicAttack() {
+    let idx = 0, fps = 10, now, then = Date.now(), interval = 1000/fps, delta;
+
+    (function animate() {
+      const animation = requestAnimationFrame(animate.bind(this));
+      now = Date.now();
+      delta = now - then;
+
+      if (delta > interval) {
+        then = now - (delta % interval);
+        this.floor.updateSingleTile(`cutd0${idx % 5}`);
+
+        idx++;
+        if (idx % 5 === 0) {
+          cancelAnimationFrame(animation);
+          this.floor.updateSingleTile('empty');
+        }
+      }
+    }.bind(this))();
   }
 
   playerMove(node) {
