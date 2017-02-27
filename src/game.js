@@ -9,7 +9,7 @@ export default class Game {
     this.canvas = canvas;
     this.ctx = ctx;
     this.tileSet = tileSet;
-    this.movementEnabled = false;
+    this.keydownEnabled = false;
     this.floors = 0;
 
     this.playerAction = this.playerAction.bind(this);
@@ -48,7 +48,7 @@ export default class Game {
   initPlayer() {
     this.player = new Player(this.playerName);
     this.floor.spawnPlayer(this.player);
-    this.toggleMovement();
+    this.toggleKeydown();
   }
 
   initHud() {
@@ -71,29 +71,28 @@ export default class Game {
     event.preventDefault();
 
     if (event.code === 'Space') {
-      this.animateBasicAttack();
+      this.playerAttack();
       return;
-    }
+    } else {
+      const pos = this.player.moveAttempt(event.key);
+      const nextNode = this.floor.map[pos.y][pos.x];
 
-    const pos = this.player.moveAttempt();
-    const nextNode = this.floor.map[pos.y][pos.x];
+      if (nextNode.hasItem()) {
+        this.playerPickup(nextNode);
+      } else if (this.floor.validNode(nextNode)) {
+        this.playerMove(nextNode);
+      }
 
-    if (nextNode.isEnemyNode()) {
-      this.playerAttack(nextNode);
-    } else if (nextNode.hasItem()) {
-      this.playerPickup(nextNode);
-    } else if (this.floor.validNode(nextNode)) {
-      this.playerMove(nextNode);
-    }
+      this.floor.update();
 
-    this.floor.update();
-
-    if (this.player.node.isHole) {
-      this.enterNewLevel();
+      if (this.player.node.isHole) {
+        this.enterNewLevel();
+      }
     }
   }
 
   animateBasicAttack() {
+    this.toggleKeydown();
     let idx = 0, fps = 10, now, then = Date.now(), interval = 1000/fps, delta;
 
     (function animate() {
@@ -109,6 +108,7 @@ export default class Game {
         if (idx % 5 === 0) {
           cancelAnimationFrame(animation);
           this.floor.updateSingleTile('empty');
+          this.toggleKeydown();
         }
       }
     }.bind(this))();
@@ -119,8 +119,17 @@ export default class Game {
     this.floor.updateCameraPos();
   }
 
-  playerAttack(node) {
-    const result = this.player.attack(node);
+  playerAttack() {
+    this.animateBasicAttack();
+
+    const attackNode = this.floor.getPlayerFacingNode();
+    const enemy = attackNode.object;
+    if (!(enemy instanceof Enemy)) return;
+
+    debugger;
+
+    const result = this.player.attack(enemy);
+
     if (result instanceof Enemy) {
       this.floor.removeEnemy(result);
       this.hud.updateEnemies(this.floor.enemies);
@@ -134,18 +143,18 @@ export default class Game {
     node.restore();
   }
 
-  toggleMovement() {
-    if (this.movementEnabled) {
-      this.movementEnabled = false;
+  toggleKeydown() {
+    if (this.keydownEnabled) {
+      this.keydownEnabled = false;
       window.removeEventListener('keydown', this.playerAction);
       return;
     }
     window.addEventListener('keydown', this.playerAction);
-    this.movementEnabled = true;
+    this.keydownEnabled = true;
   }
 
   gameOver() {
-    this.toggleMovement();
+    this.toggleKeydown();
     this.hud.updateEvents('You have died.');
 
     const modal = document.querySelector('.modal-gameover');

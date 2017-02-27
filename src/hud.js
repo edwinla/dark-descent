@@ -57,7 +57,7 @@ export default class Hud {
   }
 
   addBattleEvent(off, def) {
-    const event = `${off.name} dealt ${off.weap.damage} to ${def.name}!`;
+    const event = `${off.name} dealt ${off.weap.damage} dmg to ${def.name}!`;
     this.updateEvents(event);
   }
 
@@ -68,7 +68,7 @@ export default class Hud {
 
   addLvlUpEvent() {
     const currentlvl = this.player.lvl;
-    const event = `You lvled up from ${currentlvl - 1} to ${currentlvl}`;
+    const event = `You leveled up from ${currentlvl - 1} to ${currentlvl}`;
     this.updateEvents(event);
   }
 
