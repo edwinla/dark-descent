@@ -47,13 +47,37 @@ export default class Floor {
     }
   }
 
-  updateSingleTile(posDiff = [0, 0]) {
+  updateSingleTile(type) {
     const ts = this.tSize;
+    const diff = { x: 0, y:0 };
+    const {cx, cy} = this.cameraPos;
 
-    const fovX = Math.floor(this.fov.x / 2) + posDiff[1];
-    const fovY = Math.floor(this.fov.y / 2) + posDiff[0];
+    switch (this.player.type) {
+      case 'hn':
+        diff.y = -1;
+        break;
+      case 'hs':
+        diff.y = 1;
+        break;
+      case 'hw':
+        diff.x = -1;
+        break;
+      case 'he':
+        diff.x = 1;
+        break;
+    }
 
-    this.ctx.drawImage(this.tiles.cv, fovX * ts, fovY * ts, ts, ts);
+    const posX = Math.floor(this.fov.x / 2) + diff.x;
+    const posY = Math.floor(this.fov.y / 2) + diff.y;
+
+    const tile = this.map[cy + diff.y][cx + diff.x];
+
+    this.ctx.clearRect(posX*ts, posY*ts, ts, ts);
+    this.ctx.drawImage(this.tiles[tile.type], posX*ts, posY*ts, ts, ts);
+    if (tile.object) {
+      this.ctx.drawImage(this.tiles[tile.object.type], posX*ts, posY*ts, ts, ts);
+    }
+    this.ctx.drawImage(this.tiles[type], posX*ts, posY*ts, ts, ts);
   }
 
   update() {
