@@ -85,8 +85,7 @@ export default class Floor {
     const ts = this.tSize;
     const {camX, camY} = this.calcBounds();
 
-    this.ctx.fillStyle = "#201728";
-    this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    this.drawOuterBounds();
 
     for (let i = 0; i < this.fov.y; i++) {
       for (let j = 0; j < this.fov.x; j++) {
@@ -116,6 +115,19 @@ export default class Floor {
       }
     }
 
+  }
+
+  drawOuterBounds() {
+    const ts = this.tSize;
+
+    for (let i = 0; i < window.innerHeight / ts; i++) {
+      for (let j = 0; j < window.innerWidth / ts; j++) {
+        const xPos = j * ts;
+        const yPos = i * ts;
+        this.ctx.drawImage(this.tiles.wb, xPos, yPos, ts, ts);
+        this.darken(this.tiles.wb, xPos, yPos, ts);
+      }
+    }
   }
 
   calcBounds() {
@@ -356,7 +368,7 @@ export default class Floor {
     };
 
     for (let i = 0; i < n; i++) {
-      const monsterhp = this.number * 50;
+      const monsterhp = this.number * 20;
       const monsterweap = {
         name: 'maul',
         damage: 4 * this.number
