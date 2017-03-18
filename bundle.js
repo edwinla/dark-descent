@@ -222,7 +222,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _unit = __webpack_require__(3);
+var _unit = __webpack_require__(4);
 
 var _unit2 = _interopRequireDefault(_unit);
 
@@ -355,6 +355,162 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _unit = __webpack_require__(4);
+
+var _unit2 = _interopRequireDefault(_unit);
+
+var _weapon = __webpack_require__(2);
+
+var _weapon2 = _interopRequireDefault(_weapon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Player = function (_Unit) {
+  _inherits(Player, _Unit);
+
+  function Player(name) {
+    _classCallCheck(this, Player);
+
+    var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this, name));
+
+    _this.type = 'hs';
+    _this.hp = [100, 100];
+    _this.weap = new _weapon2.default(0);
+    _this.lvl = 1;
+    _this.xp = 0;
+    return _this;
+  }
+
+  _createClass(Player, [{
+    key: 'moveAttempt',
+    value: function moveAttempt(eventKey) {
+      var pos = Object.assign({}, { x: this.node.x, y: this.node.y });
+
+      switch (eventKey) {
+        case 'w':
+        case 'ArrowUp':
+          pos.y -= 1;
+          this.type = 'hn';
+          break;
+        case 's':
+        case 'ArrowDown':
+          pos.y += 1;
+          this.type = 'hs';
+          break;
+        case 'a':
+        case 'ArrowLeft':
+          pos.x -= 1;
+          this.type = 'hw';
+          break;
+        case 'd':
+        case 'ArrowRight':
+          this.type = 'he';
+          pos.x += 1;
+      }
+
+      return pos;
+    }
+  }, {
+    key: 'addEvent',
+    value: function addEvent(event) {
+      this.hud.updateEvents(event);
+    }
+  }, {
+    key: 'attack',
+    value: function attack(enemy) {
+      this.damages(enemy);
+
+      this.hud.addBattleEvent(this, enemy);
+
+      if (enemy.hp[0] === 0) {
+        this.xpGainedFrom(enemy);
+        return enemy.terminate();
+      } else {
+        enemy.damages(this);
+
+        this.hud.addBattleEvent(enemy, this);
+        this.updateHud('hp');
+
+        if (this.hp[0] === 0) return this;
+      }
+    }
+  }, {
+    key: 'xpGainedFrom',
+    value: function xpGainedFrom(enemy) {
+      var xpGained = enemy.hp[1] / 2 + enemy.weap.damage;
+      this.xp += xpGained;
+
+      this.updateHud('xp', enemy);
+      this.hud.addXPEvent(xpGained, enemy);
+
+      if (this.xpTnl()) this.lvlUp();
+    }
+  }, {
+    key: 'xpTnl',
+    value: function xpTnl() {
+      return this.xp >= this.lvl * 100;
+    }
+  }, {
+    key: 'lvlUp',
+    value: function lvlUp() {
+      this.lvl += 1;
+      this.xp = 0;
+      this.hp = [this.lvl * 100, this.lvl * 100];
+
+      this.updateHud('xp');
+      this.updateHud('lvl');
+      this.updateHud('hp');
+      this.hud.addLvlUpEvent();
+    }
+  }, {
+    key: 'pickupItem',
+    value: function pickupItem(item) {
+      if (item instanceof _weapon2.default) {
+        this.weap = item;
+      }
+
+      this.updateHud('weap');
+      this.hud.addItemPickupEvent(item);
+    }
+  }, {
+    key: 'updateHud',
+    value: function updateHud(attr) {
+      this.hud.updatePlayer(attr);
+    }
+  }, {
+    key: 'move',
+    value: function move(nextNode) {
+      nextNode.object = this;
+
+      this.node.restore();
+      this.node = nextNode;
+    }
+  }]);
+
+  return Player;
+}(_unit2.default);
+
+exports.default = Player;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Unit = function () {
@@ -389,7 +545,7 @@ var Unit = function () {
 exports.default = Unit;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -401,7 +557,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _floor = __webpack_require__(5);
+var _floor = __webpack_require__(6);
 
 var _floor2 = _interopRequireDefault(_floor);
 
@@ -409,11 +565,11 @@ var _enemy = __webpack_require__(1);
 
 var _enemy2 = _interopRequireDefault(_enemy);
 
-var _player = __webpack_require__(9);
+var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _hud = __webpack_require__(6);
+var _hud = __webpack_require__(7);
 
 var _hud2 = _interopRequireDefault(_hud);
 
@@ -612,7 +768,7 @@ var Game = function () {
 exports.default = Game;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -628,11 +784,11 @@ var _room = __webpack_require__(10);
 
 var _room2 = _interopRequireDefault(_room);
 
-var _map_node = __webpack_require__(7);
+var _map_node = __webpack_require__(8);
 
 var _map_node2 = _interopRequireDefault(_map_node);
 
-var _path = __webpack_require__(8);
+var _path = __webpack_require__(9);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -640,7 +796,7 @@ var _enemy = __webpack_require__(1);
 
 var _enemy2 = _interopRequireDefault(_enemy);
 
-var _player = __webpack_require__(9);
+var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
@@ -746,8 +902,7 @@ var Floor = function () {
           camX = _calcBounds.camX,
           camY = _calcBounds.camY;
 
-      this.ctx.fillStyle = "#201728";
-      this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      this.drawOuterBounds();
 
       for (var i = 0; i < this.fov.y; i++) {
         for (var j = 0; j < this.fov.x; j++) {
@@ -774,6 +929,20 @@ var Floor = function () {
           }
 
           this.darken(tile, xPos, yPos, ts);
+        }
+      }
+    }
+  }, {
+    key: 'drawOuterBounds',
+    value: function drawOuterBounds() {
+      var ts = this.tSize;
+
+      for (var i = 0; i < window.innerHeight / ts; i++) {
+        for (var j = 0; j < window.innerWidth / ts; j++) {
+          var xPos = j * ts;
+          var yPos = i * ts;
+          this.ctx.drawImage(this.tiles.wb, xPos, yPos, ts, ts);
+          this.darken(this.tiles.wb, xPos, yPos, ts);
         }
       }
     }
@@ -1039,7 +1208,7 @@ var Floor = function () {
       };
 
       for (var i = 0; i < n; i++) {
-        var monsterhp = this.number * 50;
+        var monsterhp = this.number * 20;
         var monsterweap = {
           name: 'maul',
           damage: 4 * this.number
@@ -1106,7 +1275,7 @@ var Floor = function () {
 exports.default = Floor;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1233,7 +1402,7 @@ var Hud = function () {
 exports.default = Hud;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1342,7 +1511,7 @@ var MapNode = function () {
 exports.default = MapNode;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1447,162 +1616,6 @@ var Path = function () {
 }();
 
 exports.default = Path;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _unit = __webpack_require__(3);
-
-var _unit2 = _interopRequireDefault(_unit);
-
-var _weapon = __webpack_require__(2);
-
-var _weapon2 = _interopRequireDefault(_weapon);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Player = function (_Unit) {
-  _inherits(Player, _Unit);
-
-  function Player(name) {
-    _classCallCheck(this, Player);
-
-    var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this, name));
-
-    _this.type = 'hs';
-    _this.hp = [100, 100];
-    _this.weap = new _weapon2.default(0);
-    _this.lvl = 1;
-    _this.xp = 0;
-    return _this;
-  }
-
-  _createClass(Player, [{
-    key: 'moveAttempt',
-    value: function moveAttempt(eventKey) {
-      var pos = Object.assign({}, { x: this.node.x, y: this.node.y });
-
-      switch (eventKey) {
-        case 'w':
-        case 'ArrowUp':
-          pos.y -= 1;
-          this.type = 'hn';
-          break;
-        case 's':
-        case 'ArrowDown':
-          pos.y += 1;
-          this.type = 'hs';
-          break;
-        case 'a':
-        case 'ArrowLeft':
-          pos.x -= 1;
-          this.type = 'hw';
-          break;
-        case 'd':
-        case 'ArrowRight':
-          this.type = 'he';
-          pos.x += 1;
-      }
-
-      return pos;
-    }
-  }, {
-    key: 'addEvent',
-    value: function addEvent(event) {
-      this.hud.updateEvents(event);
-    }
-  }, {
-    key: 'attack',
-    value: function attack(enemy) {
-      this.damages(enemy);
-
-      this.hud.addBattleEvent(this, enemy);
-
-      if (enemy.hp[0] === 0) {
-        this.xpGainedFrom(enemy);
-        return enemy.terminate();
-      } else {
-        enemy.damages(this);
-
-        this.hud.addBattleEvent(enemy, this);
-        this.updateHud('hp');
-
-        if (this.hp[0] === 0) return this;
-      }
-    }
-  }, {
-    key: 'xpGainedFrom',
-    value: function xpGainedFrom(enemy) {
-      var xpGained = enemy.hp[1] / 2 + enemy.weap.damage;
-      this.xp += xpGained;
-
-      this.updateHud('xp', enemy);
-      this.hud.addXPEvent(xpGained, enemy);
-
-      if (this.xpTnl()) this.lvlUp();
-    }
-  }, {
-    key: 'xpTnl',
-    value: function xpTnl() {
-      return this.xp >= this.lvl * 100;
-    }
-  }, {
-    key: 'lvlUp',
-    value: function lvlUp() {
-      this.lvl += 1;
-      this.xp = 0;
-      this.hp = [this.lvl * 100, this.lvl * 100];
-
-      this.updateHud('xp');
-      this.updateHud('lvl');
-      this.updateHud('hp');
-      this.hud.addLvlUpEvent();
-    }
-  }, {
-    key: 'pickupItem',
-    value: function pickupItem(item) {
-      if (item instanceof _weapon2.default) {
-        this.weap = item;
-      }
-
-      this.updateHud('weap');
-      this.hud.addItemPickupEvent(item);
-    }
-  }, {
-    key: 'updateHud',
-    value: function updateHud(attr) {
-      this.hud.updatePlayer(attr);
-    }
-  }, {
-    key: 'move',
-    value: function move(nextNode) {
-      nextNode.object = this;
-
-      this.node.restore();
-      this.node = nextNode;
-    }
-  }]);
-
-  return Player;
-}(_unit2.default);
-
-exports.default = Player;
 
 /***/ }),
 /* 10 */
@@ -1759,7 +1772,7 @@ exports.default = Room;
 "use strict";
 
 
-var _game = __webpack_require__(4);
+var _game = __webpack_require__(5);
 
 var _game2 = _interopRequireDefault(_game);
 
