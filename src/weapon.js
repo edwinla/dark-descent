@@ -40,6 +40,6 @@ export default class Weapon {
   }
 
   rngDamage(num) {
-    return (num * 7) + randomNumber(0, Math.floor(num * 3 / 2)) + 5;
+    return (num * 9) + randomNumber(0, Math.floor(num * 3 / 2)) + 5;
   }
 }

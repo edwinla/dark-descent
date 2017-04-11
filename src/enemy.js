@@ -9,7 +9,7 @@ export default class Enemy extends Unit {
   }
 
   generateItem(num) {
-    if (Math.random() * 10  > 9) {
+    if (Math.random() * 10  > 8) {
       this.item = new Weapon(num);
     } else return null;
   }
