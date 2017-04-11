@@ -253,7 +253,7 @@ var Enemy = function (_Unit) {
   _createClass(Enemy, [{
     key: 'generateItem',
     value: function generateItem(num) {
-      if (Math.random() * 10 > 9) {
+      if (Math.random() * 10 > 8) {
         this.item = new _weapon2.default(num);
       } else return null;
     }
@@ -333,7 +333,7 @@ var Weapon = function () {
   }, {
     key: 'rngDamage',
     value: function rngDamage(num) {
-      return num * 7 + (0, _util.randomNumber)(0, Math.floor(num * 3 / 2)) + 5;
+      return num * 9 + (0, _util.randomNumber)(0, Math.floor(num * 3 / 2)) + 5;
     }
   }]);
 
@@ -716,8 +716,6 @@ var Game = function () {
       var attackNode = this.floor.getPlayerFacingNode();
       var enemy = attackNode.object;
       if (!(enemy instanceof _enemy2.default)) return;
-
-      debugger;
 
       var result = this.player.attack(enemy);
 
