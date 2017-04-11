@@ -126,8 +126,6 @@ export default class Game {
     const enemy = attackNode.object;
     if (!(enemy instanceof Enemy)) return;
 
-    debugger;
-
     const result = this.player.attack(enemy);
 
     if (result instanceof Enemy) {
