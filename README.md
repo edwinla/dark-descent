@@ -1,7 +1,7 @@
 # Dark Descent
 [Live Game][dark-descent]
 
-[dark-descent]: https://laed37.github.io/dark-descent/
+[dark-descent]: https://edwinla.github.io/dark-descent/
 
 Dark Descent is a rogue-like dungeon crawler written in pure JavaScript without any external libraries. It utilizes procedural generation to create a new map with each descent, allowing the player to explore limitless different corridors and rooms to fight enemy creatures. SASS and Webpack were used for bundling stylesheets and modules respectively.
 
